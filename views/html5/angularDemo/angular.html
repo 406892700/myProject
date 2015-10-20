@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="/javascripts/angular.min.js"> </script>
+    <style>
+        .expander{
+            border:1px solid #aaa;
+            width:250px;
+        }
+
+        .expander > .title{
+            background-color: #aaa;
+            color:#fff;
+            padding:.1em .3em;
+            cursor:pointer;
+        }
+
+        .expander > .body{
+            padding:.1em .3em;
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+        var expanderModule = angular.module('expanderModule',[]);
+        expanderModule.controller('SomeController',['$scope','$http',function ($scope,$http){
+            $scope.title = '点击展开';
+            $scope.text = "有中国展开~~";
+            $scope.alert = function(){
+                alert(1);
+            };
+
+            $http({
+                url:'/getMsg',
+                method:'get'
+            }).success(function(data){
+                console.log(data);
+            }).error(function(err){
+                console.log(err);
+            });
+        }]);
+        expanderModule.directive('expander',function(){
+            return {
+                restrict:'EA',
+                replace:true,
+                transclude:true,
+                scope:{title:'=expanderTitle',
+                       alert:'&expanderAlert'
+                       },
+                template:'<div>'+
+                            '<div class="title" ng-click="toggle()">{{title}}</div>'+
+                            '<div class="body" ng-show="showMe" ng-transclude></div>'+
+                        '</div>',
+                link:function(scope,element,attrs){
+                    console.log(element);
+                    scope.showMe = false;
+                    scope.toggle = function toggle(){
+                        scope.showMe = !scope.showMe;
+                    };
+                }
+            }
+        });
+    </script>
+<div ng-app = "expanderModule">
+    <div class="" ng-controller="SomeController">
+        <expander class="expander" expander-title="title" expander-alert="alert()">
+            {{text}}
+        </expander>
+    </div>
+</div>
+</body>
+</html>

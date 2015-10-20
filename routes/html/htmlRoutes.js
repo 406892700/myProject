@@ -12,4 +12,17 @@ module.exports = function(app){
     app.get('/price',function(req,res){
         res.render('html5/priceControl/index',{});
     });
+
+    app.get('/angular', function (req,res) {
+        res.render('html5/angularDemo/angular',{});
+    });
+
+    app.get('/cannotdown', function (req,res) {
+        res.render('html5/cannotdown/index',{});
+    });
+    
+    
+    app.get('/getMsg', function (req,res) {
+        res.json({'msg':'123'});
+    })
 };

@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>下载不了</title>
+	<style>
+		html{
+			font-size:62.5%;
+		}
+
+		*{
+			padding:0px;
+			margin:0px;
+			box-sizing:border-box;
+		}
+
+		.cleafix{
+			clear:both;
+		}
+	</style>
+
+
+</head>
+<body class="cannotdown">
+	<script>
+		function putLink(url){
+			var head = document.getElementsByTagName('head')[0];
+			var link = document.createElement('link');
+			link.href = url;
+			link.type = 'text/css';
+			link.rel = 'stylesheet';
+			head.appendChild(link);
+		}
+
+		function isMobile() {
+			return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		}
+
+
+		if(isMobile()){
+			putLink('html5/cannotdown/css/styleMobile.css');
+		}else{
+			putLink('html5/cannotdown/css/stylePc.css');
+		}
+
+	</script>
+	<div class="header">
+		<div class="flex_wrap">
+			<div class="left_pl">
+				如何设置app store账户
+			</div>
+
+			<div class="right_pl">
+				<a href="#">返回下载页面</a>
+			</div>
+			<div class="cleafix"></div>
+		</div>
+	</div>
+	<!-- 头部-->
+	<div class="body">
+		<div class="flex_wrap">
+			<div class="body_header">
+				如果您使用的是iPhone，下载“咕噜宝宝”最好的方式就是通过苹果官方的app store。这就要求您拥有一个app store账号。没有app store账号？不知道密码？没关系，跟着下面的步骤就可以轻松拥有属于自己的app store账号
+			</div>
+			<!-- 主内容头部-->
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">1</span>
+						<label>
+							打开手机里的App Store，下图红框内所示
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (1).png" alt=""/>
+				</div>
+			</div>
+			<!-- step1-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">2</span>
+						<label>
+							进入App Store的精品推荐区域，移动到最后的地方，点击登陆
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (2).png" alt=""/>
+				</div>
+			</div>
+			<!-- step2-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">3</span>
+						<label>
+							打开Apple ID——<br>
+							1.如果您登陆了别人账户，则在XXXXX@qq.com的地方，
+							点击注销<br>
+							2.如果您没有登陆任何账户，则可直接进行注册了，见下
+							一步。
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (3).png" alt=""/>
+				</div>
+			</div>
+			<!-- step3-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">4</span>
+						<label>
+							选择您所在的地区
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (4).png" alt=""/>
+				</div>
+			</div>
+			<!-- step4-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">5</span>
+						<label>
+							阅读apple id相关条款，然后点击同意按钮，进行下一步
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (5).png" alt=""/>
+				</div>
+			</div>
+			<!-- step5-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">6</span>
+						<label>
+							《我已阅读并同意 iTunes Store 条款与条件》点击同意
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (6).png" alt=""/>
+				</div>
+			</div>
+			<!-- step6-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">7</span>
+						<label>
+							注册环节。电子信箱随便（格式为@qq.com @163.com
+							@sina.com 都可以）密码设置格式为 123456Aa （按照
+							这种规律即可）下面的自己设置，和其他注册没有区别。
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (7).png" alt=""/>
+				</div>
+			</div>
+			<!-- step7-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">8</span>
+						<label>
+							账号收费环节。（苹果官方规定的注册必要环节，大家可
+							以放心，咕噜宝宝终身免费使用，不收取任何费用哦）输
+							入你的银行卡号，可以选择Union Pay，即银联卡。然后
+							填写自己的信息，地址，点击完成就可以了。
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (8).png" alt=""/>
+				</div>
+			</div>
+			<!-- step8-->
+
+			<div class="body_step">
+				<div class="body_explain">
+					<p>
+						<span class="body_index">9</span>
+						<label>
+							点击使用现有的apple id 登陆，就可以下载咕噜宝宝
+						</label>
+					</p>
+				</div>
+				<div class="step_img">
+					<img src="html5/cannotdown/images/pic (9).png" alt=""/>
+				</div>
+			</div>
+			<!-- step9-->
+		</div>
+	</div>
+</body>
+</html>

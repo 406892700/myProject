@@ -1,0 +1,90 @@
+/*ÒÆ¶¯¶ËÑùÊ½*/
+.cannotdown{
+    font-size:1.2rem;
+    font-family: 'Microsoft Yahei';
+    text-align: center;
+    color:#2e2e2e;
+    margin:0px;
+    padding-bottom: 50px;
+}
+
+.flex_wrap{
+    width: 100%;
+    height: 100%;
+    padding:0px 20px;
+}
+
+.cannotdown > .header{
+    height:50px;
+    line-height: 50px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+.cannotdown > .header .left_pl{
+    float:left;
+    font-size:1.8rem;
+}
+
+.cannotdown > .header .right_pl{
+    float:right;
+    font-size:1.4rem;
+}
+
+.cannotdown > .header .right_pl > a{
+    color:#f95e5e;
+}
+
+.cannotdown > .body .body_header{
+    padding:15px 0px;
+    font-size:1.4rem;
+    line-height: 2.0rem;
+    text-align: left;
+    border-bottom:1px solid #d5d5d5;
+    color:#2e2e2e;
+}
+
+.cannotdown > .body .body_step{
+    font-size:14px;
+    padding:20px 0px;
+    border-bottom: 1px dashed #d5d5d5;
+}
+
+.cannotdown > .body .body_step .body_explain{
+    text-align: left;
+
+}
+
+.cannotdown > .body .body_step .body_explain p{
+}
+
+.cannotdown > .body .body_step .body_explain .body_index{
+    width:25px;
+    height:25px;
+    background-color: #4cd845;
+    color:#fff;
+    border-radius: 50%;
+    display:block;
+    font-size:1.8rem;
+    line-height: 25px;
+    text-align: center;
+    float:left;
+}
+
+.cannotdown > .body .body_step .body_explain label{
+    display:block;
+    margin-left: 30px;
+
+}
+
+.cannotdown > .body .body_step .step_img{
+    margin:30px auto;
+    width:80%;
+}
+
+.cannotdown > .body .body_step .step_img > img{
+    width: 100%;
+    display: block;
+    max-width:266px;
+    margin:0px auto;
+}
