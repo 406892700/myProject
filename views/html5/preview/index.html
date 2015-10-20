@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index</title>
+	<style>
+		body{
+			text-align: center;
+			font-size:12px;
+			font-family: 'Microsoft Yahei';
+			color:#333;
+			background-color: #f5f5f5;
+			padding-bottom: 55px;
+			overflow:hidden;
+			position: absolute;
+			top:0px;
+		}
+
+		*{
+			margin:0px;
+			padding:0px;
+		}
+		img{
+			margin:0px;
+			display:block;
+			width:100%;
+		}
+
+		.line_through{
+			text-decoration: line-through;
+		}
+
+
+		.mask_opacity{
+			width:100%;
+			height:100%;
+			position: fixed;
+			left:0px;
+			top:0px;
+			background-color: rgba(0,0,0,0);
+		}
+
+	/* 	信息/
+	.pre_mask{
+		width:100%;
+		height:100%;
+		position:absolute;
+		left:0px;
+		top:0px;
+		background-color:rgba(0,0,0,0.5);
+		z-index:999999;
+	}*/
+
+		.main_wrap{
+			/* width:400px; */
+			/* position:absolute;
+			left:50%;
+			top:30px;
+			margin-left: -320px; */
+			background-color: #fff;
+			background-color: #f2f2f2;
+		}
+
+		.main_wrap > .goods_img{
+			position:relative;
+		}
+
+		.main_wrap > .goods_img > .itemx{
+			position:absolute;
+			top:10px;
+			height:30px;
+			background-color: rgba(0,0,0,0.5);
+			color:#fff;
+			font-size: 20px;
+			line-height: 30px;
+			padding:2px 15px;
+		}
+
+		.main_wrap > .goods_img > .itemx.l_left{
+			border-radius:0px 10px 10px 0px; 
+			left:0px;
+		}
+
+		.main_wrap > .goods_img > .itemx.l_right{
+			border-radius:10px 0px 0px 10px; 
+			right:0px;
+		}
+
+		.main_wrap > .goods_img > .itemx.l_right > span{
+			display:inline-block;
+			vertical-align: middle;
+			width:25px;
+			height:25px;
+			margin:0px 2px;
+		}
+
+		.main_wrap > .goods_img > .itemx.l_right > span.icon_share{
+			background:url('icon_share.png') no-repeat 0 0;
+			width:20px;
+			height:20px;
+			background-size: cover;
+		}
+
+		.main_wrap > .goods_img > .itemx.l_right > span.icon_like{
+			background:url('icon_like.png') no-repeat 0 0;
+			width:20px;
+			height:20px;
+			background-size: cover;
+		}
+
+		.main_wrap > .goods_info{
+			text-align: left;
+			background-color: #fff;
+			border-bottom: 1px solid #d1d1d1;
+		}
+
+		.main_wrap > .goods_info > .item{
+			margin:0px 15px;
+		}
+
+		.main_wrap > .goods_info > .item.g_name{
+			font-size: 18px;
+			height:40px;
+			line-height: 40px;
+		}
+
+		.main_wrap > .goods_info > .g_date{
+			  font-size: 16px;
+			  height: 30px;
+			  line-height: 30px;
+			  font-weight: bold;
+		}
+
+		.main_wrap > .goods_info > .g_suite{
+			font-size: 16px;
+			overflow:hidden;
+			border-top:1px solid #d1d1d1;
+		}
+
+		.main_wrap > .goods_info > .g_suite > .left_bar{
+			width:30px;
+			float: left;
+		}
+
+		.icon_rili{
+			background:url('icon_rili.png') no-repeat 0 0;
+			background-size: cover;
+			display:inline-block;
+			vertical-align: text-bottom;
+			width:25px;
+			height:25px;
+		}
+
+		.main_wrap > .goods_info > .g_suite > .left_bar > .icon_money{
+			background:url('icon_money.png') no-repeat 0 0;
+			background-size: cover;
+			display:block;
+			width:25px;
+			height:25px;
+			margin-top: 10px;
+		}
+
+		.main_wrap > .goods_info > .g_suite > .right_bar{
+			margin-left:35px;
+		}
+
+		.main_wrap > .goods_info > .g_suite > .right_bar > table{
+			width:100%;
+		}
+
+		.main_wrap > .goods_info > .g_suite > .right_bar > table td{
+			vertical-align:top;
+			padding:5px;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			font-size:14px;
+		}
+
+		.main_wrap  .g_time{
+			border-top:1px solid #d1d1d1;
+			padding:5px 15px;
+			background:url('icon_right.png') no-repeat 99% 50%;
+			background-size: 20px 20px;
+		}
+
+		.main_wrap  .g_time > label{
+			display:inline-block;
+			vertical-align: middle;
+			height:25px;
+			font-size: 14px;
+			line-height: 25px;
+		}
+
+		.main_wrap .g_time > input[type=text]{
+			height:25px;
+			line-height:25px;
+			width:100px;
+			border:none;
+			padding-left: 10px;
+			font-size:14px;
+			color:#999;
+			margin-left: 10px;
+			vertical-align: middle;
+			outline:none;
+		}
+
+		.main_wrap > .g_main_article{
+			margin:15px 0px;
+			background-color: #fff;
+			border-bottom: 1px solid #d1d1d1;
+			border-top: 1px solid #d1d1d1;
+			padding:15px;
+			text-align: left;
+		}
+
+		.main_wrap > .g_main_article > img{
+			width:100%;
+			margin:10px 0px;
+		}
+
+		 .main_wrap > .g_main_article > p{
+		 	font-size: 15px;
+		 	color:#333;
+		 	line-height:20px;
+
+		 }
+
+		 .main_wrap > .g_explain{
+		 	border-top: 1px solid #d1d1d1;
+		 	border-bottom: 1px solid #d1d1d1;
+		 	background-color: #fff;
+		 	margin-top: 10px;
+		 }
+
+		 .main_wrap > .g_explain > .header{
+		 	height:35px;
+		 	margin-left:10px;
+		 	border-bottom: 1px solid #d1d1d1;
+		 	line-height: 35px;
+		 	font-size:16px;
+		 	text-align: left;
+		 }
+
+		 .main_wrap > .g_explain >  .body{
+		 	padding:10px;
+		 	font-size: 14px;
+		 	text-align: left;
+		 }
+
+		 .main_wrap > .g_explain >  .body > p{
+		 	margin:5px 0px;
+		 }
+
+		 .main_wrap > .g_btm{
+		 	height:45px;
+		 	line-height: 45px;
+		 	border-top: 1px solid #d1d1d1;
+		 	background-color: #fff;
+		 	position:fixed;
+		 	left:0px;
+		 	bottom:0px;
+		 	width:100%;
+		 	box-shadow: -5px 0px 5px #aaa;
+		 }
+
+
+		 .main_wrap > .g_btm > .price_area{
+		 	margin-right: 120px;
+		 	text-align: left;
+		 	color:#3fc5aa;
+		 	font-size: 16px;
+		 	line-height: 45px;
+		 	padding: 0px 10px;
+		 }
+
+		 .main_wrap > .g_btm > .btn_buy{
+			 display: block;
+			 width: 80px;
+			 float: right;
+			 color: #fff;
+			 font-size: 13px;
+			 height: 30px;
+			 margin-top: 8px;
+			 border-radius: 5px;
+			 line-height: 30px;
+			 background-color: #fdab34;
+			 text-decoration: none;
+			 margin-right: 10px;
+		 }
+
+		 .fake_radio{
+		 	width:15px;
+		 	height:15px;
+		 	display:inline-block;
+		 	background:url('icon_select.png') no-repeat 0 0;
+		 	background-size: cover;
+		 	vertical-align: middle;
+		 }
+
+		 .fake_radio.checked{
+		 	background-image:url('icon_selected.png');
+		 }
+	</style>
+</head>
+<body>
+	<div class="pre_mask" id="mask">
+		<div class="main_wrap">
+			<div class="header">
+				<img src="title.jpg" alt="">
+			</div>
+			<!-- 头部 -->
+			<div class="goods_img">
+				<img src="pic.png" alt="">
+				<div class="itemx l_left">
+					杭州
+				</div>
+
+				<div class="itemx l_right">
+					<span class="icon_share"></span>
+					<span class="icon_like"></span>
+				</div>
+			</div>
+			<!-- 商品图 -->
+			<div class="goods_info">
+				<div class="item g_name">
+					宋城+千古情九点+双早
+				</div>
+
+				<div class="item g_date">
+					<span class="icon_rili"></span>
+					4月1日-6月1日
+				</div>
+
+				<div class="item g_suite">
+					<div class="left_bar">
+						<span class="icon_money"></span>
+					</div>
+					<div class="right_bar">
+						<table>
+							<tr>
+								<td><span class="fake_radio checked"></span></td>
+								<td>景点费用：200元<br>
+									(往返路费+景点费用)
+								</td>
+								<td>原价：<span class="line_through">350元</span></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<div class="g_time">
+					<label>选择出行时间</label>
+					<input type="text" value="2015-12-12">
+				</div>
+			</div>
+			<!-- 商品信息 -->
+			<div class="g_main_article">
+				<img src="pic.png" alt="">
+				<img src="pic.png" alt="">
+				<img src="pic.png" alt="">
+				<p>地方数据库连接双方都</p>
+				<p>地方数据库连接双方都</p>
+				<p>地方数据库连接双方都</p>
+			</div>
+
+			<!-- 商品正文 -->
+
+			<div class="g_explain">
+				<div class="header">
+					- 参加说明 -
+				</div>
+				<div class="body">
+					<p>
+						报名截止时间：
+					</p>
+					<p>
+						支持随时退款:
+					</p>
+					<p>
+					有疑问请拨打：
+					</p>
+				</div>
+			</div>
+			<!-- 商品说明 -->
+
+			<div class="g_btm">
+				<a href="javascript:void(0)" class="btn_buy">立即参加</a>
+				<div class="price_area">200-288元</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="/javascripts/zepto.min.js"></script>
+	<script type="text/javascript">
+		console.log(obj);
+		var count = 0;
+
+		window.onload = function(){
+			var body = document.documentElement.getElementsByTagName('body')[0],
+				height = body.clientHeight,
+					top = 0;
+			//console.log(height);
+			var getOffset = function(){
+				var offsetY = $(body).css('top').slice(0,-2);
+				//console.log('currentOffsetY:'+offsetY);
+				return offsetY*1;
+
+			};
+			body.onmousedown = function(evt){
+				evt.preventDefault();
+
+				var oY = evt.clientY;//获取原始位置
+				var move = function(evt){
+					/*evt.preventDefault();*/
+					var cY = evt.clientY,
+							offset = cY-oY;
+						top = getOffset()+offset;
+					//console.log('currentTop:'+top);
+					$(body).css('top',top+'px');
+					oY = cY;
+				};
+
+				var end = function(evt){
+
+					if(top > 0){
+						$(body).animate({'top':'0px'},200);
+					}else if(top < -(height-437)){
+						$(body).animate({'top':-(height-437)+'px'},200);
+					}
+					$(body).unbind('mousemove',move);
+				};
+				$(body).unbind('mouseup',end);
+				$(body).unbind('mouseleave',end);
+				$(body).bind('mousemove', move);
+				$(body).bind('mouseup',end);
+				$(body).bind('mouseleave',end);
+			}
+		}
+	</script>
+</body>
+</html>

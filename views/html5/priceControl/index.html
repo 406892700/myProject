@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>价格控制</title>
+    <script src="/javascripts/jquery.min.js"></script>
+    <style>
+        html{
+            font-size: 62.5%;
+        }
+
+        *{
+            padding:0px;
+            margin:0px;
+        }
+
+        body{
+            font-family:'Microsoft Yahei';
+            text-align: center;
+            font-size: 1.2rem;;
+
+        }
+
+        .priceWrap{
+            background-color:rgb(238,238,238) ;
+            display:inline-block;
+            border-radius:20px;
+        }
+
+        .priceWrap > a.minus,
+        .priceWrap > a.add{
+            display: inline-block;
+            border-radius: 50%;
+            width:20px;
+            height: 20px;
+            text-decoration: none;
+            line-height: 20px;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .priceWrap > a.minus{
+            background: url('html5/priceControl/images/icon_minus.png') no-repeat 0 0;
+            background-color: #fff !important;
+            background-size:cover;
+        }
+
+        .priceWrap > a.add{
+            background: url('html5/priceControl/images/icon_add.png') no-repeat 0 0;
+            background-color: #fff !important;
+            background-size:cover;
+        }
+
+        .priceWrap > .edit{
+            vertical-align: middle;
+            display: inline-block;
+            width:30px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size:1.5rem;
+            color:#333;
+            line-height: 20px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="priceWrap">
+    <a href="javascript:void(0)" class="minus"></a>
+    <div class="edit">0</div>
+    <a href="javascript:void(0)" class="add"></a>
+</div>
+<script>
+    ;(function(window,$,undefined){
+        $.fn.priceCtrl = function(opt){
+            var that = this,
+                    minus = that.find('a.minus'),
+                    add = that.find('a.add'),
+                    edit = that.find('div.edit');
+
+            var bindEvent = function(){
+                minus.click(function(){
+                    var val = edit.text()*1;
+                    if(val == 0){
+                        return;
+                    }
+                    val--;
+                    edit.text(val);
+
+                });
+
+                add.click(function(){
+                    var val = edit.text()*1;
+                    val++;
+                    edit.text(val);
+                });
+            };
+
+            bindEvent();
+        }
+    })(window,jQuery,undefined);
+    $(function(){
+        $('.priceWrap').priceCtrl();
+    });
+</script>
+</body>
+</html>

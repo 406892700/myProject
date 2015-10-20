@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>数据提交</title>
+    <script src="waibao/laomei/js/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <form action="" id="form">
+            <div class="form_contrl"><label for="">姓名:</label><input type="text" id="name"/></div>
+            <div class="form_contrl"><label for="">电话:</label><input type="text" id="phone"/></div>
+            <div class="form_contrl"><label for="">地址:</label><textarea name="" id="" cols="30" rows="10" id="address"></textarea></div>
+            <input type="button" value="提交" id="submit"/>
+        </form>
+    </div>
+<script>
+    $(function(){
+        $('#submit').bind('click',function(){
+            var $name = $('#name'),
+                $phone = $('#phone'),
+                $address = $('#address'),
+                name = $name.val(),
+                phone = $phone.val(),
+                address = $address.val();
+            var obj  = {};
+            obj.name = name;
+            obj.phone = phone;
+            obj.address = address;
+
+            $.ajax({
+                url:'/laomeiSubmit',
+                data:obj,
+                success:function(data){
+                    alert(data.name);
+                },
+                error: function (err) {
+                    alert('数据获取错误！');
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>

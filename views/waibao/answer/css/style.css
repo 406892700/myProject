@@ -1,0 +1,48 @@
+/*重置一些浏览器默认样式*/
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+ul{
+    list-style: none;
+}
+
+img{
+    display: block;
+    margin:0px auto;
+    width:100%;
+}
+
+/*一些公用样式*/
+html{
+    font-size:62.5%;
+    height:100%;
+}
+
+body{
+    font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
+    /*font-family: 'HelveticaNeue-UltraLight';*/
+    height: 100%;
+}
+
+.clearfix{
+    clear:both;
+}
+
+.f_left{
+    float: left;
+}
+
+.f_right{
+    float: right;
+}
+
+
+/*  上面那些是公用的样式   */

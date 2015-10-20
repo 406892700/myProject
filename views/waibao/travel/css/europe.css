@@ -1,0 +1,375 @@
+﻿/*重置一些浏览器默认样式*/
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+ul{
+    list-style: none;
+}
+
+img{
+    display: block;
+    width:100%;
+    margin:0px auto;
+}
+
+/*一些公用样式*/
+html{
+    font-size:62.5%;
+    height:100%;
+}
+
+body{
+    font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
+    /*font-family: 'HelveticaNeue-UltraLight';*/
+    background: url('../images/bg.png') no-repeat  0 0;
+    background-size: cover;
+    text-align: center;
+    color:#fff;
+    height: 100%;
+}
+
+.clearfix{
+    clear:both;
+}
+
+.f_left{
+    float: left;
+}
+
+.f_right{
+    float: right;
+}
+
+.btn{
+    display:block;
+    border-radius: 5px;
+    background-color: #c7113c;
+    color:#fff;
+    font-size:2.3rem;
+    height:3.5rem;
+    line-height:3.5rem;
+    font-weight: bold;
+    box-shadow: 3px 3px 4px #444;
+    margin:0px auto;
+    letter-spacing: 2px;
+}
+
+
+/*页面主体部分样式*/
+.e_header{
+    padding: 10px 0px;
+}
+
+.e_header > img{
+    width:80%;
+    margin:0px auto;
+    -webkit-transition:background-color 1s;
+    -moz-transition:background-color 1s;
+    -ms-transition:background-color 1s;
+    -o-transition:background-color 1s;
+    transition:background-color 1s;
+}
+
+.e_header.e_cover{
+    background-color: #c7113c;
+}
+
+.e_main_body{
+    padding:0px 20px;
+}
+
+
+/*封面主要内容*/
+
+.e_main_body .e_cover_title{
+    margin-top: 30px;
+}
+
+.e_main_body .e_cover_title > img{
+    width: 90%;
+}
+
+.e_main_body .e_cover_pic{
+    margin-top: 10px;
+}
+
+.e_main_body .e_cover_pic > img{
+    width: 90%;
+}
+
+.e_main_body .footer{
+    margin-top: 20px;
+}
+
+.e_main_body .footer > a.btn{
+    width:120px;
+}
+
+.e_main_body .footer > a.explain{
+    display: block;
+    color:#fff;
+    font-size:1.4rem;
+    text-decoration: underline;
+    line-height:2.0rem;
+    margin-top: 20px;
+}
+
+/*国家介绍主体*/
+.e_main_body .country_pic{
+    position: relative;
+    overflow: hidden;
+}
+
+.e_main_body .country_pic.problem > img{
+
+}
+
+.e_main_body .country_pic > .fake_pic{
+    opacity: 0;   
+}
+.e_main_body .country_pic > .intro_pic{
+    position: absolute;
+    left:0px;
+    top:0px;
+    width:100%;
+}
+
+.e_main_body .timeout{
+
+}
+
+.e_main_body .timeout > .f_left{
+    color:#fff;
+    font-size: 12rem;
+    line-height: 14rem;
+    font-family:'HelveticaNeue-UltraLight';
+}
+
+.e_main_body .timeout > .f_left{
+    text-align: left;
+}
+.e_main_body .timeout > .f_left > img{
+    width:120px !important;
+    margin-top:30px;
+    margin-left:10px;
+}
+
+.e_main_body .goon_btn{
+    margin-top: 30px;
+}
+
+.e_main_body .goon_btn > .btn{
+    width:100px;
+}
+
+.e_main_body .goon_btn > .result{
+    color:#fff;
+    font-size:1.6rem;
+    margin-top: 15px;
+}
+
+
+/*问题回答主页面*/
+.e_main_body .country_q_a{
+    border-bottom: 1px solid #fff;
+    font-size: 1.6rem;
+    color:#fff;
+    padding: 25px 0px 0px 0px;
+}
+
+.e_main_body .country_q_a > .question{
+
+}
+
+.e_main_body .country_q_a > .answer{
+}
+
+.e_main_body .country_q_a > .answer > a{
+    display: block;
+    width: 50%;
+    text-align: center;
+    color:#fff;
+    height:60px;
+    line-height: 60px;
+}
+
+
+.e_main_body .timeout2{
+    padding-top: 0px;
+    color:#fff;
+}
+
+.e_main_body .timeout2 > span{
+    font-size: 10rem;
+    line-height: 12rem;
+    font-family:'HelveticaNeue-UltraLight';
+}
+
+.e_main_body .timeout2 > .result{
+    padding:5px;
+    background-color: #Fff;
+    color:#565153;
+    font-size:1.6rem;
+    width:160px;
+    margin: 0px auto;
+}
+
+/*领奖台*/
+.e_main_body .rank_panel{
+    padding:15px 0px;
+    border-bottom: 1px solid #fff;
+}
+
+.e_main_body .rank_panel > figure{
+    width:50%;
+    margin:0px auto;
+}
+
+.e_main_body .rank_panel > .rank_result{
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+    margin-top: 15px;
+}
+
+
+.e_main_body .result_explain{
+    border-bottom: 1px solid #fff;
+    padding:15px 0px;
+}
+
+.e_main_body .result_explain > .title{
+}
+
+.e_main_body .result_explain > .title > p{
+    font-size: 2.3rem;
+    font-weight: bold;
+    line-height:2.6rem;
+}
+
+.e_main_body .result_explain > .title > div.arrow_down{
+    height:30px;
+    background: url('../images/arrow_down.png') no-repeat center center;
+    background-size: 25px;
+}
+
+.e_main_body .result_explain > .title > div.line{
+    border-top:1px solid #fff;
+    width:120px;
+    margin:10px auto 5px;
+}
+
+.e_main_body .result_explain > p{
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+}
+
+.e_main_body .some_operation{
+    padding:20px 0px;
+}
+
+.e_main_body .some_operation > .btn_share{
+    width:170px;
+    margin-bottom:15px;
+}
+
+.e_main_body .some_operation > .btn_repeat{
+    width:120px;
+}
+
+/*提交个人信息*/
+.e_main_body .form_wrap{
+    margin-top:40px;
+}
+
+.e_main_body .form_wrap >.inputCtrl{
+    margin:20px 0px;
+}
+
+.e_main_body .form_wrap >.inputCtrl > label{
+    font-size:1.8rem;
+}
+
+.e_main_body .form_wrap >.inputCtrl > input[type],
+.e_main_body .form_wrap >.inputCtrl > textarea{
+    color:#fff;
+    background-color: rgba(255,255,255,0);
+    border:1px solid #fff;
+    border-radius: 3px;
+    height:35px;
+    width:180px;
+    font-size:1.6rem;
+    line-height: 35px;
+    padding-left: 5px;
+}
+
+.e_main_body .form_wrap >.inputCtrl > textarea{
+    height:100px !important;
+    line-height: 2.0rem;
+}
+
+.e_main_body .btn_panel{
+    margin-top: 50px;
+}
+
+.e_main_body .btn_panel > .btn{
+    margin: 20px auto;
+}
+
+.e_main_body .btn_panel > .btn.style1{
+    width:120px;
+}
+
+.e_main_body .btn_panel > .btn.style2{
+    width:200px;
+
+}
+
+/*弹窗样式*/
+.e_mask{
+    position: fixed;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0,0.2);
+    display: none;
+}
+.e_tips{
+    width:80%;
+    height:auto;
+    position: absolute;
+    z-index:99999;
+    left:10%;
+    top:50%;
+    -webkit-transform:translateY(-50%);
+    -moz-transform:translateY(-50%);
+    -ms-transform:translateY(-50%);
+    -o-transform:translateY(-50%);
+    transform:translateY(-50%);
+    background-color: rgba(0,0,0,0.8);
+    color:#fff;
+    box-shadow: 0px 0px 5px #aaa;
+    padding:20px 20px;
+    border:1px solid #fff;
+    border-radius:5px;
+
+}
+
+.e_tips p{
+    color:#fff;
+    font-size:1.6rem;
+    text-align: left;
+    margin: 10px 0px;
+    text-indent:2em;
+}
+
+.e_tips .btn{
+    width:120px;
+    margin-top: 30px;
+}

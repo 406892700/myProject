@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.fakeWrap{
+			width:450px;
+			height:600px;
+			background:url('html5/preview/iPhone6_03.png') no-repeat 0 0;
+			background-size: cover;
+			width:280px;
+			height:582px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-left: -140px;
+			margin-top: -291px;
+		}
+
+		.fakeWrap > iframe{
+			width: 246px;
+			height: 437px;
+			left: 18px;
+			top: 73px;
+			position: absolute;
+		}
+
+		.fakeWrap > .pre_btn_done{
+			width:260px;
+			height:40px;
+			background-color:#3fc5aa;
+			color:#fff;
+			font-size:18px;
+			line-height: 40px;
+			text-align: center;
+			bottom: -60px;
+			position: absolute;
+			margin:0px 10px;
+			cursor:pointer;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var init = function(){
+			console.log(window.top == window)
+		}
+	</script>
+
+	<div class="fakeWrap">
+		<iframe id="iframe" src="html5/preview/index.html" frameborder="0" style="  "> </iframe>
+		<a class="pre_btn_done" href="javascript:void(0)">确定</a>
+	</div>
+	<script type="text/javascript">
+		var iframe = document.getElementById('iframe');
+		var height = iframe.contentDocument.body.clientHeight;
+		var innerWindow = iframe.contentWindow;
+
+		innerWindow.obj = {
+			destination:'',
+			firstImageUrl:'',
+			name:'',
+			activeStartDate:'',
+			activeEndDate:'',
+			suitables:[{
+				suitable:'',
+				primePrice:0,
+				price:0,
+				suitableNote:''
+			}],
+			priceLow:0,
+			priceHigh:0,
+			content:'',
+			keepDate:'',
+			refundAllow:'',
+			contactPhone:''
+		}
+	</script>
+</body>
+</html>
