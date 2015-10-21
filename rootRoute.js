@@ -6,7 +6,8 @@ var routeModule = [
     /*require('./routes/index'),*/
     require('./routes/admin/login/loginRoute'),
     require('./routes/waibao/waibao'),
-    require('./routes/html/htmlRoutes')
+    require('./routes/html/htmlRoutes'),
+    require('./routes/demo/demo')
 ];
 
 

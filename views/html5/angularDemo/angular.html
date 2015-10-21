@@ -26,12 +26,14 @@
 <body>
     <script>
         var expanderModule = angular.module('expanderModule',[]);
-        expanderModule.controller('SomeController',['$scope','$http',function ($scope,$http){
+        expanderModule.controller('SomeController',['$scope','$http','$location',function ($scope,$http,$location){
             $scope.title = '点击展开';
             $scope.text = "有中国展开~~";
             $scope.alert = function(){
                 alert(1);
             };
+
+            $scope.$apply();
 
             $http({
                 url:'/getMsg',

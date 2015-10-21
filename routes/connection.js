@@ -7,7 +7,7 @@ module.exports = function(app){
         host     : 'localhost',
         user     : 'root',
         password : '123456',
-        database : 'xuhuaiyuan'
+        database : 'angular'
     });
     return connection;
 };

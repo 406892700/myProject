@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="/javascripts/angular.min.js"> </script>
+    <title></title>
+    <script>
+        var app = angular.module('module',[]);
+            app.controller('appController',['$scope',function($scope){
+               $scope.province = '';
+                $scope.city = '';
+                $scope.dist = '';
+                $scope.type = '';
+            }]);
+    </script>
+</head>
+<body ng-app = "module">
+    <div ng-controller="appController">
+        <select ng-model="type">
+            <option ng-repeat = "type in ['province','city','dist']" value="{{type}}">{{type}}</option>
+        </select>
+
+        <div class="value">
+            {{type}}
+        </div>
+    </div>
+</body>
+</html>

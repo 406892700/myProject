@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <title>添加商品</title>
+    <% include ../../template/head.html %>
+</head>
+<body>
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading ">
+                <div class="title">
+                    添加商品
+                </div>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">商品名称</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="name" placeholder="商品名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price" class="col-sm-2 control-label">商品价格</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="price" placeholder="商品价格">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price" class="col-sm-2 control-label">商品类别</label>
+                        <div class="col-sm-2">
+                            <select name="" id="price" class="form-control">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price" class="col-sm-2 control-label">商品备注</label>
+                        <div class="col-sm-4">
+                            <textarea type="text" class="form-control" id="price" placeholder="商品备注"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">确认添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('module',[]);
+        app.factory('typeService',['$http',function($http){
+            return function(){
+                var deffer = $http({
+                    url:'/getGoodsType',
+                    method:'get'
+                });
+
+                return deffer;
+            }
+
+        }]);
+        app.controller('addController',['$scope','typeService' function ($scope,typeService) {
+            var
+        }]);
+    </script>
+</body>
+</html>

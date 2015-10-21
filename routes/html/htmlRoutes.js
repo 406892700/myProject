@@ -17,9 +17,13 @@ module.exports = function(app){
         res.render('html5/angularDemo/angular',{});
     });
 
+    app.get('/angularSelect', function (req,res) {
+        res.render('html5/angularDemo/select',{});
+    });
+
     app.get('/cannotdown', function (req,res) {
         res.render('html5/cannotdown/index',{});
-    });
+});
     
     
     app.get('/getMsg', function (req,res) {
