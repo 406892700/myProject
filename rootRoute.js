@@ -2,6 +2,11 @@
  * Created by Administrator on 2015/9/9.
  */
 
+
+/*
+*所有路由文件配置文件
+*
+* */
 var routeModule = [
     /*require('./routes/index'),*/
     require('./routes/admin/login/loginRoute'),

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="module">
 <head lang="zh-cn">
     <meta charset="UTF-8">
     <title>添加商品</title>
     <% include ../../template/head.html %>
 </head>
-<body>
+<body ng-controller="addController">
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading ">
@@ -14,33 +14,42 @@
                 </div>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" action="/addGoodsInfo" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">商品名称</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="name" placeholder="商品名称">
+                            <input type="text" class="form-control" id="name" placeholder="商品名称" name="g_name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="price" class="col-sm-2 control-label">商品价格</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="price" placeholder="商品价格">
+                            <input type="text" class="form-control" id="price" placeholder="商品价格" name="g_price">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="price" class="col-sm-2 control-label">商品类别</label>
                         <div class="col-sm-2">
-                            <select name="" id="price" class="form-control">
-                                <option value=""></option>
+                            <select name="g_type" id="price" class="form-control">
+                                <option ng-repeat="o in obj.data" value="{{o.g_type_id}}">{{o.g_type_name}}</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="price" class="col-sm-2 control-label">商品备注</label>
+
+                    <!--<div class="form-group">
+                        <label for="price" class="col-sm-2 control-label">商品图片</label>
                         <div class="col-sm-4">
-                            <textarea type="text" class="form-control" id="price" placeholder="商品备注"></textarea>
+                            <input type="file" class="form-control"  placeholder="商品图片" name="g_pic">
+                        </div>
+                    </div>-->
+
+
+                    <div class="form-group">
+                        <label for="g_note" class="col-sm-2 control-label">商品备注</label>
+                        <div class="col-sm-4">
+                            <textarea type="text" class="form-control" id="g_note" placeholder="商品备注" name="g_note"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -54,20 +63,34 @@
     </div>
     <script>
         var app = angular.module('module',[]);
-        app.factory('typeService',['$http',function($http){
-            return function(){
+        app.factory('dataService',['$http',function($http){
+            return function(url){
                 var deffer = $http({
-                    url:'/getGoodsType',
+                    url:url,
                     method:'get'
+                }).success(function(data){
+
+                }).error(function(err){
+                    console.logErr('数据获取错误！');
                 });
 
                 return deffer;
             }
 
         }]);
-        app.controller('addController',['$scope','typeService' function ($scope,typeService) {
-            var
+
+        app.directive('showLoading',function(){
+           return function(){
+
+           };
+        });
+        app.controller('addController',['$scope','dataService',function ($scope,dataService) {
+            data = dataService('/getGoodsType');
+            data.success(function(data){
+                $scope.obj = data;
+            })
         }]);
     </script>
+
 </body>
 </html>

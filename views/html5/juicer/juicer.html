@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="/javascripts/juicer-min.js"></script>
+    <script type="text/javascript" src="/javascripts/zepto.min.js"></script>
+</head>
+<body>
+    <div></div>
+    <script id="tpl" type="text/template">
+        <ul>
+            {@each list as it,index}
+            <li>${it.name} (index: ${index})</li>
+            {@/each}
+            {@each blah as it}
+            <li>
+                num: ${it.num} <br />
+                {@if it.num==3}
+                {@each it.inner as it2}
+                ${it2.time} <br />
+                {@/each}
+                {@/if}
+            </li>
+            {@/each}
+            <li>${num}</li>
+            <li></li>
+        </ul>
+    </script>
+    <script>
+        var data = {
+            list: [
+                {name:' guokai', show: true},
+                {name:' benben', show: false},
+                {name:' dierbaby', show: true}
+            ],
+            blah: [
+                {num: 1},
+                {num: 2},
+                {num: 3, inner:[
+                    {'time': '15:00'},
+                    {'time': '16:00'},
+                    {'time': '17:00'},
+                    {'time': '18:00'}
+                ]},
+                {num: 4}
+            ],
+            num:100
+        };
+
+        var tpl = document.getElementById('tpl').innerHTML;
+        var html = juicer(tpl, data);
+
+        document.addEventListener("DOMContentLoaded", function(){
+            $('body').append($(html));
+        }, false);
+
+    </script>
+</body>
+</html>
