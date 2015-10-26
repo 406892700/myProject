@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="routeApp">
+<head>
+<title>后台</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="matrix/css/bootstrap.min.css" />
+<link rel="stylesheet" href="matrix/css/bootstrap-responsive.min.css" />
+<!--<link rel="stylesheet" href="matrix/css/fullcalendar.css" />-->
+<link rel="stylesheet" href="matrix/css/matrix-style.css" />
+<link rel="stylesheet" href="matrix/css/matrix-media.css" />
+<link href="matrix/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<!--<link rel="stylesheet" href="matrix/css/jquery.gritter.css" />-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <% include ../../template/head.html %>
+</head>
+<body ng-controller="mainController">
+
+<!--Header-part-->
+<div id="header">
+  <h1><a href="">Matrix Admin</a></h1>
+</div>
+<!--close-Header-part-->
+
+
+<!--top-Header-menu-->
+<div id="user-nav" class="navbar navbar-inverse">
+  <ul class="nav">
+    <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">username</span><b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a href="#"><i class="icon-user"></i> 我的账户</a></li>
+        <li class="divider"></li>
+        <li><a href="/loginout"><i class="icon-key"></i> 登出</a></li>
+      </ul>
+    </li>
+    <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">消息</span> <span class="label label-important">5</span> <b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a class="sAdd" title="" href="#"><i class="icon-plus"></i> 新消息</a></li>
+      </ul>
+    </li>
+    <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">设置</span></a></li>
+    <li class=""><a title="" href="/loginout"><i class="icon icon-share-alt"></i> <span class="text">登出</span></a></li>
+  </ul>
+</div>
+<!--close-top-Header-menu-->
+<!--start-top-serch-->
+<div id="search">
+  <input type="text" placeholder="Search here..."/>
+  <button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
+</div>
+<!--close-top-serch-->
+<!--sidebar-menu-->
+<div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> 主面板</a>
+  <ul>
+    <li class="active"><a href="#"><i class="icon icon-home"></i> <span>主面板</span></a> </li>
+    <li><a href="#"><i class="icon icon-file"></i> <span>订单管理</span></a> </li>
+    <li><a href="#"><i class="icon icon-signal"></i> <span>统计管理</span></a> </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>商品管理</span> <span class="label label-important">2</span></a>
+      <ul>
+        <li><a href="#">添加新商品</a></li>
+        <li><a href="#">管理库存</a></li>
+      </ul>
+    </li>
+    <li><a href="#"><i class="icon icon-inbox"></i> <span>消息管理{{message}}</span></a> </li>
+  </ul>
+</div>
+
+<!--sidebar-menu-->
+<!--main-container-part-->
+<div id="content" ng-view>
+
+</div>
+<!--end-Footer-part-->
+
+  <script src="matrix/js/jquery.min.js"></script>
+  <script src="matrix/js/matrix.js"></script>
+  <script src="matrix/js/matrix.dashboard.js"></script>
+<script type="text/javascript" src="javascripts/angular.min.js"></script>
+<script>
+  /*var routeApp = angular.module('routeApp',['ngRoute']);
+      routeApp.config(function($routeProvider){
+        $routeProvider
+                .when('/',{
+                  templateUrl:'admin/content/home.html',
+                  controller:'homeController'
+        });
+                /!*.when('/addGoods',{
+                  templateUrl:'content/addGoods',
+                  controller:'addGoodsController'
+                })*!/
+      });
+
+  routeApp.controller('mainController',function($scope){
+    $scope.name = "12112";
+  });
+
+  routeApp.controller('homeController',['$scope',function($scope){
+    $scope.name = 'home';
+  }]);*/
+
+  var routeApp = angular.module('routeApp', ['ngRoute']);
+
+    routeApp.config(function($routeProvider) {
+      $routeProvider
+              .when('/', {
+                templateUrl : 'admin/content/home.html',
+                controller  : 'mainController'
+              })
+              .when('/about', {
+                templateUrl : 'pages/about.html',
+                controller  : 'aboutController'
+              })
+              .when('/contact', {
+                templateUrl : 'pages/contact.html',
+                controller  : 'contactController'
+              });
+    });
+
+    routeApp.controller('mainController', function($scope) {
+      $scope.message = 'Everyone come and see how good I look!';
+    });
+</script>
+
+</body>
+</html>

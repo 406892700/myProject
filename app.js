@@ -1,63 +1,94 @@
-// ¼ÓÔØÒÀÀµ¿â£¬Ô­À´Õâ¸öÀà¿â¶¼·â×°ÔÚconnectÖĞ£¬ÏÖÔÚĞèµØ×¢µ¥¶À¼ÓÔØ
+// åŠ è½½ä¾èµ–åº“ï¼ŒåŸæ¥è¿™ä¸ªç±»åº“éƒ½å°è£…åœ¨connectä¸­ï¼Œç°åœ¨éœ€åœ°æ³¨å•ç‹¬åŠ è½½
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var ejs = require('ejs');
 
-// ´´½¨ÏîÄ¿ÊµÀı
+// åˆ›å»ºé¡¹ç›®å®ä¾‹
 var app = express();
 
-// ¶¨ÒåEJSÄ£°åÒıÇæºÍÄ£°åÎÄ¼şÎ»ÖÃ£¬Ò²¿ÉÒÔÊ¹ÓÃjade»òÆäËûÄ£ĞÍÒıÇæ
+// å®šä¹‰EJSæ¨¡æ¿å¼•æ“å’Œæ¨¡æ¿æ–‡ä»¶ä½ç½®ï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨jadeæˆ–å…¶ä»–æ¨¡å‹å¼•æ“
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'ejs');
-app.engine('.html', ejs.__express);//ÈÃhtmlºó×ºµÄÄ£°åÄÜ¾ß±¸ejsµÄ¹¦ÄÜ
-app.set('view engine', 'html');//¸ü¸ÄÄ£°åÒıÇæÎªhtml
-
-/*
- *---------------------------------------------
- *                  Â·ÓÉÄ£¿é¼ÓÔØ
- *---------------------------------------------
- * */
-/*var routes = require('./routes/index');
-var users = require('./routes/users');*/
-
-var rootRoute = require('./rootRoute');
-rootRoute(app);
-/*
- *---------------------------------------------
- *                  Â·ÓÉÊµÀı»¯
- *---------------------------------------------
- * */
-
-//routes(app);
+app.engine('.html', ejs.__express);//è®©htmlåç¼€çš„æ¨¡æ¿èƒ½å…·å¤‡ejsçš„åŠŸèƒ½
+app.set('view engine', 'html');//æ›´æ”¹æ¨¡æ¿å¼•æ“ä¸ºhtml
 
 // uncomment after placing your favicon in /public
-// ¶¨ÒåiconÍ¼±ê
+// å®šä¹‰iconå›¾æ ‡
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// ¶¨ÒåÈÕÖ¾ºÍÊä³ö¼¶±ğ
+// å®šä¹‰æ—¥å¿—å’Œè¾“å‡ºçº§åˆ«
 app.use(logger('dev'));
-// ¶¨ÒåÊı¾İ½âÎöÆ÷
+// å®šä¹‰æ•°æ®è§£æå™¨
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// ¶¨Òåcookie½âÎöÆ÷
+// å®šä¹‰cookieè§£æå™¨
 app.use(cookieParser());
-// ¶¨Òå¾²Ì¬ÎÄ¼şÄ¿Â¼
+app.use(session({
+  secret: 'recommand 128 bytes random string', // å»ºè®®ä½¿ç”¨ 128 ä¸ªå­—ç¬¦çš„éšæœºå­—ç¬¦ä¸²
+  cookie: { maxAge: 60 * 1000 * 30 }
+}));
+
+/*
+ *---------------------------------------------
+ *                  è·¯ç”±æ¨¡å—åŠ è½½
+ *---------------------------------------------
+ * */
+var rootRoute = require('./rootRoute');
+rootRoute.map(function(v){
+  v(app);
+});
+/*
+ *---------------------------------------------
+ *                  è·¯ç”±å®ä¾‹åŒ–
+ *---------------------------------------------
+ * */
+
+app.get('/test', function (req, res) {
+
+  // æ£€æŸ¥ session ä¸­çš„ isVisit å­—æ®µ
+  // å¦‚æœå­˜åœ¨åˆ™å¢åŠ ä¸€æ¬¡ï¼Œå¦åˆ™ä¸º session è®¾ç½® isVisit å­—æ®µï¼Œå¹¶åˆå§‹åŒ–ä¸º 1ã€‚
+  if(req.session.isVisit) {
+    req.session.isVisit++;
+    res.send('<p>ç¬¬ ' + req.session.isVisit + 'æ¬¡æ¥æ­¤é¡µé¢</p>');
+  } else {
+    req.session.isVisit = 1;
+    res.send("æ¬¢è¿ç¬¬ä¸€æ¬¡æ¥è¿™é‡Œ");
+    console.log(req.session);
+  }
+});
+
+app.get('/testx', function (req, res) {
+
+  // æ£€æŸ¥ session ä¸­çš„ isVisit å­—æ®µ
+  // å¦‚æœå­˜åœ¨åˆ™å¢åŠ ä¸€æ¬¡ï¼Œå¦åˆ™ä¸º session è®¾ç½® isVisit å­—æ®µï¼Œå¹¶åˆå§‹åŒ–ä¸º 1ã€‚
+  if(req.session.isVisit) {
+    req.session.isVisit++;
+    res.send('<p>ç¬¬ ' + req.session.isVisit + 'æ¬¡æ¥æ­¤é¡µé¢</p>');
+  } else {
+    req.session.isVisit = 1;
+    res.send("æ¬¢è¿ç¬¬ä¸€æ¬¡æ¥è¿™é‡Œ");
+    console.log(req.session);
+  }
+});
+// å®šä¹‰é™æ€æ–‡ä»¶ç›®å½•
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Æ¥ÅäÂ·¾¶ºÍÂ·ÓÉ
+
+// åŒ¹é…è·¯å¾„å’Œè·¯ç”±
 /*app.use('/', routes);
 app.use('/users', users);*/
 
 /*routes(app);*/
 
 // catch 404 and forward to error handler
-// 404´íÎó´¦Àí
+// 404é”™è¯¯å¤„ç†
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -68,7 +99,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-// ¿ª·¢»·¾³£¬500´íÎó´¦ÀíºÍ´íÎó¶ÑÕ»¸ú×Ù
+// å¼€å‘ç¯å¢ƒï¼Œ500é”™è¯¯å¤„ç†å’Œé”™è¯¯å †æ ˆè·Ÿè¸ª
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -81,7 +112,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-// Éú²ú»·¾³£¬500´íÎó´¦Àí
+// ç”Ÿäº§ç¯å¢ƒï¼Œ500é”™è¯¯å¤„ç†
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -90,5 +121,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-// Êä³öÄ£ĞÍapp
+// è¾“å‡ºæ¨¡å‹app
 module.exports = app;
