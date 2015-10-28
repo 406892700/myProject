@@ -6,14 +6,13 @@ module.exports = function(app){
     * 普通的页面跳转 start
     * */
     var util = require('../../routesUtil');//路由工具方法
-
     //登录页
     app.get('/login',function(req,res){
         var arg =  req.query.toggle;
         if(!arg){//不传参时
             if(req.session.user){//如果已经存在登陆状态，那就直接跳回到主面板
                 //res.render('/admin/dashboard/index');
-                res.redirect('/');
+                res.redirect('/dashboard');
             }
         }
         res.render('admin/login/login1',{});
@@ -32,7 +31,7 @@ module.exports = function(app){
     });
 
     //进入仪表盘
-    app.get('/',function(req,res){
+    app.get('/dashboard',function(req,res){
         if(!req.session.user){
             res.render('admin/login/login1');
         }else{
@@ -74,7 +73,7 @@ module.exports = function(app){
                     req.session.user = ret[1][0];
                     // res.json({'msg':'登录成功啦'});
                     //res.render('admin/dashboard',{user:req.session.user});
-                    res.redirect('/');
+                    res.redirect('/dashboard');
                 }
             }
         });
@@ -156,5 +155,67 @@ module.exports = function(app){
         });
 
 
+    });
+    
+    
+    app.get('/getOrderList', function (req,res) {
+        console.log(req.query);
+        var arg = req.query,
+            statIndex = arg._iDisplayStart,
+            displayLength = arg.iDisplayLength,
+            echo = arg.echo,
+            total,
+            run = util.syncify,
+            obj = {},
+            conn = require('../../connection')(app),
+            sql = 'select t.o_order_id,t.g_create_date,t.status, from t_order t, t_order_goods og where t.g_order_id = og.g_order_id';
+
+        conn.connect();
+
+        run(function * gen(callback){
+            var ret = yield conn.query(sql,callback);
+            if(ret[0]){
+                console.log(ret[0]);
+                console.log('查找出错了！');
+            }else{
+                conn.end();
+                console.log(ret[1]);
+                /*res.json({'msg':'商品添加成功！'});*/
+            }
+        });
+
+      /*  var obj = {
+            /!*"sEcho": 0,
+            "iTotalRecords": 30,
+            "iTotalDisplayRecords": 30,*!/
+            "sEcho": 3,
+            "iTotalRecords": 57,
+            "iTotalDisplayRecords": 57,
+            "aaData": [
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version'],
+                ['Gecko','All others','Platform(s)','Engine version']
+            ]
+        };*/
+        res.json(obj);
     });
 };

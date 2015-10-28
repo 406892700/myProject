@@ -33,5 +33,15 @@ module.exports = function(app){
 
     app.get('/juicer', function (req,res) {
         res.render('html5/juicer/juicer',{});
+    });
+
+
+    app.get('/share',function(req,res){
+        res.render('html5/sharePlugin/index',{});
+    });
+    
+    
+    app.get('/dateTable', function (req,res) {
+        res.render('html5/dataTable/index',{});
     })
 };

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="matrix/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="matrix/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="matrix/css/uniform.css" />
+    <link rel="stylesheet" href="matrix/css/select2.css" />
+    <link rel="stylesheet" href="matrix/css/matrix-style.css" />
+    <link rel="stylesheet" href="matrix/css/matrix-media.css" />
+    <script src="matrix/js/jquery.min.js"></script>
+    <script src="matrix/js/jquery.ui.custom.js"></script>
+    <script src="matrix/js/bootstrap.min.js"></script>
+    <script src="matrix/js/jquery.uniform.js"></script>
+    <script src="matrix/js/select2.min.js"></script>
+    <script src="matrix/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                    <h5>Data table</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <table class="table table-bordered data-table" id="orderTable">
+                        <thead>
+                        <tr>
+                            <th>Rendering engine</th>
+                            <th>Browser</th>
+                            <th>Platform(s)</th>
+                            <th>Engine version</th>
+                        </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#orderTable').dataTable({
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            /*"sDom": '<""l>t<"F"fp>',
+            /*"bDestroy" : true,*/
+            "bProcessing" : true,
+            "bServerSide" : true,
+            "sAjaxSource" : "/getOrderList"/*,
+            "aoColumns" : [ {
+                "mDataProp" : "Rendering engine"
+            }, {
+                "mDataProp" : "Browser"
+            }, {
+                "mDataProp" : "Platform(s)"
+            }, {
+                "mDataProp" : "Engine version"
+            }]*/
+        });
+    })
+</script>
+</body>
+</html>
