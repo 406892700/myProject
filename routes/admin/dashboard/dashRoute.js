@@ -160,6 +160,7 @@ module.exports = function(app){
     
     app.get('/getOrderList', function (req,res) {
         console.log(req.query);
+        util.baseExtend();
         var arg = req.query,
             statIndex = arg._iDisplayStart,
             displayLength = arg.iDisplayLength,
@@ -168,18 +169,108 @@ module.exports = function(app){
             run = util.syncify,
             obj = {},
             conn = require('../../connection')(app),
-            sql = 'select t.o_order_id,t.g_create_date,t.status, from t_order t, t_order_goods og where t.g_order_id = og.g_order_id';
+            //sql = 'select t.o_order_id,t.g_create_date,t.status from t_order t, t_order_goods og where t.g_order_id = og.g_order_id';
+            /*sql = 'SELECT ' +
+                'o.g_order_id AS orderId, ' +
+                'g.g_name AS goodsName, ' +
+                'og.g_goods_num AS goodsNum, ' +
+                'o.g_ceate_date AS createDate, ' +
+                'o.`status` AS orderStatus, ' +
+                'o.note AS orderNote ' +
+                'FROM ' +
+                't_order o, ' +
+                't_order_goods og, ' +
+                't_goods g ' +
+                'WHERE ' +
+                'o.g_order_goods = og.g_order_id ' +
+                'AND ' +
+                'og.g_good_id = g.g_id ' +
+                'ORDER BY o.g_order_id ' +
+                'limit 8,6',*/
+            sql = 'select * from t_order',
+            sql2 = 'select count(*) as length from t_order';
 
         conn.connect();
 
         run(function * gen(callback){
-            var ret = yield conn.query(sql,callback);
-            if(ret[0]){
+            var ret = yield conn.query(sql,callback),
+                ret2 = yield conn.query(sql2,callback);
+            console.log(ret2[1]);
+            if(ret[0] || ret2[0]){
                 console.log(ret[0]);
+                console.log(ret2[0]);
                 console.log('查找出错了！');
             }else{
-                conn.end();
-                console.log(ret[1]);
+
+                var aaData = [];
+                obj.sEcho = echo;
+                obj.iTotalRecords = ret2[1][0].length;
+                obj.iTotalDisplayRecords = ret2[1][0].length;
+                var temp = [];
+                ret[1].map(function (v) {
+                    temp.push(v.g_order_id);
+                });
+
+                var sql3  = 'select og.g_order_id as o_id ,og.g_goods_num,g.g_name from t_order_goods og,t_goods g where og.g_good_id = g.g_id and og.g_order_id in ('+temp.join(',')+')';
+                console.log(sql3);
+                var run1 = util.syncify;
+                run1(function * gen1(callback1) {
+                    var ret3 =  yield conn.query(sql3,callback1);
+                    console.log(ret3[1]);
+
+                });
+
+                /*var x = [
+                    { o_id: 1, g_goods_num: 3, g_name: '精品语句' },
+                    { o_id: 2, g_goods_num: 33, g_name: '的说法都是' },
+                    { o_id: 2, g_goods_num: 12, g_name: '的说法都ddd' },
+                    { o_id: 3, g_goods_num: 2, g_name: '的说法都ddd' },
+                    { o_id: 4, g_goods_num: 343, g_name: '的说dsffds都是f' },
+                    { o_id: 4, g_goods_num: 33, g_name: '的说法都是' },
+                    { o_id: 6, g_goods_num: 22, g_name: '3' }
+                ];
+
+
+                var getTpl = function(obj){
+                    var tmp = {},
+                        idArr = [];
+                    obj.map(function(v,i){
+                        var cId = v.o_id,
+                            cNum = v.g_goods_num,
+                            cName = v.g_name;
+                        if(idArr.indexOf(cId) == -1){
+                            idArr.push(cId);
+                            tmp[cId] = {o_id:cId,goods_info:[cName+' * '+cNum]};
+                            //tmp.push({o_id:cId,goods_info:[cName+' * '+cNum]})
+                        }else{
+                            tmp[cId].goods_info.push(cName+' * '+cNum);
+                        }
+                    });
+
+                    return tmp;
+                };
+
+                getTpl(x);*/
+                /*ret[1].map(function(v,i){
+                    var tmp = [],
+                        sql3 = 'select og.g_goods_num,g.g_name from t_order_goods og,t_goods g where og.g_good_id = g.g_id and og.g_order_id ='+v.g_order_id,
+                        run1 = util.syncify;
+                    tmp.push(v.g_order_id);
+                    run1(function * gen1(callback1) {
+                        var ret3 =  yield conn.query(sql3,callback1),
+                            goodsInfo = "";
+                        ret3[1].map(function(v,i){
+                            goodsInfo += v.g_name+'*'+v.g_goods_num;
+                        });
+                        tmp.push(goodsInfo);
+                        tmp.push(v.g_ceate_date);
+                        tmp.push(v.status);
+                        tmp.push(v.note);
+                        aaData.push(tmp);
+                        console.log(tmp);
+                    });
+                });*/
+
                 /*res.json({'msg':'商品添加成功！'});*/
             }
         });
@@ -216,6 +307,6 @@ module.exports = function(app){
                 ['Gecko','All others','Platform(s)','Engine version']
             ]
         };*/
-        res.json(obj);
+
     });
 };
