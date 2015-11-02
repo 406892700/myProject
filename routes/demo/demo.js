@@ -4,7 +4,7 @@
 module.exports = function(app){
     var util = require('../routesUtil');//路由工具方法
     /*添加商品*/
-    app.get('/addGoods',function(req,res){
+ /*   app.get('/addGoods',function(req,res){
         res.render('admin/demo/addGoods',{'title':'添加商品'})
     });
 
@@ -16,7 +16,7 @@ module.exports = function(app){
         res.render('admin/demo/login',{'title':'用户登录'});
     });
 
-    /*登录*/
+    /!*登录*!/
     app.post('/loginAction',function(req,res){
         var conn = require('../connection')(app),
             crypto = require('crypto'),
@@ -81,7 +81,7 @@ module.exports = function(app){
 
     });
 
-    /*获取商品类别*/
+    /!*获取商品类别*!/
     app.get('/getGoodsType', function (req,res) {
         var conn = require('../connection')(app);
         conn.connect();
@@ -119,9 +119,9 @@ module.exports = function(app){
         });
 
 
-    });
+    });*/
 
-    app.get('/testx', function (req, res) {
+ /*   app.get('/testx', function (req, res) {
 
         // 检查 session 中的 isVisit 字段
         // 如果存在则增加一次，否则为 session 设置 isVisit 字段，并初始化为 1。
@@ -133,7 +133,7 @@ module.exports = function(app){
             res.send("欢迎第一次来这里");
             console.log(req.session);
         }
-    });
+    });*/
 
 
     /*获取商品类别*/
@@ -154,5 +154,31 @@ module.exports = function(app){
                 res.json({'code':1,data:temp});
             }
         });
+    });*/
+
+    /*图片上传*/
+/*
+    app.get('/upload', function (req,res) {
+        res.render('admin/demo/fileUpload',{});
+    });
+
+    var multipart = require('connect-multiparty');
+    var multipartMiddleware = multipart();
+    var  fs = require('fs');
+    app.post('/uploadPic',multipartMiddleware, function (req,res) {
+        var files = req.files;
+        console.log(req.files);
+        for(var i in files){
+            var o_path = files[i].path,
+                t_path = 'public/images/upload/'+files[i].originalFilename,
+                readStream=fs.createReadStream(o_path),
+                writeStream=fs.createWriteStream(t_path);
+            readStream.pipe(writeStream);
+            readStream.on('end',function(){
+
+            });
+        }
+        res.json({'code':'1',data:'图片上传成功！'});
+
     });*/
 };

@@ -5,55 +5,115 @@
 <!--End-breadcrumbs-->
 <div class="container-fluid">
     <div class="row-fluid">
-    <div class="span12">
-        <div class="widget-box">
-            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                <h5>Personal-info</h5>
-            </div>
-            <div class="widget-content nopadding">
-                <form action="#" method="get" class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label">First Name :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" placeholder="First name">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>Personal-info</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <form action="#" method="get" class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label">订单编号 :</label>
+                            <div class="controls">
+                                <span>{{}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Last Name :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" placeholder="Last name">
+                        <div class="control-group">
+                            <label class="control-label">商品名称 :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" placeholder="商品名称">
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Password input</label>
-                        <div class="controls">
-                            <input type="password" class="span11" placeholder="Enter Password">
+                        <div class="control-group">
+                            <label class="control-label">商品图片</label>
+                            <div class="controls">
+                                <div class="span12">
+                                    <img src="images/good_pic.jpg" alt=""/>
+                                </div>
+                                <a href="javascript:void(0)" class="btn btn-success" style="margin-top:10px;" onclick="$(this).next('#upload').click()">点击上传图片</a>
+                                <input type="file" id="upload" class="hide"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Company info :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" placeholder="Company name">
+                        <div class="control-group">
+                            <label class="control-label">商品参数 :</label>
+                            <div class="controls">
+                                <iframe src="summernote/edit.html" frameborder="0" class="span11" id="edit" style="margin-bottom: 10px;"></iframe>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Description field:</label>
-                        <div class="controls">
-                            <input type="text" class="span11">
-                            <span class="help-block">Description field</span> </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Message</label>
-                        <div class="controls">
-                            <textarea class="span11"></textarea>
+                        <div class="control-group">
+                            <label class="control-label">单价(元):</label>
+                            <div class="controls">
+                                <input type="text" class="span2">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-success">确定</button>
-                    </div>
-                </form>
+
+                        <div class="control-group">
+                            <label class="control-label">库存(件):</label>
+                            <div class="controls">
+                                <input type="text" class="span2">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">商品类别:</label>
+                            <div class="controls">
+                                <select name="" id="" class="span2">
+                                    <option value="1">鱼竿</option>
+                                    <option value="2">一线</option>
+                                    <option value="3">个汉堡</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">状态:</label>
+                            <div class="controls">
+                                <select name="" id="" class="span2">
+                                    <option value="1">上架中</option>
+                                    <option value="2">已下架</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label"></label>
+                            <div class="controls">
+                                <button type="submit" class="btn btn-success">确定</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+<script>
+    ;(function(window,$,undefined){
+        $.fn.preview = function (opt,callback) {
+            var that = this;
+            var default_opt = {
+                
+            };
+            
+            var init = function () {
+                that.bind('load',function(evt){
+
+                });
+            }
+        }
+    })(window,jQuery,undefined);
+    $(function () {
+        /*alert($($('#edit')[0].contentWindow.document.body).height());*/
+        $('#edit')[0].onload = function(){
+            setInterval(function(){
+                $('#edit').height($('#edit')[0].contentWindow.document.body.clientHeight);
+            },100);
+
+        };
+
+        /*$('select').select2();*/
+
+    })
+</script>

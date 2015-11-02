@@ -5,82 +5,82 @@
 <!--End-breadcrumbs-->
 <div class="container-fluid">
     <div class="row-fluid">
-    <div class="span12">
-        <div class="widget-box">
-            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                <h5>订单详情</h5>
-            </div>
-            <div class="widget-content nopadding">
-                <form action="#" method="get" class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label">订单编号 :</label>
-                        <div class="controls">
-                            <input type="text" class="span3" placeholder="First name" readonly ng-model="info.o_id">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                    <h5>订单详情</h5>
+                </div>
+                <div class="widget-content nopadding">
+                    <form action="#" method="get" class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label">订单编号 :</label>
+                            <div class="controls">
+                                <input type="text" class="span3" placeholder="First name" readonly ng-model="info.o_id">
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">商品 :</label>
-                        <div class="controls">
-                            <div class="span11">
-                                <div class="widget-box" style="margin-top:0px;">
-                                    <div class="widget-content nopadding">
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>商品名</th>
-                                                <th>单价</th>
-                                                <th>数量</th>
-                                                <th>操作</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr class="even gradeA" ng-repeat="good in info.goods_info">
-                                                <td class="center">商品{{$index+1}}</td>
-                                                <td class="center">{{good.name}}</td>
-                                                <td class="center">{{good.price}}</td>
-                                                <td class="center">{{good.g_num}}</td>
-                                                <td class="center"><a href="#/goodsDetail?id={{good.g_id}}" class="btn btn-success btn-mini">查看商品</a></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                        <div class="control-group">
+                            <label class="control-label">商品 :</label>
+                            <div class="controls">
+                                <div class="span11">
+                                    <div class="widget-box" style="margin-top:0px;">
+                                        <div class="widget-content nopadding">
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>商品名</th>
+                                                    <th>单价</th>
+                                                    <th>数量</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="even gradeA" ng-repeat="good in info.goods_info">
+                                                    <td class="center">商品{{$index+1}}</td>
+                                                    <td class="center">{{good.name}}</td>
+                                                    <td class="center">{{good.price}}</td>
+                                                    <td class="center">{{good.g_num}}</td>
+                                                    <td class="center"><a href="#/goodsDetail?id={{good.g_id}}" class="btn btn-success btn-mini">查看商品</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">订单创建日期</label>
-                        <div class="controls">
-                            <input type="text" class="span3" placeholder="Enter Password" readonly ng-model="info.create_date">
+                        <div class="control-group">
+                            <label class="control-label">订单创建日期</label>
+                            <div class="controls">
+                                <input type="text" class="span3" placeholder="Enter Password" readonly ng-model="info.create_date">
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">订单状态 :</label>
-                        <div class="controls">
-                            <input type="text" class="span3" placeholder="Company name" readonly ng_model="info.o_status">
+                        <div class="control-group">
+                            <label class="control-label">订单状态 :</label>
+                            <div class="controls">
+                                <input type="text" class="span3" placeholder="Company name" readonly ng_model="info.o_status">
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">备注:</label>
-                        <div class="controls">
-                            <textarea readonly ng_model="info.o_note" class="span6"></textarea>
-                    </div>
+                        <div class="control-group">
+                            <label class="control-label">备注:</label>
+                            <div class="controls">
+                                <textarea readonly ng_model="info.o_note" class="span6"></textarea>
+                        </div>
 
 
-                    <div class="form-actions">
-                        <div class="btn-group">
-                            <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">处理订单 <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">标记为已处理</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">标记为订单无效</a></li>
-                            </ul>
+                        <div class="form-actions">
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">处理订单 <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">标记为已处理</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">标记为订单无效</a></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>

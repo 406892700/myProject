@@ -2,13 +2,13 @@
  * Created by Administrator on 2015/9/9.
  */
 /*
- *ËùÓĞÂ·ÓÉÎÄ¼şÅäÖÃÎÄ¼ş
+ *ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
  *
  * */
 module.exports  = [
    /* require('./routes/admin/login/loginRoute'),*/
     require('./routes/waibao/waibao'),
     require('./routes/html/htmlRoutes'),
-   /* require('./routes/demo/demo'),*/
+    require('./routes/demo/demo'),
     require('./routes/admin/dashboard/dashRoute')
 ];

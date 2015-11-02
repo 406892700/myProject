@@ -281,4 +281,80 @@ module.exports = function(app){
 
 
     });
+
+
+    /*获取商品列表*/
+    app.get('/getGoodsList',function(req,res){
+        util.baseExtend();
+        var arg = req.query,
+            statIndex = arg.iDisplayStart,
+            displayLength = arg.iDisplayLength,
+            echo = arg.sEcho,
+            run = util.syncify,
+            obj = {},
+            conn = require('../../connection')(app),
+            sql = 'SELECT g.g_id AS gid,' +
+                    'g.g_name AS gname, ' +
+                    'g.g_pic AS gpic, ' +
+                    'g.g_description AS gdes, ' +
+                    'g.g_price AS gprice, ' +
+                    'g.g_store_num AS gstore, ' +
+                    't.g_type_name AS gtype, ' +
+                    'g.g_note AS gnote, ' +
+                    'u.nickname AS nickname, ' +
+                    'g.g_status AS gstatus, ' +
+                    'g.g_add_date AS gadddate, ' +
+                    'g.g_modify_date AS gmodifydate ' +
+                    'FROM t_goods ' +
+                    'g, t_type t, ' +
+                    't_user u ' +
+                    'WHERE g.g_type = t.g_type_id ' +
+                    'AND ' +
+                    'g.g_operator = u.user_id limit '+statIndex+','+displayLength,
+            sql2 = 'select count(*) as length from t_goods';
+
+        run(function *gen(callback){
+            var ret = yield conn.query(sql,callback),
+                ret1 = yield  conn.query(sql2,callback);
+            if(ret[0] || ret1[0]){
+                console.log('出错了！');
+                console.log(ret[0]);
+                console.log(ret1[0]);
+            }else{
+                obj.sEcho = echo;
+                obj.iTotalRecords = ret1[1][0].length;
+                obj.iTotalDisplayRecords = ret1[1][0].length;
+                ret[1].map(function(v,i){
+                   v.gadddate = new Date(v.gadddate).Format('yyyy-MM-dd hh:mm:ss');
+                    v.gmodifydate = new Date(v.gmodifydate).Format('yyyy-MM-dd hh:mm:ss');
+                });
+                obj.aaData = ret[1];
+                res.json(obj);
+            }
+
+        });
+
+    });
+
+
+    /*商品图片上传*/
+    var multipartMiddleware = require('connect-multiparty')(),
+        fs = require('fs');
+    app.post('/uploadPic',multipartMiddleware, function (req,res) {
+        var files = req.files;
+        console.log(req.files);
+        for(var i in files){
+            var o_path = files[i].path,
+                t_path = 'public/images/upload/'+files[i].originalFilename,
+                readStream=fs.createReadStream(o_path),
+                writeStream=fs.createWriteStream(t_path);
+            readStream.pipe(writeStream);
+            readStream.on('end',function(){
+
+            });
+        }
+        res.json({'code':'1',data:'图片上传成功！'});
+    });
+
+
 };

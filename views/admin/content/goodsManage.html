@@ -6,55 +6,87 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            {{route}}
             <div class="widget-box">
-                <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                    <h5>Personal-info</h5>
+                <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                    <h5>商品列表</h5>
                 </div>
                 <div class="widget-content nopadding">
-                    <form action="#" method="get" class="form-horizontal">
-                        <div class="control-group">
-                            <label class="control-label">First Name :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" placeholder="First name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Last Name :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" placeholder="Last name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Password input</label>
-                            <div class="controls">
-                                <input type="password" class="span11" placeholder="Enter Password">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Company info :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" placeholder="Company name">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Description field:</label>
-                            <div class="controls">
-                                <input type="text" class="span11">
-                                <span class="help-block">Description field</span> </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Message</label>
-                            <div class="controls">
-                                <textarea class="span11"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div>
-                    </form>
+                    <table class="table table-bordered data-table" id="orderTable">
+                        <thead>
+                        <tr>
+                            <th>商品id</th>
+                            <th>商品名</th>
+                            <th>商品图片</th>
+                            <th>商品参数</th>
+                            <th>价格</th>
+                            <th>库存数</th>
+                            <th>类别</th>
+                            <th>添加日期</th>
+                            <th>修改日期</th>
+                            <th>商品状态</th>
+                            <th>备注</th>
+                            <th>操作员</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 </div>
+
+<script>
+    $(function(){
+        $('#orderTable').dataTable({
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            /*"sDom": '<""l>t<"F"fp>',*/
+            "bDestroy" : true,
+            "bProcessing" : true,
+            "sAjaxSource" : "/getGoodsList?rd=" + new Date().getTime(),
+            "bServerSide" : true,
+            "bFilter":false,
+            "aoColumns": [
+                { "sTitle": "订单id",   "mData": "gid" },
+                { "sTitle": "商品名称",  "mData": "gname" },
+                { "sTitle": "商品图片", "mData": "gpic" },
+                { "sTitle": "商品参数",  "mData": "gdes" },
+                { "sTitle": "单价",    "mData": "gprice" },
+                { "sTitle": "库存",  "mData": "gstore" },
+                { "sTitle": "商品类别",  "mData": "gtype" },
+                { "sTitle": "备注",  "mData": "gnote" },
+                { "sTitle": "操作员",  "mData": "nickname" },
+                { "sTitle": "状态",  "mData": "gstatus" },
+                { "sTitle": "添加时间",  "mData": "gadddate" },
+                { "sTitle": "修改时间",  "mData": "gmodifydate" },
+                { "sTitle": "操作",  "mData": "gid" }
+            ],
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                var button = '<a class="btn btn-success btn-small" href="#/goodsDetail?edit=true&id='+aData.gid+'">编辑商品</a>',
+                        img = '<img src="'+aData.gpic+'" width="150" height="150">',
+                        td = $(nRow).find('td'),
+                        render;
+
+
+                switch(aData.gstatus){
+                    case 1:render = '<span class="label label-success">上架中</span>';break;
+                    case 2:render = '<span class="label label">已下架</span>';break;
+                    default:render = '未配置项';break;
+                }
+                td.last().html(button);
+                td.eq(9).html(render);
+                td.eq(2).html(img);
+
+
+            }
+        });
+
+        $('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+
+        $('select').select2();
+    });
+</script>

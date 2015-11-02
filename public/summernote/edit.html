@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="./dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    <link href="./summernote.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="font-awesome.min.css" type="text/css"/>
+    <script src="../javascripts/jquery.min.js"></script>
+    <script src="./summernote.min.js"></script>
+    <script src="./dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="summernote"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#summernote').summernote({
+                height: 300,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true              // set focus to editable area after initializing summernote});});
+            });
+
+        })
+    </script>
+</body>
+</html>
