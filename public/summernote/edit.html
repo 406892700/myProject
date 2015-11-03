@@ -19,7 +19,54 @@
                 height: 300,                 // set editor height
                 minHeight: null,             // set minimum height of editor
                 maxHeight: null,             // set maximum height of editor
-                focus: true              // set focus to editable area after initializing summernote});});
+                focus: true,          // set focus to editable area after initializing summernote});});
+                onImageUpload: function(files, editor, $editable) {
+                    var form = new FormData();
+                    form.append('file',files);
+                    form.append('arg','dd');
+                    console.log(files);
+                    /*$.ajax({
+                        url:'/uploadPic',
+                        data:form,
+                        type:'post'
+
+                    }).success(function(data){
+                        var fr = new FileReader();
+                        fr.readAsDataURL(files[0]);
+                        fr.onload = function (evt) {
+                            var base64 = evt.target.result;
+                            editor.insertImage($editable,base64);
+                            alert(data);
+                        };
+
+                    }).fail(function (err) {
+                        alert('上传错误！');
+                    });*/
+                    $.ajax({
+                        url:'/uploadPic',
+                        data:form,
+                        type:'post',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            var fr = new FileReader();
+                            fr.readAsDataURL(files[0]);
+                            fr.onload = function (evt) {
+                                var base64 = evt.target.result;
+                                editor.insertImage($editable,base64);
+                                console.log(data);
+                            };
+                        },
+                        error: function (err) {
+                            alert('上传 错误！~');
+                        }
+
+                    })
+
+
+
+                }
             });
 
         })

@@ -8,14 +8,14 @@
         <div class="span12">
             <div class="widget-box">
                 <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                    <h5>Personal-info</h5>
+                    <h5>添加商品</h5>
                 </div>
                 <div class="widget-content nopadding">
                     <form action="#" method="get" class="form-horizontal">
                         <div class="control-group">
                             <label class="control-label">订单编号 :</label>
                             <div class="controls">
-                                <span>{{}}</span>
+                                <span>512</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -28,7 +28,7 @@
                             <label class="control-label">商品图片</label>
                             <div class="controls">
                                 <div class="span12">
-                                    <img src="images/good_pic.jpg" alt=""/>
+                                    <img src="images/good_pic.jpg" alt="" id="preview"/>
                                 </div>
                                 <a href="javascript:void(0)" class="btn btn-success" style="margin-top:10px;" onclick="$(this).next('#upload').click()">点击上传图片</a>
                                 <input type="file" id="upload" class="hide"/>
@@ -94,14 +94,29 @@
         $.fn.preview = function (opt,callback) {
             var that = this;
             var default_opt = {
-                
+                preview:'#preview'
             };
+
+            opt = $.extend({},default_opt,opt);
             
             var init = function () {
-                that.bind('load',function(evt){
+                console.log(that[0].files);
+                if(!window.FileReader){
+                    alert('您的浏览器不支持上传~');
+                    return false;
+                }else{
 
-                });
-            }
+                    var fr = new FileReader(), file = that[0].files[0];
+                    fr.readAsDataURL(file);
+                    fr.onload = function(evt){
+                        console.log(evt.target.result);
+                        $(opt.preview)[0].src = evt.target.result;
+                    }
+                }
+
+            };
+
+            that.bind('change',init);
         }
     })(window,jQuery,undefined);
     $(function () {
@@ -114,6 +129,6 @@
         };
 
         /*$('select').select2();*/
-
+        $('#upload').preview({preview:'#preview'});
     })
 </script>

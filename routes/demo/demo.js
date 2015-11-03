@@ -157,11 +157,11 @@ module.exports = function(app){
     });*/
 
     /*图片上传*/
-/*
+
     app.get('/upload', function (req,res) {
         res.render('admin/demo/fileUpload',{});
     });
-
+    /*
     var multipart = require('connect-multiparty');
     var multipartMiddleware = multipart();
     var  fs = require('fs');

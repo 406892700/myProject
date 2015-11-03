@@ -339,10 +339,11 @@ module.exports = function(app){
 
     /*商品图片上传*/
     var multipartMiddleware = require('connect-multiparty')(),
-        fs = require('fs');
+    fs = require('fs');
     app.post('/uploadPic',multipartMiddleware, function (req,res) {
         var files = req.files;
         console.log(req.files);
+        console.log(req.body.arg);
         for(var i in files){
             var o_path = files[i].path,
                 t_path = 'public/images/upload/'+files[i].originalFilename,
