@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin\www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$USER_HOME$/AppData/Roaming/npm/node-supervisor.cmd" path-to-js-file="bin/www" node-parameters="--harmony" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="bin\www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/supervisor" path-to-js-file="bin/www" node-parameters="--harmony" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="node:*" />
     </envs>
