@@ -181,4 +181,18 @@ module.exports = function(app){
         res.json({'code':'1',data:'图片上传成功！'});
 
     });*/
+    var util = require('../routesUtil');//路由工具方法
+    app.get('/util', function (req,res) {
+        res.render('util/util',{});
+    });
+
+    app.post('/textPost',util.handlePost(),function(req,res){
+        console.log(req.body);
+        res.json({'msg':'ffdddddd'});
+    });
+    app.get('/textPost',util.handlePost(),function(req,res){
+        console.log(req.query);
+        res.json({'msg':'ffdddddd'});
+    });
+
 };

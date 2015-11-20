@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dd</title>
+    <script src="util/util.js"></script>
+</head>
+<body>
+<div id="_1">
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+</div>
+<div id="_2">
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+</div>
+<div id="_3">
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+</div>
+    <script>
+        $.domReady(function(){
+            $.get('#_1 ul li:nth-child(2)')[0].remove();
+            $.ajax({
+                url:'/textPost',
+                cache:false,
+                data:{
+                    a:'333',
+                    b:'ddf'
+                },
+                method:'get',
+                success:function(data,xhr){
+                    console.log(data);
+                },
+                error: function (err) {
+                    console.log('数据获取错误！');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
