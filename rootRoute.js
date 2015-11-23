@@ -10,5 +10,6 @@ module.exports  = [
     require('./routes/waibao/waibao'),
     require('./routes/html/htmlRoutes'),
     require('./routes/demo/demo'),
-    require('./routes/admin/dashboard/dashRoute')
+    require('./routes/admin/dashboard/dashRoute'),
+    require('./routes/someDemo/demo')
 ];
