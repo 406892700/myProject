@@ -27,6 +27,21 @@
 		/*$(function(){
 			$('div.item').append('dfdsf');
 		});*/
+
+		/*模仿一下jquery对象的工厂模式*/
+		var xQuery = function(selecter){
+			return new xQuery.fn.init(selecter);
+		};
+
+		xQuery.fn = xQuery.prototype = {
+			constructor:xQuery,
+			init :function(selecter){
+				return this;
+			},
+			selecter:0
+		};
+
+		xQuery.fn.init.prototype = xQuery.fn;
 	</script>
 </body>
 </html>

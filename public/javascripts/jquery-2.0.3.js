@@ -95,21 +95,26 @@ var
 
 jQuery.fn = jQuery.prototype = {
 	// The current version of jQuery being used
+	//当前正在使用的jQuery版本
 	jquery: core_version,
-
+	//构造函数
 	constructor: jQuery,
+	//init函数
 	init: function( selector, context, rootjQuery ) {
 		var match, elem;
 
 		// HANDLE: $(""), $(null), $(undefined), $(false)
+		//控制非正常的参数情况
 		if ( !selector ) {
 			return this;
 		}
 
+		//如果选择器为html字符串
 		// Handle HTML strings
 		if ( typeof selector === "string" ) {
 			if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
 				// Assume that strings that start and end with <> are HTML and skip the regex check
+				//认定<dxdfs>形式的字符串为HTML并且直接放弃使用正则匹配
 				match = [ null, selector, null ];
 
 			} else {
@@ -117,6 +122,7 @@ jQuery.fn = jQuery.prototype = {
 			}
 
 			// Match html or make sure no context is specified for #id
+			//匹配HTML并且没有上下文
 			if ( match && (match[1] || !context) ) {
 
 				// HANDLE: $(html) -> $(array)
@@ -131,6 +137,7 @@ jQuery.fn = jQuery.prototype = {
 					) );
 
 					// HANDLE: $(html, props)
+					//html和配置项
 					if ( rsingleTag.test( match[1] ) && jQuery.isPlainObject( context ) ) {
 						for ( match in context ) {
 							// Properties of context are called as methods if possible
@@ -147,6 +154,7 @@ jQuery.fn = jQuery.prototype = {
 					return this;
 
 				// HANDLE: $(#id)
+					//为id选择器时
 				} else {
 					elem = document.getElementById( match[2] );
 
@@ -163,17 +171,21 @@ jQuery.fn = jQuery.prototype = {
 					return this;
 				}
 
+				//执行上下文为jquery对象时
 			// HANDLE: $(expr, $(...))
 			} else if ( !context || context.jquery ) {
-				return ( context || rootjQuery ).find( selector );
+				return ( context || rootjQuery ).find( selector );//在上下文jquery对象或者顶层jquery对象中调用find方法
 
+				//
 			// HANDLE: $(expr, context)
 			// (which is just equivalent to: $(context).find(expr)
+
 			} else {
 				return this.constructor( context ).find( selector );
 			}
 
 		// HANDLE: $(DOMElement)
+			//选择器HTML代码
 		} else if ( selector.nodeType ) {
 			this.context = this[0] = selector;
 			this.length = 1;
@@ -181,6 +193,7 @@ jQuery.fn = jQuery.prototype = {
 
 		// HANDLE: $(function)
 		// Shortcut for document ready
+			//参数为函数时候，直接作为document.ready函数的回调函数
 		} else if ( jQuery.isFunction( selector ) ) {
 			return rootjQuery.ready( selector );
 		}
@@ -205,6 +218,7 @@ jQuery.fn = jQuery.prototype = {
 
 	// Get the Nth element in the matched element set OR
 	// Get the whole matched element set as a clean array
+	//获取对象对应的html元素与$()[num]功能相同
 	get: function( num ) {
 		return num == null ?
 
@@ -280,36 +294,52 @@ jQuery.fn = jQuery.prototype = {
 };
 
 // Give the init function the jQuery prototype for later instantiation
+	//将jquery的原型对象复制给init，用以后续的实例化
 jQuery.fn.init.prototype = jQuery.fn;
 
+
+
+/*
+*
+*
+*
+*   合并对象函数（很常用下次过来偷代码）
+*
+*
+* */
 jQuery.extend = jQuery.fn.extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0] || {},
+		target = arguments[0] || {},//第一个参数~如果第一个参数为boolean型，将执行深/浅克隆
 		i = 1,
-		length = arguments.length,
-		deep = false;
+		length = arguments.length,//参数数量
+		deep = false;//默认浅克隆
 
 	// Handle a deep copy situation
+	//深度克隆
 	if ( typeof target === "boolean" ) {
 		deep = target;
-		target = arguments[1] || {};
+		target = arguments[1] || {};//克隆目标为第二个参数
 		// skip the boolean and the target
 		i = 2;
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
+	//控制目标对象为一个字符串或者其他的类型|（可能在深克隆时）
 	if ( typeof target !== "object" && !jQuery.isFunction(target) ) {
 		target = {};
 	}
 
 	// extend jQuery itself if only one argument is passed
+	//根据参数判断是不是扩展jquery对象自身
 	if ( length === i ) {
-		target = this;
-		--i;
+		target = this;//克隆目标为第一个jquery对象本身
+		--i;//根据情况选择性忽略第一个参数（保证后续的遍历只会被执行一次）
 	}
 
+	//遍历除了克隆目标和深浅克隆标志参数外的所有参数
 	for ( ; i < length; i++ ) {
 		// Only deal with non-null/undefined values
+		//只用来处理正常情况
 		if ( (options = arguments[ i ]) != null ) {
 			// Extend the base object
 			for ( name in options ) {
@@ -317,24 +347,28 @@ jQuery.extend = jQuery.fn.extend = function() {
 				copy = options[ name ];
 
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				//避免死循环
+				if ( target === copy ) {//不理解什么时候会发生？？
 					continue;
 				}
 
 				// Recurse if we're merging plain objects or arrays
+				//在合并普通对象或者数组的时候使用递归调用方式
 				if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
-					if ( copyIsArray ) {
+					if ( copyIsArray ) {//是数组
 						copyIsArray = false;
 						clone = src && jQuery.isArray(src) ? src : [];
 
-					} else {
+					} else {//是普通对象
 						clone = src && jQuery.isPlainObject(src) ? src : {};
 					}
 
 					// Never move original objects, clone them
+					//递归调用本身进行克隆
 					target[ name ] = jQuery.extend( deep, clone, copy );
 
 				// Don't bring in undefined values
+					//浅拷贝，且属性值不是undefined
 				} else if ( copy !== undefined ) {
 					target[ name ] = copy;
 				}
@@ -343,8 +377,13 @@ jQuery.extend = jQuery.fn.extend = function() {
 	}
 
 	// Return the modified object
-	return target;
+	return target;//返回被更改后的对象
 };
+
+
+
+
+
 
 jQuery.extend({
 	// Unique for each copy of jQuery on the page
@@ -841,6 +880,8 @@ jQuery.ready.promise = function( obj ) {
 };
 
 // Populate the class2type map
+	//各种类别的hashmap
+
 jQuery.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 });
@@ -874,6 +915,7 @@ rootjQuery = jQuery(document);
  *
  * Date: 2013-06-03
  */
+	//sizzle选择器引擎！！
 (function( window, undefined ) {
 
 var i,
@@ -2857,7 +2899,7 @@ function createOptions( options ) {
 
 /*
  * Create a callback list using the following parameters:
- *
+ *使用下列参数创建一个callabck函数
  *	options: an optional list of space-separated options that will change how
  *			the callback list behaves or a more traditional option object
  *
@@ -2867,43 +2909,56 @@ function createOptions( options ) {
  * Possible options:
  *
  *	once:			will ensure the callback list can only be fired once (like a Deferred)
- *
+ *  回调函数只会被调用一次
  *	memory:			will keep track of previous values and will call any callback added
  *					after the list has been fired right away with the latest "memorized"
  *					values (like a Deferred)
+ *缓存上次调用的值
  *
  *	unique:			will ensure a callback can only be added once (no duplicate in the list)
- *
+ *相同的回调函数只能被添加一次
  *	stopOnFalse:	interrupt callings when a callback returns false
- *
+ *回调函数返回false时终止当前函数
  */
+
+	/*jQuery 中的回调函数*/
 jQuery.Callbacks = function( options ) {
 
 	// Convert options from String-formatted to Object-formatted if needed
 	// (we check in cache first)
+	//将格式化字符串转化为格式化对象(首先确定是否已经缓存)
 	options = typeof options === "string" ?
 		( optionsCache[ options ] || createOptions( options ) ) :
 		jQuery.extend( {}, options );
 
 	var // Last fire value (for non-forgettable lists)
+		//上次缓存的内容
 		memory,
 		// Flag to know if list was already fired
+		//已知的被触发的hi掉函数
 		fired,
 		// Flag to know if list is currently firing
+		//当期正在调用的函数
 		firing,
 		// First callback to fire (used internally by add and fireWith)
+		//首次调用
 		firingStart,
 		// End of the loop when firing
+		//停止循环
 		firingLength,
 		// Index of currently firing callback (modified by remove if needed)
+		//当前调用函数的索引序号
 		firingIndex,
 		// Actual callback list
+		//调用队列
 		list = [],
 		// Stack of fire calls for repeatable lists
+		//可重复调动栈
 		stack = !options.once && [],
 		// Fire callbacks
+		//触发回调函数
 		fire = function( data ) {
-			memory = options.memory && data;
+			memory = options.memory && data;//如果已经有缓存就读取缓存
 			fired = true;
 			firingIndex = firingStart || 0;
 			firingStart = 0;
@@ -2911,7 +2966,8 @@ jQuery.Callbacks = function( options ) {
 			firing = true;
 			for ( ; list && firingIndex < firingLength; firingIndex++ ) {
 				if ( list[ firingIndex ].apply( data[ 0 ], data[ 1 ] ) === false && options.stopOnFalse ) {
-					memory = false; // To prevent further calls using add
+					memory = false; // To prevent further calls using add （阻止可能的下一次对add的调用）
+
 					break;
 				}
 			}
@@ -2929,20 +2985,22 @@ jQuery.Callbacks = function( options ) {
 			}
 		},
 		// Actual Callbacks object
+		//实际调用对象(被return出去)
 		self = {
 			// Add a callback or a collection of callbacks to the list
+			//添加回调
 			add: function() {
 				if ( list ) {
 					// First, we save the current length
 					var start = list.length;
-					(function add( args ) {
+					(function add( args ) {//这里采用一个自动用函数用意在于可以方便进行回调
 						jQuery.each( args, function( _, arg ) {
 							var type = jQuery.type( arg );
-							if ( type === "function" ) {
-								if ( !options.unique || !self.has( arg ) ) {
-									list.push( arg );
+							if ( type === "function" ) {//如果传入的是单个的函数
+								if ( !options.unique || !self.has( arg ) ) {//且该回调函数是不可重复的（且在self中不存在的????这个不是很理解）~
+									list.push( arg );//直接压入数组
 								}
-							} else if ( arg && arg.length && type !== "string" ) {
+							} else if ( arg && arg.length && type !== "string" ) {//如果对象是数组或者类数组元素，递归调用add函数
 								// Inspect recursively
 								add( arg );
 							}
@@ -2950,10 +3008,13 @@ jQuery.Callbacks = function( options ) {
 					})( arguments );
 					// Do we need to add the callbacks to the
 					// current firing batch?
+
+					//是否需要将当添加的回调函数加入正在执行的批中
 					if ( firing ) {
 						firingLength = list.length;
 					// With memory, if we're not firing then
 					// we should call right away
+						//在缓存中查看，如果我们还没有调用他们，则以正确的形式调用他们
 					} else if ( memory ) {
 						firingStart = start;
 						fire( memory );
@@ -2962,18 +3023,19 @@ jQuery.Callbacks = function( options ) {
 				return this;
 			},
 			// Remove a callback from the list
+			//从回调函数队列中删除一个函数
 			remove: function() {
 				if ( list ) {
 					jQuery.each( arguments, function( _, arg ) {
 						var index;
-						while( ( index = jQuery.inArray( arg, list, index ) ) > -1 ) {
-							list.splice( index, 1 );
+						while( ( index = jQuery.inArray( arg, list, index ) ) > -1 ) {//确认需要删除的函数在回调队列中
+							list.splice( index, 1 );//直接在队列中删除函数
 							// Handle firing indexes
 							if ( firing ) {
-								if ( index <= firingLength ) {
+								if ( index <= firingLength ) {//如果当前调用序列且索引值小于队列下标
 									firingLength--;
 								}
-								if ( index <= firingIndex ) {
+								if ( index <= firingIndex ) {//如果索引小于当前正在调用的队列索引
 									firingIndex--;
 								}
 							}
@@ -2984,37 +3046,45 @@ jQuery.Callbacks = function( options ) {
 			},
 			// Check if a given callback is in the list.
 			// If no argument is given, return whether or not list has callbacks attached.
+			//如果没给参数，返回list是否有callback
 			has: function( fn ) {
 				return fn ? jQuery.inArray( fn, list ) > -1 : !!( list && list.length );
 			},
 			// Remove all callbacks from the list
+			//清空队列
 			empty: function() {
 				list = [];
 				firingLength = 0;
 				return this;
 			},
 			// Have the list do nothing anymore
+			//让队列不能再被触发
 			disable: function() {
+				//直接置空list，stack，memory
 				list = stack = memory = undefined;
 				return this;
 			},
 			// Is it disabled?
+			//是否被禁止
 			disabled: function() {
 				return !list;
 			},
 			// Lock the list in its current state
+			//锁住当前状态的队列
 			lock: function() {
 				stack = undefined;
-				if ( !memory ) {
+				if ( !memory ) {//如果缓存为空，就直接执行禁止方法
 					self.disable();
 				}
 				return this;
 			},
+			//是否被锁住
 			// Is it locked?
 			locked: function() {
 				return !stack;
 			},
 			// Call all callbacks with the given context and arguments
+			//用给定的上下文和参数来调用队列中所有的函数
 			fireWith: function( context, args ) {
 				if ( list && ( !fired || stack ) ) {
 					args = args || [];
@@ -3028,11 +3098,13 @@ jQuery.Callbacks = function( options ) {
 				return this;
 			},
 			// Call all the callbacks with the given arguments
+			//调用所有的函数
 			fire: function() {
 				self.fireWith( this, arguments );
 				return this;
 			},
 			// To know if the callbacks have already been called at least once
+			//是否所有的函数都被至少调用过一次
 			fired: function() {
 				return !!fired;
 			}
