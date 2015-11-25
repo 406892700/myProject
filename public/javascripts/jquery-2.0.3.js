@@ -886,6 +886,7 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object Error".spli
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 });
 
+//判断类数组对象
 function isArraylike( obj ) {
 	var length = obj.length,
 		type = jQuery.type( obj );
@@ -2897,6 +2898,15 @@ function createOptions( options ) {
 	return object;
 }
 
+
+
+/*
+
+   上方为Sizzle引擎代码，留待以后看，有点看不懂~
+
+
+*/
+
 /*
  * Create a callback list using the following parameters:
  *使用下列参数创建一个callabck函数
@@ -2913,12 +2923,12 @@ function createOptions( options ) {
  *	memory:			will keep track of previous values and will call any callback added
  *					after the list has been fired right away with the latest "memorized"
  *					values (like a Deferred)
- *缓存上次调用的值
+ *  保持以前的值，将添加到这个列表的后面的最新的值立即执行调用任何回调 (像一个递延 Deferred).
  *
  *	unique:			will ensure a callback can only be added once (no duplicate in the list)
- *相同的回调函数只能被添加一次
+ *  确保一次只能添加一个回调(所以在列表中没有重复的回调)
  *	stopOnFalse:	interrupt callings when a callback returns false
- *回调函数返回false时终止当前函数
+ *  当一个回调返回false 时中断调用
  */
 
 	/*jQuery 中的回调函数*/
@@ -2926,13 +2936,13 @@ jQuery.Callbacks = function( options ) {
 
 	// Convert options from String-formatted to Object-formatted if needed
 	// (we check in cache first)
-	//将格式化字符串转化为格式化对象(首先确定是否已经缓存)
+	//将格式化字符串转化为格式化对象(首先确定是否已经缓存？？？)
 	options = typeof options === "string" ?
 		( optionsCache[ options ] || createOptions( options ) ) :
 		jQuery.extend( {}, options );
 
 	var // Last fire value (for non-forgettable lists)
-		//上次缓存的内容
+		//上次触发的内容
 		memory,
 		// Flag to know if list was already fired
 		//已知的被触发的hi掉函数
@@ -2958,28 +2968,29 @@ jQuery.Callbacks = function( options ) {
 		// Fire callbacks
 		//触发回调函数
 		fire = function( data ) {
-			memory = options.memory && data;//如果已经有缓存就读取缓存
+			memory = options.memory && data;//memory参数不为空时，返回data
 			fired = true;
 			firingIndex = firingStart || 0;
 			firingStart = 0;
 			firingLength = list.length;
 			firing = true;
 			for ( ; list && firingIndex < firingLength; firingIndex++ ) {
-				if ( list[ firingIndex ].apply( data[ 0 ], data[ 1 ] ) === false && options.stopOnFalse ) {
+				//在if（）中调用了list中的各个函数
+				if ( list[ firingIndex ].apply( data[ 0 ]/*上下文对象*/, data[ 1 ]/*参数*/ ) === false && options.stopOnFalse ) {//如果某个回调函数返回了false，且stopOnFalse参数为true，设置memeory为false，且跳出循环
 					memory = false; // To prevent further calls using add （阻止可能的下一次对add的调用）
 
 					break;
 				}
 			}
-			firing = false;
-			if ( list ) {
-				if ( stack ) {
-					if ( stack.length ) {
-						fire( stack.shift() );
+			firing = false;//所有回调函数都已经被执行了
+			if ( list ) {//list不为null或者undefined
+				if ( stack ) {//如果stack不为null或者undefined
+					if ( stack.length ) {//如果栈中函调个数不为0
+						fire( stack.shift() );//将stack中的元素出栈，并且递归调用fire
 					}
-				} else if ( memory ) {
-					list = [];
-				} else {
+				} else if ( memory ) {//如果memory不为null或者undefined（没有被disabled或者locked）
+					list = [];//重置list
+				} else {//其他情况下，
 					self.disable();
 				}
 			}
@@ -3014,7 +3025,7 @@ jQuery.Callbacks = function( options ) {
 						firingLength = list.length;
 					// With memory, if we're not firing then
 					// we should call right away
-						//在缓存中查看，如果我们还没有调用他们，则以正确的形式调用他们
+						//在参数为memory，则以正确的形式直接调用他们
 					} else if ( memory ) {
 						firingStart = start;
 						fire( memory );
@@ -3059,7 +3070,7 @@ jQuery.Callbacks = function( options ) {
 			},
 			// Have the list do nothing anymore
 			//让队列不能再被触发
-			disable: function() {
+			disable: function() {//与lock的却别在于memory其实lock的本质还是调用disable
 				//直接置空list，stack，memory
 				list = stack = memory = undefined;
 				return this;
@@ -3112,48 +3123,72 @@ jQuery.Callbacks = function( options ) {
 
 	return self;
 };
+
+
+
+
+
+	/*
+	* Jquery deferred对象~
+	*
+	* */
 jQuery.extend({
 
 	Deferred: function( func ) {
 		var tuples = [
 				// action, add listener, listener list, final state
-				[ "resolve", "done", jQuery.Callbacks("once memory"), "resolved" ],
-				[ "reject", "fail", jQuery.Callbacks("once memory"), "rejected" ],
-				[ "notify", "progress", jQuery.Callbacks("memory") ]
+				//调用了jQuery.Callbacks
+				[ "resolve", "done", jQuery.Callbacks("once memory"), "resolved" ],//只有第一次的回调函数调用有效
+				[ "reject", "fail", jQuery.Callbacks("once memory"), "rejected" ],//同上
+				[ "notify", "progress", jQuery.Callbacks("memory") ]//每次add都会触发回调~~
 			],
-			state = "pending",
+			state = "pending",//状态待定
 			promise = {
 				state: function() {
 					return state;
 				},
-				always: function() {
+				always: function() {//不论成功失败都执行
 					deferred.done( arguments ).fail( arguments );
 					return this;
 				},
 				then: function( /* fnDone, fnFail, fnProgress */ ) {
 					var fns = arguments;
-					return jQuery.Deferred(function( newDefer ) {
-						jQuery.each( tuples, function( i, tuple ) {
+					return jQuery.Deferred(function( newDefer ) {//返回一个新的Deferred对象
+						jQuery.each( tuples, function( i, tuple ) {//重新遍历生成规则
 							var action = tuple[ 0 ],
-								fn = jQuery.isFunction( fns[ i ] ) && fns[ i ];
+								fn = jQuery.isFunction( fns[ i ] ) && fns[ i ];//参数为函数就返回该函数，不是就返回false
 							// deferred[ done | fail | progress ] for forwarding actions to newDefer
-							deferred[ tuple[1] ](function() {
-								var returned = fn && fn.apply( this, arguments );
-								if ( returned && jQuery.isFunction( returned.promise ) ) {
-									returned.promise()
-										.done( newDefer.resolve )
-										.fail( newDefer.reject )
-										.progress( newDefer.notify );
-								} else {
-									newDefer[ action + "With" ]( this === promise ? newDefer.promise() : this, fn ? [ returned ] : arguments );
+
+							//--------------------------------------------------------------------------------------------
+							//--------------------------------------------------------------------------------------------
+							//TODO://（（（下面这段的具体实现不是很看的懂，但是大概知道这是要读取父作用域上的deferred对象，并为其添加resolve，reject，和notify函数）））
+							//--------------------------------------------------------------------------------------------
+							//--------------------------------------------------------------------------------------------
+
+
+							deferred[ tuple[1] ](function() {//执行上层的deferred中的done，reject，notify
+								//console.log(fn.apply( this, arguments ));
+								var returned = fn && fn.apply( this, arguments );//如果fn不是函数，则返回false，不然则返回fn.apply(this,arguments)执行后的返回值(这个时候的this指针已经被改变了)
+								if ( returned && jQuery.isFunction( returned.promise ) ) {//returned不是false且returned.promise是一个函数
+									returned.promise()//对returned.promise调用done,fail,progress
+										.done( newDefer.resolve )//把tuples中的resolve对应的回调函数传入done，
+										.fail( newDefer.reject )//把tuples中的reject对应的回调函数传入fail，
+										.progress( newDefer.notify );//把tuples中notify的对应的回调函数传入progress，
+								} else {//否则直接就reject|resolve|notify掉
+									newDefer[ action + "With" ]
+									( this === promise ? newDefer.promise() : this, //如果promise === this,那就把newDefer.promise()作为第一个参数，否则就返回this
+										fn ? [ returned ] : arguments );//fn是否有效（true，！undefined等情况），有效则返回returned，否则返回arguments
 								}
 							});
 						});
-						fns = null;
+						fns = null;//释放掉内存
 					}).promise();
 				},
 				// Get a promise for this deferred
 				// If obj is provided, the promise aspect is added to the object
+				//为该延迟对象添加一个promise对象，如果对象已经提供了，那就把promise特性赋予给该对象
+				//exp  ajax 就是使用这个方法来使ajax方法返回一个promise。并且其中还有success 和 fail
+
 				promise: function( obj ) {
 					return obj != null ? jQuery.extend( obj, promise ) : promise;
 				}
@@ -3161,38 +3196,44 @@ jQuery.extend({
 			deferred = {};
 
 		// Keep pipe for back-compat
+		//保证向下兼容
 		promise.pipe = promise.then;
 
 		// Add list-specific methods
 		jQuery.each( tuples, function( i, tuple ) {
-			var list = tuple[ 2 ],
-				stateString = tuple[ 3 ];
+			var list = tuple[ 2 ],//$.Callbacks对象
+				stateString = tuple[ 3 ];//状态名称 rejected，resolved
 
 			// promise[ done | fail | progress ] = list.add
-			promise[ tuple[1] ] = list.add;
+			promise[ tuple[1] ] = list.add;//添加callbacks
 
 			// Handle state
-			if ( stateString ) {
+			//状态控制
+			//alert(tuples[ i ^ 1 ][ 2 ]);
+			if ( stateString ) {//状态为resolved或者rejected
 				list.add(function() {
 					// state = [ resolved | rejected ]
-					state = stateString;
+					state = stateString;//状态参数赋值给state
 
 				// [ reject_list | resolve_list ].disable; progress_list.lock
+					//为什么总感觉tuples[ i ^ 1 ]会数组越界~~~~~~
 				}, tuples[ i ^ 1 ][ 2 ].disable, tuples[ 2 ][ 2 ].lock );
 			}
 
 			// deferred[ resolve | reject | notify ]
-			deferred[ tuple[0] ] = function() {
-				deferred[ tuple[0] + "With" ]( this === deferred ? promise : this, arguments );
-				return this;
+			deferred[ tuple[0] ] = function() {//三个函数调用了fireWith
+				deferred[ tuple[0] + "With" ]( this === deferred ? promise : this, arguments );//调用三个函数
+				return this;//返回当前jQuery对象
 			};
-			deferred[ tuple[0] + "With" ] = list.fireWith;
+			deferred[ tuple[0] + "With" ] = list.fireWith;//将回调函数赋值给deferred.resolveWidth,deferred.rejectWidth,deferred.notifyWidth,
 		});
 
 		// Make the deferred a promise
+		//将延迟对象转化为一个promise对象
 		promise.promise( deferred );
 
 		// Call given func if any
+		//如果有函数参数，则在deferred中调用该函数，并且经deferred作为参数传给该函数
 		if ( func ) {
 			func.call( deferred, deferred );
 		}
@@ -3204,13 +3245,15 @@ jQuery.extend({
 	// Deferred helper
 	when: function( subordinate /* , ..., subordinateN */ ) {
 		var i = 0,
-			resolveValues = core_slice.call( arguments ),
-			length = resolveValues.length,
+			resolveValues = core_slice.call( arguments ),//把类数组转成数组
+			length = resolveValues.length,//参数数目
 
 			// the count of uncompleted subordinates
+			//尚未被調用的下級回調函數
 			remaining = length !== 1 || ( subordinate && jQuery.isFunction( subordinate.promise ) ) ? length : 0,
 
 			// the master Deferred. If resolveValues consist of only a single Deferred, just use that.
+			//主延遲對象，如果延遲對象參數數組只有一個參數，直接使用jQuery.Deferred()
 			deferred = remaining === 1 ? subordinate : jQuery.Deferred(),
 
 			// Update function for both resolve and progress values
@@ -3253,6 +3296,13 @@ jQuery.extend({
 		return deferred.promise();
 	}
 });
+
+
+	/*
+	*
+	* Jquery的特性检测模块
+	*
+	* */
 jQuery.support = (function( support ) {
 	var input = document.createElement("input"),
 		fragment = document.createDocumentFragment(),
