@@ -35,20 +35,24 @@ var
 	docElem = document.documentElement,
 
 	// Map over jQuery in case of overwrite
+	//防止jQuery被覆盖
 	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
+	//防止$被覆盖
 	_$ = window.$,
 
 	// [[Class]] -> type pairs
 	class2type = {},
 
 	// List of deleted data cache ids, so we can reuse them
+	//列出已经被删除的缓存数据id，用于后面的复用
 	core_deletedIds = [],
 
 	core_version = "2.0.3",
 
 	// Save a reference to some core methods
+	//一些原生的方法借用
 	core_concat = core_deletedIds.concat,
 	core_push = core_deletedIds.push,
 	core_slice = core_deletedIds.slice,
@@ -64,9 +68,11 @@ var
 	},
 
 	// Used for matching numbers
+	//匹配数字（还能匹配科学计数法的数字）
 	core_pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source,
 
 	// Used for splitting on whitespace
+	//拆开空格，空格个数不确定
 	core_rnotwhite = /\S+/g,
 
 	// A simple way to check for HTML strings
@@ -387,7 +393,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 jQuery.extend({
 	// Unique for each copy of jQuery on the page
-	expando: "jQuery" + ( core_version + Math.random() ).replace( /\D/g, "" ),
+	expando: "jQuery" + ( core_version + Math.random() ).replace( /\D/g, "" ),//jquery的uuid
 
 	noConflict: function( deep ) {
 		if ( window.$ === jQuery ) {
@@ -2887,9 +2893,18 @@ jQuery.contains = Sizzle.contains;
 
 })( window );
 // String to Object options format cache
-var optionsCache = {};
+
+
+	/*
+
+	 上方为Sizzle引擎代码，留待以后看，有点看不懂~
+
+
+	 */
+var optionsCache = {};//回调对象的缓存配置对象
 
 // Convert String-formatted options into Object-formatted ones and store in cache
+	//把字符格式化参数转化成对象，并且缓存起来
 function createOptions( options ) {
 	var object = optionsCache[ options ] = {};
 	jQuery.each( options.match( core_rnotwhite ) || [], function( _, flag ) {
@@ -2898,14 +2913,20 @@ function createOptions( options ) {
 	return object;
 }
 
+	/*
+	返回对象如下
+	*{
+	* 	once:true,
+	* 	memory:true,
+	* 	unique:true,
+	*   stopOnFalse:true
+	* }
+	*
+	* */
 
 
-/*
-
-   上方为Sizzle引擎代码，留待以后看，有点看不懂~
 
 
-*/
 
 /*
  * Create a callback list using the following parameters:
@@ -2936,19 +2957,19 @@ jQuery.Callbacks = function( options ) {
 
 	// Convert options from String-formatted to Object-formatted if needed
 	// (we check in cache first)
-	//将格式化字符串转化为格式化对象(首先确定是否已经缓存？？？)
+	//将格式化字符串转化为格式化对象(首先确定是否已经缓存 optionsCache[ options ] <= 这个就是缓存，如果没有执行createOptions( options ))
 	options = typeof options === "string" ?
 		( optionsCache[ options ] || createOptions( options ) ) :
 		jQuery.extend( {}, options );
 
 	var // Last fire value (for non-forgettable lists)
-		//上次触发的内容
+		//上次触发的内容（可传递队列）
 		memory,
 		// Flag to know if list was already fired
-		//已知的被触发的hi掉函数
+		//是否队列中所有的函数都被调用的标志
 		fired,
 		// Flag to know if list is currently firing
-		//当期正在调用的函数
+		//当期队列正在调用函数的标志
 		firing,
 		// First callback to fire (used internally by add and fireWith)
 		//首次调用
@@ -3166,7 +3187,7 @@ jQuery.extend({
 							//--------------------------------------------------------------------------------------------
 
 
-							deferred[ tuple[1] ](function() {//执行上层的deferred中的done，reject，notify
+							deferred[ tuple[1] ](function() {//执行上层的deferred中的done，reject，progress回调函数
 								//console.log(fn.apply( this, arguments ));
 								var returned = fn && fn.apply( this, arguments );//如果fn不是函数，则返回false，不然则返回fn.apply(this,arguments)执行后的返回值(这个时候的this指针已经被改变了)
 								if ( returned && jQuery.isFunction( returned.promise ) ) {//returned不是false且returned.promise是一个函数
@@ -3243,6 +3264,7 @@ jQuery.extend({
 	},
 
 	// Deferred helper
+	//Deferred when这个函数留待以后看吧，现在还真的是有点看不太懂
 	when: function( subordinate /* , ..., subordinateN */ ) {
 		var i = 0,
 			resolveValues = core_slice.call( arguments ),//把类数组转成数组
@@ -3257,6 +3279,7 @@ jQuery.extend({
 			deferred = remaining === 1 ? subordinate : jQuery.Deferred(),
 
 			// Update function for both resolve and progress values
+			//同时为resolve和progress定义的更新函数
 			updateFunc = function( i, contexts, values ) {
 				return function( value ) {
 					contexts[ i ] = this;
@@ -3418,14 +3441,21 @@ jQuery.support = (function( support ) {
 
 /*
 	Implementation Summary
+	//使用总结
 
 	1. Enforce API surface and semantic compatibility with 1.9.x branch
+	实施api并且兼容1.9版本
 	2. Improve the module's maintainability by reducing the storage
 		paths to a single mechanism.
+	加强模块的可维护性，通过减少存储路径使之成为单例机制
 	3. Use the same single mechanism to support "private" and "user" data.
+	//使用相同的单例机制来支持private和user数据
 	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
+	不将private的数据暴露给用户
 	5. Avoid exposing implementation details on user objects (eg. expando properties)
+	避免暴露实施实现细节给用户对象
 	6. Provide a clear path for implementation upgrade to WeakMap in 2014
+	提供一个干净的路径来实现一个weakMap
 */
 var data_user, data_priv,
 	rbrace = /(?:\{[\s\S]*\}|\[[\s\S]*\])$/,
@@ -3435,7 +3465,7 @@ function Data() {
 	// Support: Android < 4,
 	// Old WebKit does not have Object.preventExtensions/freeze method,
 	// return new empty object instead with no [[set]] accessor
-	Object.defineProperty( this.cache = {}, 0, {
+	Object.defineProperty( this.cache = {}, 0, {//在ata对象内部创建一个cache对象
 		get: function() {
 			return {};
 		}
@@ -3446,14 +3476,14 @@ function Data() {
 
 Data.uid = 1;
 
-Data.accepts = function( owner ) {
+Data.accepts = function( owner ) {//只有对象和dom元素可以被使用（这个Data上的全局方法）
 	// Accepts only:
 	//  - Node
 	//    - Node.ELEMENT_NODE
 	//    - Node.DOCUMENT_NODE
 	//  - Object
 	//    - Any
-	return owner.nodeType ?
+	return owner.nodeType ?//如果是dom元素，判断是不是element或者document，如果不是dom元素，默认为object    
 		owner.nodeType === 1 || owner.nodeType === 9 : true;
 };
 
@@ -3615,6 +3645,7 @@ Data.prototype = {
 };
 
 // These may be used throughout the jQuery core codebase
+//这两个对象可能会在jQuery核心代码库之外被使用	
 data_user = new Data();
 data_priv = new Data();
 
@@ -6887,6 +6918,17 @@ jQuery.fn.extend({
 		return arguments.length === 1 ? this.off( selector, "**" ) : this.off( types, selector || "**", fn );
 	}
 });
+
+
+
+/*
+*-------------------------------------------
+
+       				ajax实现
+
+*-------------------------------------------
+
+*/
 var
 	// Document location
 	ajaxLocParts,
@@ -7292,6 +7334,7 @@ jQuery.extend({
 			};
 
 		// Attach deferreds
+		//把jqXHR对象转化为一个延迟对象（通过Deferrd模块的promise()方法）
 		deferred.promise( jqXHR ).complete = completeDeferred.add;
 		jqXHR.success = jqXHR.done;
 		jqXHR.error = jqXHR.fail;
@@ -7310,6 +7353,7 @@ jQuery.extend({
 		s.dataTypes = jQuery.trim( s.dataType || "*" ).toLowerCase().match( core_rnotwhite ) || [""];
 
 		// A cross-domain request is in order when we have a protocol:host:port mismatch
+		//一个跨域请求
 		if ( s.crossDomain == null ) {
 			parts = rurl.exec( s.url.toLowerCase() );
 			s.crossDomain = !!( parts &&
@@ -8960,6 +9004,7 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 
 // If there is a window object, that at least has a document property,
 // define jQuery and $ identifiers
+//在这里将jQuery和$传给window对象
 if ( typeof window === "object" && typeof window.document === "object" ) {
 	window.jQuery = window.$ = jQuery;
 }
