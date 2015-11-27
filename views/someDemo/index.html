@@ -4,6 +4,11 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script type="text/javascript" src="javascripts/jquery-2.0.3.js"></script>
+	<style>
+		.aNewClass{
+			border:1px solid #d00000;
+		}
+	</style>
 </head>
 <body>
 	<div class="item_1">
@@ -22,8 +27,20 @@
 		</ul>
 	</div>
 
+	<button id="myElement">click</button>
+
 
 	<script type="text/javascript">
+		$('#myElement').click(function() {
+			var _this = this;
+			setTimeout(function() {
+
+				// Problem! In this function "this" is not our element!
+				//console.log(_this);
+				$(_this).addClass('aNewClass');
+			}, 1000);
+
+		});
 		/*$(function(){
 			$('div.item').append('dfdsf');
 		});*/

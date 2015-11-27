@@ -457,30 +457,36 @@ jQuery.extend({
 
 	isArray: Array.isArray,
 
-	isWindow: function( obj ) {
+	isWindow: function( obj ) {//利用window.window = window的特性来判断
 		return obj != null && obj === obj.window;
 	},
 
-	isNumeric: function( obj ) {
+	isNumeric: function( obj ) {//是否可以转换为float且是有限的
 		return !isNaN( parseFloat(obj) ) && isFinite( obj );
 	},
 
+	//判断对象类型
 	type: function( obj ) {
-		if ( obj == null ) {
+		if ( obj == null ) {//如果是null直接返回'null'
 			return String( obj );
 		}
 		// Support: Safari <= 5.1 (functionish RegExp)
-		return typeof obj === "object" || typeof obj === "function" ?
-			class2type[ core_toString.call(obj) ] || "object" :
-			typeof obj;
+		return typeof obj === "object" || typeof obj === "function" ?//先判断是obj和function类型的
+			class2type[ core_toString.call(obj) ] || "object" ://通过toString来判断类型（如果不在预设的几个对象属性中，就直接返回object）
+			typeof obj;//否则直接返回typeof（其实也就array和object分不出来）
 	},
 
+	//判断是不是普通对象
 	isPlainObject: function( obj ) {
 		// Not plain objects:
+		//不是普通对象的特征
 		// - Any object or value whose internal [[Class]] property is not "[object Object]"
+		//内部类不是[Object Object] 也就是说借用Obect的提哦String返回的值不是object
 		// - DOM nodes
+		//DOM节点
 		// - window
-		if ( jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
+		// window对象
+		if ( jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {//三个特性有一个或一个以上不符合
 			return false;
 		}
 
@@ -488,6 +494,7 @@ jQuery.extend({
 		// The try/catch suppresses exceptions thrown when attempting to access
 		// the "constructor" property of certain host objects, ie. |window.location|
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
+		//这个是专门用来判断一些特殊浏览器的对象，比如说window.location对象
 		try {
 			if ( obj.constructor &&
 					!core_hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
@@ -499,17 +506,21 @@ jQuery.extend({
 
 		// If the function hasn't returned already, we're confident that
 		// |obj| is a plain object, created by {} or constructed with new Object
+
+		//如果上面都没有返回，那我们就能确定当前这个对象是一个普通对象，是由字面量{}或者new Object()创建的
 		return true;
 	},
 
-	isEmptyObject: function( obj ) {
+	//判断是不是空对象
+	isEmptyObject: function( obj ) {//感觉有点问题，如果把属性设置为不可枚举，也会返回true，但是并不是空对象（不知道是不是直接忽略这种情况）
 		var name;
 		for ( name in obj ) {
+			//如果有属性
 			return false;
 		}
 		return true;
 	},
-
+	//抛出错误！
 	error: function( msg ) {
 		throw new Error( msg );
 	},
@@ -594,15 +605,18 @@ jQuery.extend({
 
 	// Convert dashed to camelCase; used by the css and data modules
 	// Microsoft forgot to hump their vendor prefix (#9572)
+	//转化成驼峰式（并且自动补充ie前缀）
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
 
+	//判断nodeName对不对
 	nodeName: function( elem, name ) {
 		return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 	},
 
 	// args is for internal usage only
+	//args是给内部调用的
 	each: function( obj, callback, args ) {
 		var value,
 			i = 0,
@@ -629,6 +643,7 @@ jQuery.extend({
 			}
 
 		// A special, fast, case for the most common use of each
+		//最常用的一个
 		} else {
 			if ( isArray ) {
 				for ( ; i < length; i++ ) {
@@ -642,7 +657,7 @@ jQuery.extend({
 				for ( i in obj ) {
 					value = callback.call( obj[ i ], i, obj[ i ] );
 
-					if ( value === false ) {
+					if ( value === false ) {//返回false就中断循环
 						break;
 					}
 				}
@@ -651,12 +666,13 @@ jQuery.extend({
 
 		return obj;
 	},
-
+	//去空格
 	trim: function( text ) {
 		return text == null ? "" : core_trim.call( text );
 	},
 
 	// results is for internal usage only
+	//把类数组转化为数组对象
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
@@ -755,6 +771,8 @@ jQuery.extend({
 
 	// Bind a function to a context, optionally partially applying any
 	// arguments.
+
+	//改变绑定的作用域参数，更改this指针的指向
 	proxy: function( fn, context ) {
 		var tmp, args, proxy;
 
@@ -784,6 +802,10 @@ jQuery.extend({
 
 	// Multifunctional method to get and set values of a collection
 	// The value/s can optionally be executed if it's a function
+
+	/*
+	
+	*/
 	access: function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		var i = 0,
 			length = elems.length,
@@ -3465,7 +3487,7 @@ function Data() {
 	// Support: Android < 4,
 	// Old WebKit does not have Object.preventExtensions/freeze method,
 	// return new empty object instead with no [[set]] accessor
-	Object.defineProperty( this.cache = {}, 0, {//在ata对象内部创建一个cache对象
+	Object.defineProperty( this.cache = {}, 0, {//在Data对象内部创建一个cache对象，并且为cache定义一个‘0’属性,且只可读（只会{}），不可写，不可配置
 		get: function() {
 			return {};
 		}
@@ -3488,123 +3510,140 @@ Data.accepts = function( owner ) {//只有对象和dom元素可以被使用（�
 };
 
 Data.prototype = {
+	//返回一个自增后的uid
 	key: function( owner ) {
 		// We can accept data for non-element nodes in modern browsers,
 		// but we should not, see #8335.
 		// Always return the key for a frozen object.
-		if ( !Data.accepts( owner ) ) {
+		if ( !Data.accepts( owner ) ) {//如果不是element和document，直接返回0
 			return 0;
 		}
 
-		var descriptor = {},
+		var descriptor = {},//配置对象，为空的时候就是不可写， 不可枚举，不可配置
 			// Check if the owner object already has a cache key
-			unlock = owner[ this.expando ];
+			unlock = owner[ this.expando ];//获取unlock对象
 
 		// If not, create one
-		if ( !unlock ) {
-			unlock = Data.uid++;
+		if ( !unlock ) {//如果没有unlock，表示未缓存，则创建一个缓存
+			unlock = Data.uid++;//uid自增
 
 			// Secure it in a non-enumerable, non-writable property
+			//如果是环境支持ES5则用Object.defineProperties()来配置
 			try {
 				descriptor[ this.expando ] = { value: unlock };
 				Object.defineProperties( owner, descriptor );
 
 			// Support: Android < 4
 			// Fallback to a less secure definition
-			} catch ( e ) {
+			} catch ( e ) {//否则，就用polyfill方法
 				descriptor[ this.expando ] = unlock;
 				jQuery.extend( owner, descriptor );
 			}
 		}
 
 		// Ensure the cache object
+		//确保cache对象被生成
 		if ( !this.cache[ unlock ] ) {
 			this.cache[ unlock ] = {};
 		}
 
-		return unlock;
+		return unlock;//返回unlock(其实就是自增后的uid)
 	},
 	set: function( owner, data, value ) {
 		var prop,
 			// There may be an unlock assigned to this node,
 			// if there is no entry for this "owner", create one inline
 			// and set the unlock as though an owner entry had always existed
-			unlock = this.key( owner ),
-			cache = this.cache[ unlock ];
+			//可能已经有一个unlock被分配给了这个node，如果没有一个对应的实体，那就在内部创建一个，并且把这个unlock赋予给owner就好像它已经存在一样
+			unlock = this.key( owner ),//创建unlock
+			cache = this.cache[ unlock ];//获取cache
 
 		// Handle: [ owner, key, value ] args
-		if ( typeof data === "string" ) {
+		if ( typeof data === "string" ) {//如果传入的data是一个字符串的话，就直接用下面的形式复制
 			cache[ data ] = value;
 
 		// Handle: [ owner, { properties } ] args
-		} else {
+		} else {//如果传入的是一个对象
 			// Fresh assignments by object are shallow copied
+			//通过浅拷贝来为cache赋值
 			if ( jQuery.isEmptyObject( cache ) ) {
 				jQuery.extend( this.cache[ unlock ], data );
 			// Otherwise, copy the properties one-by-one to the cache object
-			} else {
-				for ( prop in data ) {
+			} else {//如果不是空对象
+				for ( prop in data ) {//用for循环进行赋值
 					cache[ prop ] = data[ prop ];
 				}
 			}
 		}
-		return cache;
+		return cache;//返回整个cache对象
 	},
 	get: function( owner, key ) {
 		// Either a valid cache is found, or will be created.
+		// 如果没有一个有效的缓存值，那就创建一个
 		// New caches will be created and the unlock returned,
-		// allowing direct access to the newly created
+		//将会创建新的cache并且返回一个unlock
+		// allowing direct access to the newly created、
+		//允许对空数据对象的直接访问
 		// empty data object. A valid owner object must be provided.
-		var cache = this.cache[ this.key( owner ) ];
+		//owner对象必须为有效值
+		var cache = this.cache[ this.key( owner ) ];//根据owner来获取unlock。并且根据unlock值来找到对应的缓存
 
-		return key === undefined ?
+		return key === undefined ?//如果key没有提供，那就返回整个对应的cache，否则返回cache中指定的内容
 			cache : cache[ key ];
 	},
 	access: function( owner, key, value ) {
 		var stored;
 		// In cases where either:
+		//防止以下的几种情况
 		//
 		//   1. No key was specified
+		//key没有指定
 		//   2. A string key was specified, but no value provided
+		//指定了key但是没有指定value
 		//
 		// Take the "read" path and allow the get method to determine
 		// which value to return, respectively either:
-		//
+		//允许get方法能决定返回哪个值，他分别为
 		//   1. The entire cache object
+		//整个的cache对象
 		//   2. The data stored at the key
-		//
-		if ( key === undefined ||
-				((key && typeof key === "string") && value === undefined) ) {
+		//存在cache中的数据
+		if ( key === undefined ||//key没有被提供了
+				((key && typeof key === "string") && value === undefined) ) {//key不是空字串且key是字符型，且value不为undefined
 
-			stored = this.get( owner, key );
+			stored = this.get( owner, key );//调用this.get方法，并缓存数据
 
-			return stored !== undefined ?
-				stored : this.get( owner, jQuery.camelCase(key) );
+			return stored !== undefined ?//stored是不是为空
+				stored : this.get( owner, jQuery.camelCase(key) );//不为空直接返回stored，否则就把对象的键值转化为驼峰型并且调用get方法的返回
 		}
 
 		// [*]When the key is not a string, or both a key and value
 		// are specified, set or extend (existing objects) with either:
+		//当key不是字符串，或者key和value都被指定了，就设置或者扩展一个属性对象或者键值对
 		//
 		//   1. An object of properties
 		//   2. A key and value
 		//
-		this.set( owner, key, value );
+		this.set( owner, key, value );//否则就调用set方法
 
 		// Since the "set" path can have two possible entry points
 		// return the expected data based on which path was taken[*]
+		//因为set方法可能有两个入口点，所以返回值就依赖于你选择了那个方法
+		//
 		return value !== undefined ? value : key;
 	},
-	remove: function( owner, key ) {
+	remove: function( owner, key ) {//删除数据缓存函数
 		var i, name, camel,
-			unlock = this.key( owner ),
-			cache = this.cache[ unlock ];
+			unlock = this.key( owner ),//获取unlock值
+			cache = this.cache[ unlock ];//缓存对象
 
-		if ( key === undefined ) {
+		if ( key === undefined ) {//如果key没有传入，那就直接把所有的cache都删除
 			this.cache[ unlock ] = {};
 
 		} else {
 			// Support array or space separated string of keys
-			if ( jQuery.isArray( key ) ) {
+			//支持空格分开的字符串或者数组
+			if ( jQuery.isArray( key ) ) {//如果是数组或者类数组
 				// If "name" is an array of keys...
 				// When data is initially created, via ("key", "val") signature,
 				// keys will be converted to camelCase.
@@ -3612,32 +3651,34 @@ Data.prototype = {
 				// both plain key and camelCase key. #12786
 				// This will only penalize the array argument path.
 				name = key.concat( key.map( jQuery.camelCase ) );
-			} else {
-				camel = jQuery.camelCase( key );
+			} else {//否则就是字符串
+				camel = jQuery.camelCase( key );//装成驼峰
 				// Try the string as a key before any manipulation
-				if ( key in cache ) {
-					name = [ key, camel ];
+				//在操作之前先把字符串作为key
+				if ( key in cache ) {//如果cache中有key
+					name = [ key, camel ];//那就返回一个数组
 				} else {
 					// If a key with the spaces exists, use it.
 					// Otherwise, create an array by matching non-whitespace
+					//如果有空格的key存在，那就直接使用，否则就创建一个匹配没有空格的数组
 					name = camel;
-					name = name in cache ?
-						[ name ] : ( name.match( core_rnotwhite ) || [] );
+					name = name in cache ?//name对应的值在cache有没有
+						[ name ] : ( name.match( core_rnotwhite ) || [] );//如果没有的话，那肯定就是用空格分开的参数，通过正则匹配后就拆分成单个的参数数组
 				}
 			}
 
 			i = name.length;
-			while ( i-- ) {
-				delete cache[ name[ i ] ];
+			while ( i-- ) {//循环删除
+				delete cache[ name[ i ] ];//删除cache中的某个属性
 			}
 		}
 	},
-	hasData: function( owner ) {
+	hasData: function( owner ) {//判断是不是有绑定于元素上的data
 		return !jQuery.isEmptyObject(
 			this.cache[ owner[ this.expando ] ] || {}
 		);
 	},
-	discard: function( owner ) {
+	discard: function( owner ) {//丢弃一个元素上的缓存
 		if ( owner[ this.expando ] ) {
 			delete this.cache[ owner[ this.expando ] ];
 		}
@@ -3653,20 +3694,21 @@ data_priv = new Data();
 jQuery.extend({
 	acceptData: Data.accepts,
 
-	hasData: function( elem ) {
+	hasData: function( elem ) {//对原型中的方法hasData的调用
 		return data_user.hasData( elem ) || data_priv.hasData( elem );
 	},
 
-	data: function( elem, name, data ) {
+	data: function( elem, name, data ) {//获取或者设置data中的参数
 		return data_user.access( elem, name, data );
 	},
 
-	removeData: function( elem, name ) {
+	removeData: function( elem, name ) {//删除缓存对象
 		data_user.remove( elem, name );
 	},
 
 	// TODO: Now that all calls to _data and _removeData have been replaced
 	// with direct calls to data_priv methods, these can be deprecated.
+	//下面两个已经不用了~
 	_data: function( elem, name, data ) {
 		return data_priv.access( elem, name, data );
 	},
@@ -3676,7 +3718,7 @@ jQuery.extend({
 	}
 });
 
-jQuery.fn.extend({
+jQuery.fn.extend({//非$全局方法
 	data: function( key, value ) {
 		var attrs, name,
 			elem = this[ 0 ],
@@ -3684,18 +3726,19 @@ jQuery.fn.extend({
 			data = null;
 
 		// Gets all values
+		//如果第一个参数不传的话，那就会把该元素上所有的缓存内容都输出来
 		if ( key === undefined ) {
 			if ( this.length ) {
-				data = data_user.get( elem );
+				data = data_user.get( elem );//获取unlock
 
-				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
-					attrs = elem.attributes;
-					for ( ; i < attrs.length; i++ ) {
+				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {//因为传入了‘hasDataAttrs’，所以返回特定的数据（这是对data_priv操作的）
+					attrs = elem.attributes;//获取元素上的所有属性
+					for ( ; i < attrs.length; i++ ) {//遍历属性类数组对象
 						name = attrs[ i ].name;
 
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.slice(5) );
-							dataAttr( elem, name, data[ name ] );
+						if ( name.indexOf( "data-" ) === 0 ) {//如果以data-开头
+							name = jQuery.camelCase( name.slice(5) );//去掉前5个单词，并且对处理后的字符串进行驼峰式操作
+							dataAttr( elem, name, data[ name ] );//
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -3706,12 +3749,15 @@ jQuery.fn.extend({
 		}
 
 		// Sets multiple values
+		//设置多值
 		if ( typeof key === "object" ) {
-			return this.each(function() {
-				data_user.set( this, key );
+			return this.each(function() {//对Jquery对象进行遍历
+				data_user.set( this, key );//设置多值得
 			});
 		}
 
+
+		//既不是多值，也不是第一个参数没传的情况
 		return jQuery.access( this, function( value ) {
 			var data,
 				camelKey = jQuery.camelCase( key );
@@ -3775,12 +3821,15 @@ jQuery.fn.extend({
 	}
 });
 
+
+/*上面有用到这个函数*/
 function dataAttr( elem, key, data ) {
 	var name;
 
 	// If nothing was found internally, try to fetch any
 	// data from the HTML5 data-* attribute
-	if ( data === undefined && elem.nodeType === 1 ) {
+	//如果数据没找到，那就试试去找找HTML5的data-*属性
+	if ( data === undefined && elem.nodeType === 1 ) {//如果data为空，且elem为element对象
 		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
 		data = elem.getAttribute( name );
 
@@ -3803,6 +3852,13 @@ function dataAttr( elem, key, data ) {
 	}
 	return data;
 }
+
+
+
+
+/*
+	队列函数
+*/
 jQuery.extend({
 	queue: function( elem, type, data ) {
 		var queue;
