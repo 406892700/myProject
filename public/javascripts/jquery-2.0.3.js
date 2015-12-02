@@ -23,6 +23,7 @@ var
 	rootjQuery,
 
 	// The deferred used on DOM ready
+	/*dom加载延迟对象*/
 	readyList,
 
 	// Support: IE9
@@ -30,6 +31,7 @@ var
 	core_strundefined = typeof undefined,
 
 	// Use the correct document accordingly with window argument (sandbox)
+	/*一些常用对象*/
 	location = window.location,
 	document = window.document,
 	docElem = document.documentElement,
@@ -213,11 +215,14 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	// Start with an empty selector
+	// 最开始的选择器是一个空字串
 	selector: "",
 
 	// The default length of a jQuery object is 0
+	//默认对象长度是0
 	length: 0,
 
+	//转成数组
 	toArray: function() {
 		return core_slice.call( this );
 	},
@@ -237,26 +242,29 @@ jQuery.fn = jQuery.prototype = {
 
 	// Take an array of elements and push it onto the stack
 	// (returning the new matched element set)
+	//返回一个元素数组，并且压入一个栈中
 	pushStack: function( elems ) {
 
 		// Build a new jQuery matched element set
-		var ret = jQuery.merge( this.constructor(), elems );
+		var ret = jQuery.merge( this.constructor()/*返回一个jQuery对象*/, elems/*传入的是jQuery类数组对象*/ );//与原来的对象合并
 
 		// Add the old object onto the stack (as a reference)
-		ret.prevObject = this;
-		ret.context = this.context;
+		ret.prevObject = this;//把当前对象设置为新的prevObject
+		ret.context = this.context;//把当前的context设置为新的context
 
 		// Return the newly-formed element set
-		return ret;
+		return ret;//返回新的jQuery对象
 	},
 
 	// Execute a callback for every element in the matched set.
 	// (You can seed the arguments with an array of args, but this is
 	// only used internally.)
+	//args可以不传
 	each: function( callback, args ) {
 		return jQuery.each( this, callback, args );
 	},
 
+	/*添加DOMContentLoaded事件绑定~*/
 	ready: function( fn ) {
 		// Add the callback
 		jQuery.ready.promise().done( fn );
@@ -264,14 +272,16 @@ jQuery.fn = jQuery.prototype = {
 		return this;
 	},
 
+	/*调用原生的slice事件，并且返回一个jQuery对象*/
 	slice: function() {
 		return this.pushStack( core_slice.apply( this, arguments ) );
 	},
 
+	/*返回第一个*/
 	first: function() {
 		return this.eq( 0 );
 	},
-
+	/*返回最后一个*/
 	last: function() {
 		return this.eq( -1 );
 	},
@@ -424,6 +434,7 @@ jQuery.extend({
 	},
 
 	// Handle when the DOM is ready
+	/*dom加载完成事件*/
 	ready: function( wait ) {
 
 		// Abort if there are pending holds or we're already ready
@@ -451,12 +462,14 @@ jQuery.extend({
 	// See test/unit/core.js for details concerning isFunction.
 	// Since version 1.3, DOM methods and functions like alert
 	// aren't supported. They return false on IE (#2968).
+	/*判断是不是函数*/
 	isFunction: function( obj ) {
 		return jQuery.type(obj) === "function";
 	},
-
+	/*调用es5的isArray函数*/
 	isArray: Array.isArray,
 
+	/*判断是不是window*/
 	isWindow: function( obj ) {//利用window.window = window的特性来判断
 		return obj != null && obj === obj.window;
 	},
@@ -690,10 +703,12 @@ jQuery.extend({
 		return ret;
 	},
 
+	/*调用indexOf方法~*/
 	inArray: function( elem, arr, i ) {
 		return arr == null ? -1 : core_indexOf.call( arr, elem, i );
 	},
 
+	/*合并对象*/
 	merge: function( first, second ) {
 		var l = second.length,
 			i = first.length,
@@ -804,14 +819,25 @@ jQuery.extend({
 	// The value/s can optionally be executed if it's a function
 
 	/*
-	
+		一个为collection型对象赋值的多功能函数
+		value是函数的时候可以被选择性执行
 	*/
-	access: function( elems, fn, key, value, chainable, emptyGet, raw ) {
+/*
+	* @param elems jQuery的this
+	* @param fn 函数
+	* @param key 属性
+	* @param value 值
+	* @param chainable 是否可以链式调用，如果是get动作，为false，如果是set动作，为true
+	* @param emptyGet 如果jQuery没有选中到元素的返回值
+	* @param raw value是否为原始数据，如果raw是true，说明value是原始数据，如果是false，说明raw是个函数
+*/
+	access: function( elems/*操作对象*/, fn/**/, key, value, chainable, emptyGet, raw ) {
 		var i = 0,
 			length = elems.length,
-			bulk = key == null;
+			bulk = key == null;//如果key是null。那bulk是true，反之是false
 
 		// Sets many values
+		//key是对象的时候，递归赋值
 		if ( jQuery.type( key ) === "object" ) {
 			chainable = true;
 			for ( i in key ) {
@@ -819,45 +845,48 @@ jQuery.extend({
 			}
 
 		// Sets one value
-		} else if ( value !== undefined ) {
-			chainable = true;
+		//赋予单个值的时候
+		} else if ( value !== undefined ) {//如果value不为空，表明是赋值操作
+			chainable = true;//赋值操作需要可以链式操作
 
-			if ( !jQuery.isFunction( value ) ) {
-				raw = true;
+			if ( !jQuery.isFunction( value ) ) {//如果value不是函数
+				raw = true;//是函数的标志
 			}
 
 			if ( bulk ) {
 				// Bulk operations run against the entire set
-				if ( raw ) {
-					fn.call( elems, value );
-					fn = null;
+				//bulk根据整个对象来执行
+				if ( raw ) {//如果是个函数
+					fn.call( elems, value );//执行函数
+					fn = null;//置空函数
 
 				// ...except when executing function values
-				} else {
-					bulk = fn;
+				//
+				} else {//
+					bulk = fn;//
 					fn = function( elem, key, value ) {
 						return bulk.call( jQuery( elem ), value );
 					};
 				}
 			}
 
-			if ( fn ) {
-				for ( ; i < length; i++ ) {
-					fn( elems[i], key, raw ? value : value.call( elems[i], i, fn( elems[i], key ) ) );
+			if ( fn ) {//如果fn是函数
+				for ( ; i < length; i++ ) {//遍历元素数组
+					fn( elems[i], key, raw ? value : value.call( elems[i], i, fn( elems[i], key ) ) );//对每一个元素对象执行函数fn
 				}
 			}
 		}
 
-		return chainable ?
+		return chainable ?//如果是set操作，那返回当前对象
 			elems :
 
 			// Gets
-			bulk ?
+			bulk ?//如果是get操作
 				fn.call( elems ) :
-				length ? fn( elems[0], key ) : emptyGet;
+				length ? fn( elems[0], key ) : emptyGet;//返回具体的值
 	},
 
-	now: Date.now,
+	now: Date.now,//返回日期
 
 	// A method for quickly swapping in/out CSS properties to get correct calculations.
 	// Note: this method belongs to the css module but it's needed here for the support module.
@@ -3505,7 +3534,7 @@ Data.accepts = function( owner ) {//只有对象和dom元素可以被使用（�
 	//    - Node.DOCUMENT_NODE
 	//  - Object
 	//    - Any
-	return owner.nodeType ?//如果是dom元素，判断是不是element或者document，如果不是dom元素，默认为object    
+	return owner.nodeType ?//如果是dom元素，判断是不是element或者document，如果不是dom元素，默认为object
 		owner.nodeType === 1 || owner.nodeType === 9 : true;
 };
 
@@ -3686,7 +3715,7 @@ Data.prototype = {
 };
 
 // These may be used throughout the jQuery core codebase
-//这两个对象可能会在jQuery核心代码库之外被使用	
+//这两个对象可能会在jQuery核心代码库之外被使用
 data_user = new Data();
 data_priv = new Data();
 
@@ -3758,46 +3787,47 @@ jQuery.fn.extend({//非$全局方法
 
 
 		//既不是多值，也不是第一个参数没传的情况
-		return jQuery.access( this, function( value ) {
+		return jQuery.access( this, function( value ) {//调用钩子jQuery.access()函数来执行data
 			var data,
-				camelKey = jQuery.camelCase( key );
+				camelKey = jQuery.camelCase( key );//驼峰化
 
 			// The calling jQuery object (element matches) is not empty
 			// (and therefore has an element appears at this[ 0 ]) and the
 			// `value` parameter was not undefined. An empty jQuery object
 			// will result in `undefined` for elem = this[ 0 ] which will
 			// throw an exception if an attempt to read a data cache is made.
-			if ( elem && value === undefined ) {
+			if ( elem && value === undefined ) {//如果value为空
 				// Attempt to get data from the cache
 				// with the key as-is
-				data = data_user.get( elem, key );
+				data = data_user.get( elem, key );//就把获取到的值赋予给data
 				if ( data !== undefined ) {
-					return data;
+					return data;//data不为空时候，返回data
 				}
 
 				// Attempt to get data from the cache
 				// with the key camelized
-				data = data_user.get( elem, camelKey );
+				data = data_user.get( elem, camelKey );//用驼峰化字符串再尝试一次
 				if ( data !== undefined ) {
 					return data;
 				}
 
 				// Attempt to "discover" the data in
 				// HTML5 custom data-* attrs
-				data = dataAttr( elem, camelKey, undefined );
+				data = dataAttr( elem, camelKey, undefined );//在HTML5的data-set方法中找一下看看有没有
 				if ( data !== undefined ) {
 					return data;
 				}
 
 				// We tried really hard, but the data doesn't exist.
-				return;
+				return;//三种方法都特么试过了，找不到，直接返回
 			}
 
 			// Set the data...
+			//不是get方法，那就是set方法了
 			this.each(function() {
 				// First, attempt to store a copy or reference of any
 				// data that might've been store with a camelCased key.
-				var data = data_user.get( this, camelKey );
+				var data = data_user.get( this, camelKey );//首先，尝试存储一个可能已经存在的驼峰key的拷贝或者引用
 
 				// For HTML5 data-* attribute interop, we have to
 				// store property names with dashes in a camelCase form.
@@ -3811,7 +3841,7 @@ jQuery.fn.extend({//非$全局方法
 					data_user.set( this, key, value );
 				}
 			});
-		}, null, value, arguments.length > 1, null, true );
+		}, null, value, arguments.length > 1/*通过判断参数个数来确定是set还是get*/, null/*如果没选到，返回null*/, true );
 	},
 
 	removeData: function( key ) {
@@ -3830,27 +3860,27 @@ function dataAttr( elem, key, data ) {
 	// data from the HTML5 data-* attribute
 	//如果数据没找到，那就试试去找找HTML5的data-*属性
 	if ( data === undefined && elem.nodeType === 1 ) {//如果data为空，且elem为element对象
-		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
-		data = elem.getAttribute( name );
+		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();//转换成data-name形式的
+		data = elem.getAttribute( name );//用原生方法getAttribute方法来获取参数值
 
-		if ( typeof data === "string" ) {
+		if ( typeof data === "string" ) {//如果是字符串的话
 			try {
-				data = data === "true" ? true :
+				data = data === "true" ? true ://字符串形式的布尔型，就直接转成布尔型并返回
 					data === "false" ? false :
-					data === "null" ? null :
+					data === "null" ? null ://如果不是null，那只能是对象了。
 					// Only convert to a number if it doesn't change the string
 					+data + "" === data ? +data :
-					rbrace.test( data ) ? JSON.parse( data ) :
+					rbrace.test( data ) ? JSON.parse( data ) ://转成对象
 					data;
 			} catch( e ) {}
 
 			// Make sure we set the data so it isn't changed later
-			data_user.set( elem, key, data );
-		} else {
+			data_user.set( elem, key, data );//给其赋值
+		} else {//如果不是字符串的话那就是undefined
 			data = undefined;
 		}
 	}
-	return data;
+	return data;//返回对象
 }
 
 
@@ -4438,6 +4468,7 @@ boolHook = {
 		return name;
 	}
 };
+
 jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) {
 	var getter = jQuery.expr.attrHandle[ name ] || jQuery.find.attr;
 
@@ -6054,7 +6085,7 @@ jQuery.extend({
 			}
 
 			// Capture executables
-			//~~~？？？？
+			//~~~？
 			if ( scripts ) {
 				j = 0;
 				while ( (elem = tmp[ j++ ]) ) {
@@ -6962,6 +6993,7 @@ jQuery.fn.extend({
 	bind: function( types, data, fn ) {
 		return this.on( types, null, data, fn );
 	},
+	
 	unbind: function( types, fn ) {
 		return this.off( types, null, fn );
 	},

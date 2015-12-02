@@ -4,8 +4,431 @@
     <meta charset="UTF-8">
     <title>课程详情</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+    <style>
+        html{
+            font-size:62.5%;
+        }
+
+        body{
+            font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
+            text-align: center;
+            max-width:1280px;
+            margin:0px auto;
+            background-color:#e9e9e9;
+        }
+
+        *{
+            margin:0px;
+            padding:0px;
+            box-sizing:border-box;
+        }
+
+        a{
+            text-decoration: none;
+        }
+
+        .clearfix{
+            clear:both;
+        }
+
+        img{
+            display: block;
+
+        }
+
+
+        /*以下为非公用部分*/
+        body{
+            background-color: #ffffff;
+            padding-bottom: 50px;
+        }
+        img{
+            width:100%;
+        }
+
+        ul{
+            margin:0px;
+            padding:0px;
+            list-style: none;
+            text-align: justify;
+        }
+
+        /*section的公用样式*/
+        .p_sec{
+            margin: 15px 12px;
+        }
+
+        .p_sec > header{
+            position: relative;
+            display: inline-block;
+            color:#333;
+            font-size:2.5rem;
+            padding:10px 20px;
+            margin-bottom: 20px;
+        }
+
+        .p_sec > header > .i_arrow{
+            position: absolute;
+            width:13px;
+            height:21px;
+        }
+
+        .p_sec > header > .i_arrow.i_arrow_left{
+            background:url('html5/courseRegister/images/p_reg_icon1.png') no-repeat 0 0 ;
+            left:0px;
+            top:0px;
+        }
+
+        .p_sec > header > .i_arrow.i_arrow_right{
+            background:url('html5/courseRegister/images/p_reg_icon2.png') no-repeat 0 0 ;
+            right:0px;
+            bottom:0px;
+        }
+
+
+        /*教师section*/
+        .sec_teacher > .bd{
+            border:1px solid #3fc5aa;
+            position: relative;
+            padding:0px 10px;
+        }
+
+        .sec_teacher > .bd > .i_cover{
+            position: absolute;
+            width:43%;
+            height:2px;
+            background-color: #fff;
+            /*border:1px solid #aaa;*/
+        }
+        .sec_teacher > .bd > .i_cover.i_cover_top{
+            top:-1px;
+            right:10%;
+        }
+        .sec_teacher > .bd > .i_cover.i_cover_bottom{
+            bottom:-1px;
+            left:10%;
+        }
+
+
+        .sec_teacher > .bd > .item_teacher{
+            padding:30px 0px;
+            border-top: 1px solid #3fc5aa;
+        }
+
+        .sec_teacher > .bd > div.item_teacher:first-child{
+            border-top: none;
+        }
+
+
+        .sec_teacher > .bd >  .item_teacher > .left_pt{
+            width:80px;
+            float: left;
+        }
+
+        .sec_teacher > .bd >  .item_teacher > .left_pt img{
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .sec_teacher > .bd >  .item_teacher > .left_pt p{
+            font-size:1.6rem;
+            margin-top: 10px;
+        }
+
+
+        .sec_teacher > .bd >  .item_teacher > .right_pt{
+            margin-left: 90px;
+        }
+
+        .sec_teacher > .bd >  .item_teacher > .right_pt > ul > li{
+            padding-left:15px;
+            font-size:1.5rem;
+            background: url('html5/courseRegister/images/icon_dotted.png') no-repeat 5px 8px;
+            background-size: 6px 6px;
+            line-height: 2.3rem;
+        }
+
+        /*课程section*/
+        .sec_course > .bd{
+
+        }
+
+        .sec_course > .bd > .course_item{
+            border:1px solid #e6e5e6;
+            box-shadow: 0px 2px 1px #ccc;
+            margin-bottom: 10px;
+            padding:15px 15px 10px 15px;
+        }
+
+        .sec_course > .bd > .course_item > .course_info{
+            border-bottom: 1px dashed #d1d1d1;
+            padding-bottom: 15px;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .right_pt{
+            width:50px;
+            height:50px;
+            float: right;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .right_pt > a{
+            width: 100%;
+            height:100%;
+            display: block;
+            border-radius: 5px;
+            text-align: center;
+            font-size:1.8rem;
+            line-height: 2.3rem;
+            border-width:1px;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .right_pt > a.not_yet{
+            border:1px solid #3fc5aa;
+            color:#3fc5aa;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .right_pt > a.normal{
+            border:1px solid #f6bb53;
+            color:#f6bb53;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .right_pt > a.has_end{
+            border:1px solid #d1d1d1;
+            color:#d1d1d1;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .left_pt{
+            margin-right: 70px;
+            text-align: left;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .left_pt > .title{
+            font-size:2.2rem;
+            color:#333;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: 2.2rem;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .left_pt > p{
+            font-size:1.8rem;
+            margin-top: 10px;
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .left_pt > p > span.icon_hoster{
+            display: inline-block;
+            width:20px;
+            height: 20px;
+            background: url('html5/courseRegister/images/p_reg_icon3.png') no-repeat 0 0;
+            background-size:cover;
+            vertical-align: text-bottom;
+/*            border:1px solid #aaa;*/
+        }
+
+        .sec_course > .bd > .course_item > .course_info > .left_pt > p > span.date{
+            font-size: 1.6rem;
+            color:#7c7c7c;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .sec_course > .bd > .course_item > .course_des{
+            text-align: left;
+            padding:10px 0px;
+        }
+
+        .sec_course > .bd > .course_item > .course_des > p{
+            color:#7c7c7c;
+            font-size:1.6rem;
+            line-height: 2.2rem;
+            text-align: justify;
+        }
+    </style>
 </head>
 <body>
+    <header class="header">
+        <figure>
+            <img src="html5/courseRegister/images/p_reg_banner.png" alt="课程介绍banner"/>
+        </figure>
+    </header>
+    <!--banner头部-->
+    <section class="p_sec sec_teacher">
+        <header>
+            讲师阵容
+            <span class="i_arrow i_arrow_left"></span>
+            <span class="i_arrow i_arrow_right"></span>
+        </header>
+        <!-- sec头部-->
+        <div class="bd">
+            <div class="item_teacher">
+                <div class="left_pt">
+                    <figure class="user_pic">
+                        <img src="html5/courseRegister/images/icon_user.png" alt="讲师头像"/>
+                    </figure>
+                    <p class="user_name">王映人</p>
+                </div>
+                <!-- left_pt-->
+                <div class="right_pt">
+                    <ul>
+                        <li>柚子树教育起始创办人/营运长</li>
+                        <li>国际学前教育专家</li>
+                        <li>最接地气的两岸早幼特教文化产业顾问级专家</li>
+                        <li>台湾国立台东大学国际教育交流中心大陆地区代表</li>
+                    </ul>
+                </div>
+                <!--right_pt-->
+                <div class="clearfix"></div>
+            </div>
+            <!--讲师item-->
+            <div class="item_teacher">
+                <div class="left_pt">
+                    <figure class="user_pic">
+                        <img src="html5/courseRegister/images/icon_user.png" alt="讲师头像"/>
+                    </figure>
+                    <p class="user_name">王映人</p>
+                </div>
+                <!-- left_pt-->
+                <div class="right_pt">
+                    <ul>
+                        <li>柚子树教育起始创办人/营运长</li>
+                        <li>国际学前教育专家</li>
+                        <li>最接地气的两岸早幼特教文化产业顾问级专家</li>
+                        <li>台湾国立台东大学国际教育交流中心大陆地区代表</li>
+                    </ul>
+                </div>
+                <!--right_pt-->
+                <div class="clearfix"></div>
+            </div>
+            <!--讲师item-->
+            <span class="i_cover i_cover_top"></span>
+            <span class="i_cover i_cover_bottom"></span>
+        </div>
+        <!-- 主体部分-->
+    </section>
+    <!--讲师阵容-->
+    <section class="p_sec sec_course">
+        <header>
+            课程介绍
+            <span class="i_arrow i_arrow_left"></span>
+            <span class="i_arrow i_arrow_right"></span>
+        </header>
+        <!-- sec头部-->
+        <div class="bd">
+            <div class="course_item ">
+                <div class="course_info">
+                    <div class="right_pt">
+                        <a href="javascript:void(0)" class="not_yet">敬请期待</a>
+                    </div>
+                    <!--右边的按钮-->
+                    <div class="left_pt">
+                        <div class="title">
+                            幼儿园环境评测
+                        </div>
+                        <p>
+                            <span class="icon_hoster"></span><span>网银人</span>
+                            <span class="date">
+                                2015-10-11 8:30
+                            </span>
+                        </p>
+                    </div>
+                    <!--左边的课程信息-->
+                    <div class="clearfix"></div>
+                </div>
+                <div class="course_des">
+                    <p>
+                        课程介绍：撒哈拉看到后爱上的款撒感动撒开久别重逢撒哈拉看到后爱上的款撒感动撒开久别重逢
+                    </p>
+                </div>
+                <!--课程介绍-->
+            </div>
+            <!-- 一节课-->
+            <div class="course_item">
+                <div class="course_info">
+                    <div class="right_pt">
+                        <a href="javascript:void(0)" class="normal">敬请期待</a>
+                    </div>
+                    <!--右边的按钮-->
+                    <div class="left_pt">
+                        <div class="title">
+                            幼儿园环境评测
+                        </div>
+                        <p>
+                            <span class="icon_hoster">
+                            </span>
+                            <span>
+                                网银人
+                            </span>
+                            <span class="date">
+                                2015-10-11 8:30
+                            </span>
+                        </p>
+                    </div>
+                    <!--左边的课程信息-->
+                    <div class="clearfix"></div>
+                </div>
+                <div class="course_des">
+                    <p>
+                        课程介绍：撒哈拉看到后爱上的款撒感动撒开久别重逢撒哈拉看到后爱上的款撒感动撒开久别重逢
+                    </p>
+                </div>
+                <!--课程介绍-->
+            </div>
+            <!-- 一节课-->
+            <div class="course_item ">
+                <div class="course_info">
+                    <div class="right_pt">
+                        <a href="javascript:void(0)" class="has_end" id="dd">敬请期待</a>
+                    </div>
+                    <!--右边的按钮-->
+                    <div class="left_pt">
+                        <div class="title">
+                            幼儿园环境评测
+                        </div>
+                        <p>
+                            <span class="icon_hoster">
+                            </span>
+                            <span>
+                                网银人
+                            </span>
+                            <span class="date">
+                                2015-10-11 8:30
+                            </span>
+                        </p>
+                    </div>
+                    <!--左边的课程信息-->
+                    <div class="clearfix"></div>
+                </div>
+                <div class="course_des">
+                    <p>
+                        课程介绍：撒哈拉看到后爱上的款撒感动撒开久别重逢撒哈拉看到后爱上的款撒感动撒开久别重逢
+                    </p>
+                </div>
+                <!--课程介绍-->
+            </div>
+            <!-- 一节课-->
+        </div>
+        <!--sec主体-->
+    </section>
+    <!-- <script>
+      window.oncontextmenu = function(e){e.preventDefault()};
+      var timer;
+      var flag = false;
+      document.getElementById('dd').onmousedown = function(e){
+        timer = setTimeout(function(){
+          flag = true;
+          window.location.href = 'http://www.baidu.com';
+        },2000);
+      }
 
+      document.getElementById('dd').onmouseup = function(e){
+        clearTimeout(timer);
+        if(flag){
+          return;
+        }else{
+          window.location.href = 'http://www.qq.com';
+        }
+      }
+    </script> -->
 </body>
 </html>

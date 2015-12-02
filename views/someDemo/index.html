@@ -11,7 +11,7 @@
 	</style>
 </head>
 <body>
-	<div class="item_1">
+	<div class="item_1" data-name="dfds" data-ad="ggd" data-dd="fddd">
 		<ul>
 			<li class="li1">li_1</li>
 		</ul>
@@ -31,7 +31,7 @@
 
 
 	<script type="text/javascript">
-		$('#myElement').click(function() {
+		/*$('#myElement').click(function() {
 			var _this = this;
 			setTimeout(function() {
 
@@ -41,11 +41,11 @@
 			}, 1000);
 
 		});
-		/*$(function(){
+		/!*$(function(){
 			$('div.item').append('dfdsf');
-		});*/
+		});*!/
 
-		/*模仿一下jquery对象的工厂模式*/
+		/!*模仿一下jquery对象的工厂模式*!/
 		var xQuery = function(selecter){
 			return new xQuery.fn.init(selecter);
 		};
@@ -58,7 +58,12 @@
 			selecter:0
 		};
 
-		xQuery.fn.init.prototype = xQuery.fn;
+		xQuery.fn.init.prototype = xQuery.fn;*/
+
+		$(function () {
+			alert(21);
+		});
+		$.holdReady(true);
 	</script>
 </body>
 </html>

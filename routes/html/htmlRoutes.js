@@ -43,5 +43,9 @@ module.exports = function(app){
     
     app.get('/dateTable', function (req,res) {
         res.render('html5/dataTable/index',{});
-    })
+    });
+
+    app.get('/p_reg',function(req,res){
+        res.render('html5/courseRegister/index',{});
+    });
 };
