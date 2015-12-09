@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .main_panel{
+      overflow: hidden;
+    }
+
+    .main_panel > .left_bar{
+      float:left;
+      height:300px;
+      background-color: #d00000;
+      margin-right: 20px;
+      width:20%;
+    }
+
+    .main_panel > .main_bar{
+      height:300px;
+      background-color: #0078d8;
+      overflow: hidden;
+    }
+
+
+    /*inline-block 兼容性*/
+    .test_inline_block{
+      display:inline-block;
+      border:1px solid #aaa;
+      width:100px;
+      text-align: center;
+      +display:inline;/*hack ie7*/
+      +zoom:1;/*hack ie7*/
+    }
+
+
+
+
+    /**/
+    .tb_panel{
+      width: 100%;
+      display: table;
+    }
+
+    .tb_panel > .left_bar{
+      display: table-cell;
+      height:300px;
+      width: 20%;
+    }
+    .tb_panel > .main_bar{
+      display: table-cell;
+      height:300px;
+      background-color: #0078d8;
+      border-left: 20px solid #fff;
+    }
+
+    .border_collpase{
+      /*border:1px solid #aaa;
+      overflow: hidden;*/
+      overflow: auto;/*触发bfc*/
+      background-color: lightblue;
+    }
+
+    .border_collpase .item1{
+      width:200px;
+      height:150px;
+      border:1px solid #aaa;
+      margin:30px 20px 15px 10px;
+      /*display: inline-block;*/
+    }
+
+    .explain{
+      border:1px solid #Aaa;
+      background-color: lightblue;
+    }
+  </style>
+</head>
+<body>
+  <!-- BFC自适应左右布局 start -->
+  <!-- 这套的局限性在于高度无法自适应 -->
+  <div class="main_panel">
+    <div class="left_bar">
+      <img src="./images/left.jpg" alt="" width="100%">
+    </div>
+    <div class="main_bar"></div>
+  </div>
+  <!-- BFC自适应左右布局 end -->
+
+
+  <div class="test_inline_block">
+    123
+  </div><div class="test_inline_block">
+    44
+  </div>
+
+
+  <!-- table-cell start -->
+  <!--这一套的适用性更强一些，可以用在不考虑ie7-的情况下  -->
+  <div class="tb_panel">
+    <div class="left_bar">
+      <img src="./images/left.jpg" alt="" width="100%">
+    </div>
+    <div class="main_bar">
+
+    </div>
+  </div>
+  <!-- table-cell end -->
+
+
+  <!-- 外边距折叠 start-->
+  <div class="border_collpase">
+    <div class="item1">
+      @1
+    </div>
+    <div></div>
+    <div class="item1">
+      @2
+    </div>
+  </div>
+  <!-- 外边距折叠 end-->
+  <div class="explain">
+    若无外边距折叠，则上下的边距应该是45px;但是实际情况为30px
+  </div>
+
+  <style>
+    .horizontal_wrap{
+      background-color: lightgreen;
+    }
+
+    .horizontal_wrap >  .in_block{
+      border:1px solid #aaa;
+      display: inline-block;
+      margin:5px;
+      padding:10px;
+    }
+  </style>
+
+  <!-- 横向外边距折叠 -->
+  <div class="horizontal_wrap">
+    <div class="in_block">1</div><div class="in_block">2</div><div class="in_block">3</div><div class="in_block">4</div>
+  </div>
+</body>
+</html>

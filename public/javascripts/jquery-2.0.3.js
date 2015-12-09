@@ -891,11 +891,13 @@ jQuery.extend({
 	// A method for quickly swapping in/out CSS properties to get correct calculations.
 	// Note: this method belongs to the css module but it's needed here for the support module.
 	// If support gets modularized, this method should be moved back to the css module.
+	//一个用于快速
 	swap: function( elem, options, callback, args ) {
 		var ret, name,
 			old = {};
 
 		// Remember the old values, and insert the new ones
+		//缓存旧值，并把新值放入一个对象
 		for ( name in options ) {
 			old[ name ] = elem.style[ name ];
 			elem.style[ name ] = options[ name ];
@@ -1395,11 +1397,14 @@ function createPositionalPseudo( fn ) {
  * Detect xml
  * @param {Element|Object} elem An element or a document
  */
+//判断当前的元素是不是xml节点
 isXML = Sizzle.isXML = function( elem ) {
 	// documentElement is verified for cases where it doesn't yet exist
 	// (such as loading iframes in IE - #4833)
-	var documentElement = elem && (elem.ownerDocument || elem).documentElement;
-	return documentElement ? documentElement.nodeName !== "HTML" : false;
+	var documentElement = elem && (elem.ownerDocument || elem).documentElement;//根据它所属的document来判断，如果它有ownerDocument，那就是说明他已经是顶层了，那就直接获取他自己的documentElement
+
+	return documentElement ? documentElement.nodeName !== "HTML" : false;//如果nodeName不是HTML那就返回true，否则返回false
+
 };
 
 // Expose support vars for convenience
@@ -3393,9 +3398,11 @@ jQuery.support = (function( support ) {
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// Check the default checkbox/radio value ("" on old WebKit; "on" elsewhere)
+	//判断是不是checkbox或者radio（checkbox和radio的初值为‘on’）
 	support.checkOn = input.value !== "";
 
 	// Must access the parent to make an option select properly
+	//必须访问父元素来来正确设置被选中的option
 	// Support: IE9, IE10
 	support.optSelected = opt.selected;
 
@@ -3405,23 +3412,27 @@ jQuery.support = (function( support ) {
 	support.pixelPosition = false;
 
 	// Make sure checked status is properly cloned
+	//确保克隆的时候checked也会被正确克隆~
 	// Support: IE9, IE10
 	input.checked = true;
 	support.noCloneChecked = input.cloneNode( true ).checked;
 
 	// Make sure that the options inside disabled selects aren't marked as disabled
 	// (WebKit marks them as disabled)
+	//option被设置为disabled时，select不一定被设置为disabled
 	select.disabled = true;
 	support.optDisabled = !opt.disabled;
 
 	// Check if an input maintains its value after becoming a radio
-	// Support: IE9, IE10
+	// Support: IE9, IE
+	//检测一个input元素在被改编为一个radio时是不是还保留了原来的值(ie 9 10都是不支持的)
 	input = document.createElement("input");
 	input.value = "t";
 	input.type = "radio";
-	support.radioValue = input.value === "t";
+	support.radioValue = input.value === "t";//ie中返回false
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
+	//webkit在设置完name之后会丢失checked效果
 	input.setAttribute( "checked", "t" );
 	input.setAttribute( "name", "t" );
 
@@ -3429,10 +3440,12 @@ jQuery.support = (function( support ) {
 
 	// Support: Safari 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
+	//老的webkit在fragment中不能正确的克隆checked状态
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Support: Firefox, Chrome, Safari
 	// Beware of CSP restrictions (https://developer.mozilla.org/en/Security/CSP)
+	//注意CSP的安全策略的限制
 	support.focusinBubbles = "onfocusin" in window;
 
 	div.style.backgroundClip = "content-box";
@@ -3440,21 +3453,26 @@ jQuery.support = (function( support ) {
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
 	// Run tests that need a body at doc ready
+	//以下测试需要文档加载完成
 	jQuery(function() {
 		var container, marginDiv,
 			// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
+			//清除默认样式
 			divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box",
 			body = document.getElementsByTagName("body")[ 0 ];
 
-		if ( !body ) {
+		if ( !body ) {//没有body
 			// Return for frameset docs that don't have a body
 			return;
 		}
 
+
+		//测试对象--外容器
 		container = document.createElement("div");
 		container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;margin-top:1px";
 
 		// Check box-sizing and margin behavior.
+		//测试box-sizinghe margin的表现形式
 		body.appendChild( container ).appendChild( div );
 		div.innerHTML = "";
 		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
@@ -4257,7 +4275,7 @@ jQuery.fn.extend({
 });
 
 jQuery.extend({
-	valHooks: {
+	valHooks: {//设值钩子函数
 		option: {
 			get: function( elem ) {
 				// attributes.value is undefined in Blackberry 4.7 but
@@ -4326,48 +4344,58 @@ jQuery.extend({
 		}
 	},
 
-	attr: function( elem, name, value ) {
+	attr: function( elem, name, value ) {//设置/获取属性的静态方法
 		var hooks, ret,
 			nType = elem.nodeType;
 
 		// don't get/set attributes on text, comment and attribute nodes
+		//如果节点类型是text,comment,attribute就直接返回了
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
 
 		// Fallback to prop when attributes are not supported
+		//当getAttribute不被支持的时候，用property的方式来赋值
 		if ( typeof elem.getAttribute === core_strundefined ) {
 			return jQuery.prop( elem, name, value );
 		}
 
 		// All attributes are lowercase
 		// Grab necessary hook if one is defined
-		if ( nType !== 1 || !jQuery.isXMLDoc( elem ) ) {
-			name = name.toLowerCase();
-			hooks = jQuery.attrHooks[ name ] ||
-				( jQuery.expr.match.bool.test( name ) ? boolHook : nodeHook );
+		//如果满足其中一个条件，使用需要的钩子函数
+		if ( nType !== 1 || !jQuery.isXMLDoc( elem )/*这个一般都不是吧~*/ ) {//元素的节点类别不是1,或者不是XML
+			name = name.toLowerCase();//转成小写
+			hooks = jQuery.attrHooks[ name ] ||//只有是type、的时候hook才实行后面的
+				( jQuery.expr.match.bool.test( name ) ?//如果是类似于required,disabled之类的属性，hooks = boolHook
+					boolHook : nodeHook );//否则就是nodeHook（这个貌似是个undefined）TODO:
 		}
 
-		if ( value !== undefined ) {
+		if ( value !== undefined ) {//如果value已经传入(这个就是set操作)
 
-			if ( value === null ) {
-				jQuery.removeAttr( elem, name );
+			if ( value === null ) {//如果value的值为null
+				jQuery.removeAttr( elem, name );//移除当前属性
 
-			} else if ( hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ) {
+			} else if ( hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ) {//如果value不是null,且是set是hook的属性，反正就是hack了ie的6-9
 				return ret;
 
-			} else {
+			} else {//非ie6-9的处理
 				elem.setAttribute( name, value + "" );
 				return value;
 			}
 
-		} else if ( hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== null ) {
+		}
+
+
+
+		else if ( hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== null ) {//value没有传入，那就是一个get操作（）
+			//为毛感觉这个判断永远都不会进来啊~~~！！！！！！！TODO:
 			return ret;
 
 		} else {
 			ret = jQuery.find.attr( elem, name );
 
 			// Non-existent attributes return null, we normalize to undefined
+			//如果不存在的属性会返回null，我们这里直接将其统一化成返回undeifned
 			return ret == null ?
 				undefined :
 				ret;
@@ -4394,12 +4422,12 @@ jQuery.extend({
 		}
 	},
 
-	attrHooks: {
+	attrHooks: {//这个是针对type的赋值钩子（就是拿来hack ie6-9的）
 		type: {
 			set: function( elem, value ) {
-				if ( !jQuery.support.radioValue && value === "radio" && jQuery.nodeName(elem, "input") ) {
-					// Setting the type on a radio button after the value resets the value in IE6-9
-					// Reset value to default in case type is set after value during creation
+				if ( !jQuery.support.radioValue/*ie中返回false,chrome中返回true*/ && value === "radio" && jQuery.nodeName(elem, "input") ) {
+					// Setting the type on a radio button after the value resets the value in IE6-9/*ie6-9中会重置这个值*/
+					// Reset value to default in case type is set after value during creation //直接重置
 					var val = elem.value;
 					elem.setAttribute( "type", value );
 					if ( val ) {
@@ -4411,7 +4439,7 @@ jQuery.extend({
 		}
 	},
 
-	propFix: {
+	propFix: {//兼容性属性修复
 		"for": "htmlFor",
 		"class": "className"
 	},
@@ -4421,31 +4449,32 @@ jQuery.extend({
 			nType = elem.nodeType;
 
 		// don't get/set properties on text, comment and attribute nodes
+		//如果是文本节点，注释节点，属性节点，或者节点为空,那就直接返回
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
 
-		notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
+		notxml = nType !== 1 || !jQuery.isXMLDoc( elem );//节点是不是xml
 
-		if ( notxml ) {
+		if ( notxml ) {//如果不是xml节点
 			// Fix name and attach hooks
-			name = jQuery.propFix[ name ] || name;
-			hooks = jQuery.propHooks[ name ];
+			name = jQuery.propFix[ name ] || name;//修复for和className
+			hooks = jQuery.propHooks[ name ];//如果是tabIndex，则调用钩子函数
 		}
 
-		if ( value !== undefined ) {
-			return hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ?
+		if ( value !== undefined ) {//如果value传进来了，那就是set
+			return hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ?//钩子函数没有，那就是直接赋值
 				ret :
 				( elem[ name ] = value );
 
 		} else {
-			return hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== null ?
+			return hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== null ?//钩子函数没有，直接取值
 				ret :
 				elem[ name ];
 		}
 	},
 
-	propHooks: {
+	propHooks: {//属性钩子
 		tabIndex: {
 			get: function( elem ) {
 				return elem.hasAttribute( "tabindex" ) || rfocusable.test( elem.nodeName ) || elem.href ?
@@ -4457,21 +4486,24 @@ jQuery.extend({
 });
 
 // Hooks for boolean attributes
-boolHook = {
+boolHook = {//布尔型钩子
 	set: function( elem, value, name ) {
 		if ( value === false ) {
 			// Remove boolean attributes when set to false
+			//如果传进来的值是false，直接把属性删掉
 			jQuery.removeAttr( elem, name );
 		} else {
+			//否则，就是形如在input required = required
 			elem.setAttribute( name, name );
 		}
-		return name;
+		return name;//返回属性值
 	}
 };
-
+/*jQuery.expr.match.bool.source的值为
+* ^(?:checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped)$*/
 jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) {
 	var getter = jQuery.expr.attrHandle[ name ] || jQuery.find.attr;
-
+//TODO:
 	jQuery.expr.attrHandle[ name ] = function( elem, name, isXML ) {
 		var fn = jQuery.expr.attrHandle[ name ],
 			ret = isXML ?
@@ -4493,6 +4525,8 @@ jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) 
 
 // Support: IE9+
 // Selectedness for an option in an optgroup can be inaccurate
+	//可能是不准确的
+
 if ( !jQuery.support.optSelected ) {
 	jQuery.propHooks.selected = {
 		get: function( elem ) {
@@ -4505,6 +4539,7 @@ if ( !jQuery.support.optSelected ) {
 	};
 }
 
+	/*遍历填充propFix数组*/
 jQuery.each([
 	"tabIndex",
 	"readOnly",
@@ -4539,8 +4574,8 @@ jQuery.each([ "radio", "checkbox" ], function() {
 });
 var rkeyEvent = /^key/,
 	rmouseEvent = /^(?:mouse|contextmenu)|click/,
-	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
-	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
+	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,//
+	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;//判断是否以namespace的形式
 
 function returnTrue() {
 	return true;
@@ -4560,10 +4595,16 @@ function safeActiveElement() {
  * Helper functions for managing events -- not part of the public interface.
  * Props to Dean Edwards' addEvent library for many of the ideas.
  */
+
+ /*
+
+  管理event的帮助函数（不是公共接口的一部分）]
+  作者在这里建议我们去看Dean edwards的 addEvent库
+ */
 jQuery.event = {
 
 	global: {},
-
+  
 	add: function( elem, types, handler, data, selector ) {
 
 		var handleObjIn, eventHandle, tmp,
@@ -4572,11 +4613,13 @@ jQuery.event = {
 			elemData = data_priv.get( elem );
 
 		// Don't attach events to noData or text/comment nodes (but allow plain objects)
-		if ( !elemData ) {
+		//不为noData或者文本注释节点绑定事件
+		if ( !elemData ) {//如果获取缓存失败，那就直接返回(这个基本不会发生)
 			return;
 		}
 
 		// Caller can pass in an object of custom data in lieu of the handler
+		// 
 		if ( handler.handler ) {
 			handleObjIn = handler;
 			handler = handleObjIn.handler;
@@ -4584,31 +4627,36 @@ jQuery.event = {
 		}
 
 		// Make sure that the handler has a unique ID, used to find/remove it later
-		if ( !handler.guid ) {
+		//检查handler有没有一个唯一的id，用于后续的find和remove操作
+		if ( !handler.guid ) {//如果没有，那就为他穿件一个
 			handler.guid = jQuery.guid++;
 		}
 
 		// Init the element's event structure and main handler, if this is the first
-		if ( !(events = elemData.events) ) {
+		// 如果当前是第一个调用的话，那就初始化元素的event结构和主处理函数
+		if ( !(events = elemData.events) ) {//看看缓存里面有没有，没有就创建
 			events = elemData.events = {};
 		}
-		if ( !(eventHandle = elemData.handle) ) {
+		if ( !(eventHandle = elemData.handle) ) {//如果elemData.handle为空
 			eventHandle = elemData.handle = function( e ) {
 				// Discard the second event of a jQuery.event.trigger() and
 				// when an event is called after a page has unloaded
-				return typeof jQuery !== core_strundefined && (!e || jQuery.event.triggered !== e.type) ?
-					jQuery.event.dispatch.apply( eventHandle.elem, arguments ) :
+				// 
+				return typeof jQuery !== core_strundefined/*jQuery存在*/ && (!e/*如果e没传的话*/ || jQuery.event.triggered !== e.type/*或者事件类型不统一*/)?
+					jQuery.event.dispatch.apply( eventHandle.elem, arguments ) /*调用dispatch方法*/:
 					undefined;
 			};
 			// Add elem as a property of the handle fn to prevent a memory leak with IE non-native events
+			//把元素作为参数从传入handle函数来阻止ie中的内存泄露
 			eventHandle.elem = elem;
 		}
 
 		// Handle multiple events separated by a space
+		//处理用空格分开的多个事件
 		types = ( types || "" ).match( core_rnotwhite ) || [""];
 		t = types.length;
 		while ( t-- ) {
-			tmp = rtypenamespace.exec( types[t] ) || [];
+			tmp = rtypenamespace.exec( types[t] ) || [];//是否已namespace的形式传入
 			type = origType = tmp[1];
 			namespaces = ( tmp[2] || "" ).split( "." ).sort();
 
@@ -5264,67 +5312,87 @@ if ( !jQuery.support.focusinBubbles ) {
 	});
 }
 
+	/*jQuery的on方法
+	*
+	*
+	*      这个特么的很重要~
+	*
+	*
+	* */
 jQuery.fn.extend({
 
 	on: function( types, selector, data, fn, /*INTERNAL*/ one ) {
 		var origFn, type;
 
 		// Types can be a map of types/handlers
+		//主要应对这种情况
+		// $('body').on({
+		//   click:function(){
+		// 	console.log('click');
+	 //  		},
+		//   focus:function(){
+		//   	console.log('dbclick');
+		// 	}
+		// },'#myElement');
 		if ( typeof types === "object" ) {
 			// ( types-Object, selector, data )
-			if ( typeof selector !== "string" ) {
+			if ( typeof selector !== "string" ) {//如果选择器不是string类型
 				// ( types-Object, data )
+				//参数修正，如果data为空，那就吧把selecter当做data
 				data = data || selector;
 				selector = undefined;
 			}
-			for ( type in types ) {
+			for ( type in types ) {//遍历对象，并且递归调用自身，未元素绑定上所有事件
 				this.on( type, selector, data, types[ type ], one );
 			}
 			return this;
 		}
 
-		if ( data == null && fn == null ) {
+		if ( data == null && fn == null ) {//参数修正（data和fn都是空//选择器当做fn，）
 			// ( types, fn )
-			fn = selector;
-			data = selector = undefined;
-		} else if ( fn == null ) {
-			if ( typeof selector === "string" ) {
-				// ( types, selector, fn )
-				fn = data;
-				data = undefined;
-			} else {
-				// ( types, data, fn )
+			fn = selector;//选择器当做fn，
+			data = selector = undefined;//置空变量
+		} else if ( fn == null ) {//只有fn为空的时候
+			if ( typeof selector === "string" ) {//如果选择器是string
+				// ( types, selector, fn )//委托的方式
+				fn = data;//data当做fn
+				data = undefined;//置空data
+			} else {//选择器不是string
+				// ( types, data, fn )//没有委托的方式
 				fn = data;
 				data = selector;
 				selector = undefined;
 			}
 		}
-		if ( fn === false ) {
-			fn = returnFalse;
-		} else if ( !fn ) {
-			return this;
+		if ( fn === false ) {//如果传入的fn为false
+			fn = returnFalse;//直接returnFasle的值赋给fn
+		} else if ( !fn ) {//如果fn没传或者传入了null，undefined之类的值
+			return this;//直接返回当前jQuery对象
 		}
 
-		if ( one === 1 ) {
-			origFn = fn;
+		if ( one === 1 ) {//最后一个参数，判断判断是否执行一次
+			origFn = fn;//回调函数赋值给一个临时变量
 			fn = function( event ) {
 				// Can use an empty set, since event contains the info
-				jQuery().off( event );
-				return origFn.apply( this, arguments );
+				//可以使用空的set，因为event对象包含了这个信息（参看下面的off方法，专门为这种情况作了判断）
+				jQuery().off( event );//清除事件
+				return origFn.apply( this, arguments );//方法借用的方式调用origFn
 			};
 			// Use same guid so caller can remove using origFn
+			//事件缓存对象
 			fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );
 		}
-		return this.each( function() {
+		return this.each( function() {//循环中调用jQuery.event.add为事件绑定
 			jQuery.event.add( this, types, fn, data, selector );
 		});
 	},
-	one: function( types, selector, data, fn ) {
+	one: function( types, selector, data, fn ) {//调用on
+
 		return this.on( types, selector, data, fn, 1 );
 	},
-	off: function( types, selector, fn ) {
+	off: function( types, selector, fn ) {//注销事件
 		var handleObj, type;
-		if ( types && types.preventDefault && types.handleObj ) {
+		if ( types && types.preventDefault && types.handleObj ) {//为上面的事件清除作了判断
 			// ( event )  dispatched jQuery.Event
 			handleObj = types.handleObj;
 			jQuery( types.delegateTarget ).off(
@@ -6993,7 +7061,7 @@ jQuery.fn.extend({
 	bind: function( types, data, fn ) {
 		return this.on( types, null, data, fn );
 	},
-	
+
 	unbind: function( types, fn ) {
 		return this.off( types, null, fn );
 	},
