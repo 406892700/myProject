@@ -1,98 +1,236 @@
-﻿<!DOCTYPE html>
-<html lang="ch" style="height:100%;">
+﻿<!--<!DOCTYPE html>-->
+<!--<html lang="ch" style="height:100%;">-->
+<!--<head>-->
+	<!--<meta charset="UTF-8">-->
+	<!--<meta name="viewport" content="width=device-width,initial-scale=1.0">-->
+	<!--<title>下拉刷新</title>-->
+	<!--<script type="text/javascript" src="/javascripts/zepto.min.js"></script>-->
+	<!--<script type="text/javascript" src="/javascripts/zepto.flush.js"></script>-->
+	<!--<style type="text/css">-->
+		<!--body{-->
+			<!--text-align: center;-->
+			<!--background-color: #fff;-->
+		<!--}-->
+		<!--.f_dropdown_area{-->
+			<!--height:0px;-->
+			<!--overflow: hidden;-->
+			<!--background-color: #eee;-->
+			<!--box-shadow: 0px 0px 5px #aaa;-->
+		<!--}-->
+
+		<!--.f_inner_content{-->
+			<!--height:40px;-->
+			<!--line-height: 40px;-->
+			<!--color:#aaa;-->
+		<!--}-->
+
+		<!--.f_preLoading{-->
+			<!--display: inline-block;-->
+			<!--width:20px;-->
+			<!--height:20px;-->
+			<!--background:url('/images/arrow_top.png') no-repeat 0 0;-->
+			<!--background-size: cover;-->
+			<!--vertical-align: middle;-->
+			<!--margin-right: 5px;-->
+			<!-&#45;&#45;webkit-transform:rotate(0deg);-->
+			<!-&#45;&#45;moz-transform:rotate(0deg);-->
+			<!-&#45;&#45;ms-transform:rotate(0deg);-->
+			<!-&#45;&#45;o-transform:rotate(0deg);-->
+			<!--transform:rotate(0deg);-->
+			<!-&#45;&#45;webkit-transition:transform 0.3s;-->
+			<!-&#45;&#45;moz-transition:transform 0.3s;-->
+			<!-&#45;&#45;ms-transition:transform 0.3s;-->
+			<!-&#45;&#45;o-transition:transform 0.3s;-->
+			<!--transition:transform 0.3s;-->
+			<!--line-height: 40px;-->
+		<!--}-->
+
+		<!--.f_preLoading.rotate{-->
+			<!-&#45;&#45;webkit-transform:rotate(180deg);-->
+			<!-&#45;&#45;moz-transform:rotate(180deg);-->
+			<!-&#45;&#45;ms-transform:rotate(180deg);-->
+			<!-&#45;&#45;o-transform:rotate(180deg);-->
+			<!--transform:rotate(180deg);-->
+			<!-&#45;&#45;webkit-transition:webKitTransform 0.3s;-->
+			<!-&#45;&#45;moz-transition:transform 0.3s;-->
+			<!-&#45;&#45;ms-transition:transform 0.3s;-->
+			<!-&#45;&#45;o-transition:transform 0.3s;-->
+			<!--transition:transform 0.3s;-->
+		<!--}-->
+
+		<!--.f_preLoading.spin{-->
+			<!--background-image:url('/public/images/icon_loading.png');-->
+			<!-&#45;&#45;webkit-animation:spin 0.5s linear infinite normal;-->
+		<!--}-->
+
+		<!--@-webkit-keyframes spin{-->
+			<!--from{-->
+				<!-&#45;&#45;webkit-transform:rotate(0deg);-->
+				<!-&#45;&#45;moz-transform:rotate(0deg);-->
+				<!-&#45;&#45;ms-transform:rotate(0deg);-->
+				<!-&#45;&#45;o-transform:rotate(0deg);-->
+				<!--transform:rotate(0deg);-->
+			<!--}-->
+
+			<!--to{-->
+				<!-&#45;&#45;webkit-transform:rotate(360deg);-->
+				<!-&#45;&#45;moz-transform:rotate(360deg);-->
+				<!-&#45;&#45;ms-transform:rotate(360deg);-->
+				<!-&#45;&#45;o-transform:rotate(360deg);-->
+				<!--transform:rotate(360deg);-->
+			<!--}-->
+		<!--}-->
+
+		<!--img{-->
+			<!--width:100%;-->
+		<!--}-->
+
+		<!--html, body { height: 100%; }-->
+		<!--body { overflow: hidden }-->
+		<!--body > div, body > div > div { height: 100%; overflow-y: auto; overflow-x: visible; -webkit-overflow-scrolling: touch }-->
+	<!--</style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div>-->
+	<!--<div>-->
+		<!--<img src="http://file28.mafengwo.net/M00/9F/5D/wKgB6lSotSGASc1mAASoXxTTPvM809.png" alt="">-->
+		<!--<img src="http://image.photophoto.cn/nm-6/018/030/0180300244.jpg" alt="">-->
+	<!--</div>-->
+<!--</div>-->
+	<!--<script type="text/javascript">-->
+<!--//		$(window).on('scroll.elasticity',-->
+<!--//				function (e){e.preventDefault();-->
+<!--//			})-->
+<!--//				.on('touchmove.elasticity',-->
+<!--//				function(e){e.preventDefault();-->
+<!--//			});-->
+		<!--$(function(){-->
+			<!--$.flush();-->
+		<!--});-->
+	<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>下拉刷新</title>
-	<script type="text/javascript" src="/javascripts/zepto.min.js"></script>
-	<script type="text/javascript" src="/javascripts/zepto.flush.js"></script>
-	<style type="text/css">
-		body{
+	<meta charset=utf-8 />
+	<title>ScrollFix Demo</title>
+	<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" />
+	<!--<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
+	<style>
+		html
+		{
+			height: 100%;
+		}
+
+
+		body
+		{
+			padding: 0;
+			margin: 0;
+			font-family: helvetica, arial, sans-serif;
+			max-height: 100%;
+		}
+
+		.scrollable
+		{
+			position: absolute;
+			top: 50px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow-y: scroll;
+			-webkit-overflow-scrolling: touch;
+			-webkit-box-flex: 1;
+		}
+
+		.toolbar
+		{
+			-webkit-box-sizing: border-box;
+			padding: 1em;
+			background: #222;
+			color: #fff;
+			font-weight: bold;
 			text-align: center;
-			background-color: #fff;
-		}
-		.f_dropdown_area{
-			height:0px;
-			overflow: hidden;
-			background-color: #eee;
-			box-shadow: 0px 0px 5px #aaa;
+			height: 50px;
 		}
 
-		.f_inner_content{
-			height:40px;
-			line-height: 40px;
-			color:#aaa;
+		ul
+		{
+			padding: 0;
+			margin: 0;
 		}
 
-		.f_preLoading{
-			display: inline-block;
-			width:20px;
-			height:20px;
-			background:url('/images/arrow_top.png') no-repeat 0 0;
-			background-size: cover;
-			vertical-align: middle;
-			margin-right: 5px;
-			-webkit-transform:rotate(0deg);
-			-moz-transform:rotate(0deg);
-			-ms-transform:rotate(0deg);
-			-o-transform:rotate(0deg);
-			transform:rotate(0deg);
-			-webkit-transition:transform 0.3s;
-			-moz-transition:transform 0.3s;
-			-ms-transition:transform 0.3s;
-			-o-transition:transform 0.3s;
-			transition:transform 0.3s;
-			line-height: 40px;
-		}
-
-		.f_preLoading.rotate{
-			-webkit-transform:rotate(180deg);
-			-moz-transform:rotate(180deg);
-			-ms-transform:rotate(180deg);
-			-o-transform:rotate(180deg);
-			transform:rotate(180deg);
-			-webkit-transition:webKitTransform 0.3s;
-			-moz-transition:transform 0.3s;
-			-ms-transition:transform 0.3s;
-			-o-transition:transform 0.3s;
-			transition:transform 0.3s;
-		}
-
-		.f_preLoading.spin{
-			background-image:url('/public/images/icon_loading.png');
-			-webkit-animation:spin 0.5s linear infinite normal;
-		}
-
-		@-webkit-keyframes spin{
-			from{
-				-webkit-transform:rotate(0deg);
-				-moz-transform:rotate(0deg);
-				-ms-transform:rotate(0deg);
-				-o-transform:rotate(0deg);
-				transform:rotate(0deg);
-			}
-
-			to{
-				-webkit-transform:rotate(360deg);
-				-moz-transform:rotate(360deg);
-				-ms-transform:rotate(360deg);
-				-o-transform:rotate(360deg);
-				transform:rotate(360deg);
-			}
-		}
-
-		img{
-			width:100%; 
-		}
+		li
+		{
+			list-style: none;
+			margin: 0;
+			padding: 1em;
+			border-bottom: 1px solid #ccc;
 	</style>
 </head>
-<body style="height:100%;margin:0px;">
-	<script type="text/javascript">
-		$(function(){
-			$.flush();
-		});
-	</script>
-	<img src="http://file28.mafengwo.net/M00/9F/5D/wKgB6lSotSGASc1mAASoXxTTPvM809.png" alt="">
-	<img src="http://image.photophoto.cn/nm-6/018/030/0180300244.jpg" alt="">
+<body>
+<div class="toolbar">Toolbar</div>
+<div class="scrollable" id="scrollable">
+	<ul>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+		<li>List Item</li>
+	</ul>
+</div>
 </body>
+
+	<script>
+	var ScrollFix = function(elem) {
+		// Variables to track inputs
+		var startY, startTopScroll;
+
+		elem = elem || document.querySelector(elem);
+
+		// If there is no element, then do nothing
+		if(!elem)
+			return;
+
+		// Handle the start of interactions
+		elem.addEventListener('touchstart', function(event){
+			startY = event.touches[0].pageY;
+			startTopScroll = elem.scrollTop;
+
+			if(startTopScroll <= 0)
+				elem.scrollTop = 1;
+
+			if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
+				elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+		}, false);
+	};
+	var scrollable = document.getElementById("scrollable");
+	new ScrollFix(scrollable);
+</script>
 </html>

@@ -71,12 +71,15 @@ var $ = (function(window,undefined){
         }
     };
 
-    function Xobj(elem,selector){
+    function Xobj(elemArr,selector){
         this.selector = selector;
-        this.domElem = elem;
+        this.domElemList = elemArr;
+        this.opIndex = 0;
+        this.length = this.domElemList.length;
     }
 
     Xobj.prototype = {
+        constructor:Xobj,
         addClass:function(classList){
             console.log('addClass');
         },
@@ -89,19 +92,35 @@ var $ = (function(window,undefined){
         toggleClass:function(className){
 
         },
-        fadeIn:function(duration,callback){
+        append:function(str){
 
         },
-        fadeOut:function(duration,callback){
-
-        },
+        //animate:function(cssDeclare,speed,easing,callback){
+        //
+        //},
+        //fadeIn:function(duration,callback){
+        //
+        //},
+        //fadeOut:function(duration,callback){
+        //
+        //},
         remove:function(){
-            this.domElem.parentNode.removeChild(this.domElem);
+            var opElem = this.domElemList[this.opIndex];
+            opElem.parentNode.removeChild(opElem);
+            this.opIndex = 0;
             return this;
         },
-        bind:function(eventType,callback,data){
-
+        eq:function(index){
+            index = index||0;
+            if(index > this.length-1){
+                throw 'Array out of Range';
+            }
+            this.opIndex = index;
+            return this;
         },
+        //bind:function(eventType,callback,data){
+        //
+        //},
         parent:function(selector){
 
         },
@@ -118,16 +137,14 @@ var $ = (function(window,undefined){
     };
 
     function get(selector){
-        var nodeList = document.querySelectorAll(selector),
-            XobjList = [];
-        Array.prototype.map.call(nodeList,function(v,i){
-            XobjList.push(new Xobj(v,selector));
-        });
+        var nodeList = document.querySelectorAll(selector);
 
-        return XobjList;
+        //var Xobj = new Xobj(nodeList,selector);
+
+        return new Xobj(nodeList,selector);
     }
 
-    function domReady(callback){
+    function domReady(callback){//文档加载完成函数
         document.addEventListener('DOMContentLoaded',callback);
     }
 
