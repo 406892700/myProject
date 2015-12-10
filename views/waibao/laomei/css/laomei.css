@@ -1,0 +1,229 @@
+﻿/*重置一些浏览器默认样式*/
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+ul{
+    list-style: none;
+}
+
+img{
+    display: block;
+    margin:0px auto;
+    width:100%;
+}
+
+/*一些公用样式*/
+html{
+    font-size:62.5%;
+    height:100%;
+}
+
+body{
+    font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
+    /*font-family: 'HelveticaNeue-UltraLight';*/
+    background: url('../images/p_bg.png') repeat-y  0 0;
+    background-size: 100% 100%;
+    text-align: center;
+    color:#fff;
+    height: 100%;
+}
+
+.clearfix{
+    clear:both;
+}
+
+.f_left{
+    float: left;
+}
+
+.f_right{
+    float: right;
+}
+
+
+/*主容器头部*/
+.lm_main_header{}
+
+/*主容器底部*/
+.lm_main_footer{}
+
+/*内部容器*/
+.inner_wrap{}
+.inner_wrap .lm_banner{
+    margin-top: 20px;
+    padding:0px 20px;
+}
+.inner_wrap .btn{
+    width:65%;
+    display: block;
+    margin:8px auto;
+    -webkit-animation: tada 1s ease-in-out infinite normal;
+}
+
+.inner_wrap .btm_queue{
+    overflow: hidden;
+    text-align: left;
+    margin-bottom: -5px;
+    margin-top: 30px;
+}
+
+.inner_wrap .btm_queue figure{
+    display: inline-block;
+    margin:0px !important;
+    padding:0px 5px;
+}
+
+.inner_wrap .r_title{
+    margin:0px 0px 30px 0px;
+    padding:0px 20px;
+    -webkit-animation: tada 3s ease-in-out infinite normal;
+}
+
+@-webkit-keyframes tada{0%{-webkit-transform:scale(1);}10%,20%{-webkit-transform:scale(0.9) rotate(-3deg);}30%,50%,70%,90%{-webkit-transform:scale(1.1) rotate(3deg);}40%,60%,80%{-webkit-transform:scale(1.1) rotate(-3deg);}100%{-webkit-transform:scale(1) rotate(0);}}
+
+.inner_wrap .lottory_area{
+    position: relative;
+    height:400px;
+}
+
+.inner_wrap .lottory_area figure,
+.inner_wrap .lottory_area a{
+    position: absolute;
+}
+
+.inner_wrap .lottory_area a > img{  
+    -webkit-animation: scaleIn 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes scaleIn{
+    from{
+        -webkit-transform: scale(0.9);
+    }
+    to{
+        -webkit-transform: scale(1);
+    }
+}
+
+.inner_wrap > .r_explain{
+    font-size:1.8rem;
+    line-height: 2.0rem;
+    letter-spacing: -1px;
+}
+
+.inner_wrap > .r_explain > p{
+    margin: 8px 20px;
+}
+
+.inner_wrap > .r_explain > p.huge{
+    font-size: 3.2rem;
+    line-height: 3.6rem;
+}
+
+.inner_wrap > .i_clouds{
+    position: relative;
+    height:50px;
+    margin-top: 30px;
+}
+
+.inner_wrap > .i_clouds > figure{
+    position: absolute;
+    
+    
+}
+
+.inner_wrap > .i_clouds > figure > img{
+    -webkit-animation:'STAR-MOVE' 5s ease-in-out infinite alternate;
+}
+ @-webkit-keyframes STAR-MOVE {
+    from {
+        -webkit-transform:translateX(0);
+    }
+    to { 
+        -webkit-transform:translateX(-200px);
+    }
+}
+
+.inner_wrap > .btn_area{
+    margin-top: 40px;
+}
+
+
+.inner_wrap > .r_explain1{
+    font-size: 1.8rem;
+    margin: 20px 20px;
+}
+
+.inner_wrap .form_group{
+    padding:0px 30px;
+    margin: 15px auto;
+}
+
+.inner_wrap .form_group > label{
+    float: left;
+    height: 45px;
+    padding:5px;
+}
+
+.inner_wrap .form_group > label > img{
+    height:100%;
+    width:auto;
+}
+
+.inner_wrap .form_group > .form_control{
+    margin-left: 110px;
+    background-color: #fff;
+    height:45px;
+    border: 2px solid #432842;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.inner_wrap .form_group > .form_control > input,
+.inner_wrap .form_group > .form_control > textarea{
+    width:100%;
+    height:100%;
+    padding:0px 10px;
+    font-size:1.8rem;
+    color:#432842;
+    border: none;
+    background-color: #fff;
+}
+
+
+/*其他的一下杂七杂八的样式*/
+.lm_mask{
+    position: fixed;
+    width: 100%;
+    height:100%;
+    left:0;
+    top:0;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.lm_mask > .content{
+    border:2px solid #fff;
+    background-color: rgba(0,0,0,.9);
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px #000;
+    padding:10px 20px;
+    position: absolute;
+    font-size: 1.6rem;
+    color:#fff;
+    left:50%;
+    top:50%;
+    -webkit-transform:translateX(-50%) translateY(-50%);
+    -moz-transform:translateX(-50%) translateY(-50%);
+    -ms-transform:translateX(-50%) translateY(-50%);
+    -o-transform:translateX(-50%) translateY(-50%);
+    transform:translateX(-50%) translateY(-50%);
+    line-height: 2.0rem;
+}
