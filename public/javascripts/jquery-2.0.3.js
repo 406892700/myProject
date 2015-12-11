@@ -6073,13 +6073,13 @@ jQuery.extend({
 			fragment = context.createDocumentFragment(),//创建文档碎片
 			nodes = [];
 
-		for ( ; i < l; i++ ) {
+		for ( ; i < l; i++ ) {//遍历整个$对象中的dom
 			elem = elems[ i ];
 
 			if ( elem || elem === 0 ) {
 
 				// Add nodes directly
-				if ( jQuery.type( elem ) === "object" ) {
+				if ( jQuery.type( elem ) === "object" ) {//判断是不是对象
 					// Support: QtWebKit
 					// jQuery.merge because core_push.apply(_, arraylike) throws
 					//不用core_push.apply是因为使用类数组元素会报错
