@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <title>dd</title>
     <script src="util/util.js"></script>
+    <style>
+        .style1{
+            border:1px solid #Aaa;
+        }
+    </style>
 </head>
 <body>
 <div id="_1">
-    <ul>
+    <ul class="style1">
         <li>1</li>
         <li>2</li>
         <li>3</li>
         <li>4</li>
-        <li>5</li>
+        <li id="dd">5</li>
     </ul>
 </div>
 <div id="_2">
-    <ul>
+    <ul class="style1">
         <li>1</li>
         <li>2</li>
         <li>3</li>
@@ -25,7 +30,7 @@
     </ul>
 </div>
 <div id="_3">
-    <ul>
+    <ul class="style1">
         <li>1</li>
         <li>2</li>
         <li>3</li>
@@ -35,22 +40,10 @@
 </div>
     <script>
         $.domReady(function(){
-            $.get('#_1 ul li:nth-child(2)').remove();
-            $.ajax({
-                url:'/textPost',
-                cache:false,
-                data:{
-                    a:'333',
-                    b:'ddf'
-                },
-                method:'get',
-                success:function(data,xhr){
-                    console.log(data);
-                },
-                error: function (err) {
-                    console.log('数据获取错误！');
-                }
-            });
+            var x = function () {
+                alert(1);
+            };
+            $.get('#_1').getE().onclick = x;
         });
 
     </script>
