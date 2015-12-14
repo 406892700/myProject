@@ -3,8 +3,21 @@
  *   前端小类库
  *   author xhy
  *   date 2015-12
+ *   version 0.1
+ *
+ *   |一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一|
+ *   | //                                                                   |
+ *   |   @1:事件系统未完成                                                    |
+ *   |   @2:缓存系统未完成                                                    |
+ *   |                                                                      |
+ *   |  @tips 因为主要是面向移动端的，所以基本没有做ie的兼容，只封装了             |
+ *   |  一部分常会用到的方法，目前事件代理，动画效果都需要自己去做                 |
+ *   |  考虑到文件的大小，以后最多就实现todo中的两个，动画就不做了，               |
+ *   |  交给css3了                                                           |
+ *   |                                                                      |
+ *   |一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一|
  */
-var $ = (function(window,undefined){
+;(function(window,undefined){
     /*ajax对象构造函数*/
     function ajax(opts){//ajax方法
         var _opt = {
@@ -81,9 +94,13 @@ var $ = (function(window,undefined){
     /*
     * 核心构造函数
     * */
-    function Xobj(elemArr,selector){
-        this.selector = selector;
+    function xQuery(elemArr,selector){
+        //this.selector = selector;
+        var that = this;
         this.domElemList = elemArr;
+        [].map.call(this.domElemList,function(v,i){
+            that[i] = v;
+        });
         this.opIndex = 0;
         this.length = this.domElemList.length;
     }
@@ -130,7 +147,7 @@ var $ = (function(window,undefined){
         },
         //获取单个参数
         getQueryByName : function(name) {
-            var r = window.location.search.substr(1).match(reg);
+            var r = window.location.search.substr(1).match(name);
             if (r != null)
                 return unescape(r[2]);
             return null;
@@ -141,10 +158,7 @@ var $ = (function(window,undefined){
                 return;
             }
             var nodeType = ele.nodeType;
-            if(nodeType && nodeType == 1){
-                return true;
-            }
-            return false;
+            return nodeType && nodeType === 1;
         },
         /*
         * @ context 执行上下文
@@ -159,22 +173,22 @@ var $ = (function(window,undefined){
                 var id = context.id;
                 if(id ){
                     slcStr = '#'+id+direc+selector;
-                    console.log(slcStr);
-                    return document.querySelectorAll(slcStr);
+                    //console.log(slcStr);
+                    return [].slice.call(document.querySelectorAll(slcStr));
                 }else{
                     var idStr = context.id = '__unique__'+new Date().getTime();//添加一个唯一的id，用于限定上下文
                     slcStr = '#'+idStr+direc+selector;
                     ret = document.querySelectorAll(slcStr);
                     context.removeAttribute('id');//用完以后删掉无用的id
-                    console.log(context.id);
-                    return ret;
+                    //console.log(context.id);
+                    return [].slice.call(ret);
                 }
 
             }else if(typeof context == 'string'){//直接当做选择器
-                return document.querySelectorAll(context+direc+selector);
+                return [].slice.call(document.querySelectorAll(context+direc+selector));
             }
         },
-        //设置元素的唯一标识用完
+        //设置元素的唯一标识用完删除
         setUnique: function (elem) {
             var id = '__unique__'+new Date().getTime();
             elem.id = id;
@@ -336,21 +350,53 @@ var $ = (function(window,undefined){
 
             // Return the modified object
             return target;//返回被更改后的对象
+        },
+        camelCase : function (str) {//驼峰式
+            return str.replace(/(-[\da-z])/gi,function(word,letter){
+                return RegExp.$1.substr(1,1).toUpperCase();
+            });
+        },
+        //文档加载完成函数
+        domReady : function (callback){
+            document.addEventListener('DOMContentLoaded',callback);
+        },
+        //ajax函数
+        ajax:function(opts){
+            return new ajax(opts).initAjax();
         }
     };
 
     /*
     * 核心对象的原型方法
     * */
-    Xobj.prototype = {
-        constructor:Xobj,
+
+
+    xQuery.fn = xQuery.prototype = {
+        constructor:xQuery,
+        //原生方法splice借用（这个其实没用，就是防止在控制台把整个对象打出来）
+        splice:function(args){
+            //[].splice.apply(this,arguments);
+            //return this;
+        },
+        ////原生方法slice借用
+        //slice: function (args) {
+        //    [].slice.apply(this,arguments);
+        //    return this;
+        //},
+        //原生方法each借用
+        each: function (args) {
+            [].map.apply(this,arguments);
+            return this;
+        },
         //获取当前操作元素
-        getOpElem: function () {
-            return this.domElemList[this.opIndex];
+        getOpElem: function (index) {
+            index  = index || this.opIndex;
+            return this.domElemList[index];
         },
         //获取元素
-        getE : function(){
-            return this.getOpElem();
+        get : function(index){
+            //index不传也没事，直接交给getOpElem去处理空值
+            return this.getOpElem(index);
         },
         //设置样式值
         css: function (prop,value) {
@@ -399,10 +445,7 @@ var $ = (function(window,undefined){
         hasClass:function(className){
             var opElem = this.getOpElem();
 
-            if(opElem.className.indexOf(className) == -1){
-                return false;
-            }
-            return true;
+            return opElem.className.indexOf(className) !== -1;
         },
         //移除class
         removeClass: function (className) {
@@ -461,35 +504,49 @@ var $ = (function(window,undefined){
         },
         //移除元素
         remove:function(){
-            var opElem = this.getOpElem();
+            var opElem = this.getOpElem(),
+                opElems = this.domElemList;
             opElem.parentNode.removeChild(opElem);
-            this.opIndex = 0;
-            return this;
+            /*this.domElemList = */[].shift.call(opElems);
+            //console.log(this.domElemList);
+            //this.opIndex = 0;
+            return this._stateChange(opElems);
         },
         //选择
+        //为防止引用传递对原来对象的影响，这里返回一个独立的克隆对象
         eq:function(index){
             index = index||0;
             if(index > this.length-1){
                 throw 'Array out of Range';
             }
-            this.opIndex = index;
-            return this;
+            return this._stateChange([this.domElemList[index]]);
         },
         //回到第一个元素
         end:function(){
             return this.eq();
         },
-        //bind:function(eventType,callback,data){
-        //
-        //},
+        //事件绑定
+        /*
+        *  param proxyObj 事件代理对象
+        *  param eventType 事件类型
+        *  param callback 事件回调函数
+        *  param data 事件所需的数据，可以不传
+        * */
+        bind:function(proxyObj,eventType,callback,data){
+
+        },
         //执行一些dom操作，这个会破坏链式操作，无法用end返回
         _stateChange: function (domElem) {
             domElem = _util.isArraylike(domElem) ? domElem : [domElem];
             //domElem = _util.getType(domElem).toLowerCase() !== 'array' ? [domElem]:domElem;
-            this.domElemList = domElem;
-            this.opIndex = 0;
-            this.length = this.domElemList.length;
-            return this;
+            var copy = _util.extend(true,{},this);
+            copy.domElemList = domElem;
+            [].map.call(copy.domElemList,function(v,i){
+                copy[i] = v;
+            });
+            copy.opIndex = 0;
+            copy.length = copy.domElemList.length;
+            return copy;
         },
         //找到父元素，
         parent:function(){
@@ -532,16 +589,41 @@ var $ = (function(window,undefined){
         },
         //缓存数据
         data:function(dataName,value){
+            //这里直接用了html5的dataset属性
             var opElems = this.domElemList,
-                rdata = /data-([a-zA-Z0-9]*)/;
-            if(arguments.length === 1 && typeof arguments[0] !== 'object'){//值的获取
-                return opElems.dataset.dataName;
-            }else if(arguments === 2){
+                opElem = this.getOpElem();
+            if(arguments.length === 1){
+                if(typeof arguments[0] !== 'object'){//值的获取
+                    return opElem.dataset[_util.camelCase(dataName)];
+                }else{//以对象的方式传入的(值的设置)
+                    [].map.call(opElems,function(outerV,i){//这里有个双重循环了，可以想办法优化一下
+                        for(var obj in dataName){
+                            outerV.dataset[obj] = dataName[obj];
+                        }
+                    });
+                }
 
+            }else if(arguments.length === 2){
+                [].map.call(opElems,function(v,i){
+                    v.dataset[dataName] = value;
+                });
             }
-            [].map(function(v,i){
 
-            });
+            return this;
+
+        },
+        //移除缓存数据
+        removeData:function(dataName){
+            var opElems = this.domElemList,
+                opElem = this.getOpElem();
+            if(typeof dataName !== 'object'){
+                delete opElem.dataset[dataName];
+            }else if(_util.getType(dataName) === 'array'){
+                dataName.map(function(v,i){
+                    delete opElem.dataset[v];
+                });
+            }
+            return this._stateChange(opElems);
         },
         //后向查找元素
         next: function (selector) {
@@ -549,6 +631,7 @@ var $ = (function(window,undefined){
                 retElems,
                 copyElem = opElem,
                 tmp = [];
+            //console.log(opElem.nextElementSibling);
             if(selector === undefined){//查找直接后项元素
                 var ret = opElem.nextElementSibling || [];
                 return this._stateChange(ret);
@@ -557,8 +640,7 @@ var $ = (function(window,undefined){
             retElems = _util.findElement(opElem.parentNode,selector,true);
             while(copyElem = copyElem.nextElementSibling){
                 if(_util.ifArrayIn(copyElem,retElems)){
-                    tmp.push(copyElem)
-                    //return this._stateChange(copyElem);
+                    tmp.push(copyElem);
                 }
             }
             return this._stateChange(tmp);
@@ -606,7 +688,20 @@ var $ = (function(window,undefined){
                 return opElem.attributes;//返回元素的attributes属性
             }
 
+            return this._stateChange(opElems);
+        },
+        //移除属性
+        removeAttr: function (attr) {
+            var opElem = this.getOpElem();
+            if(typeof attr !== 'object'){
+                delete opElem.removeAttribute(attr);
+            }else if(_util.getType(attr) === 'array'){
+                attr.map(function(v,i){
+                    delete opElem.removeAttribute(v);
+                });
+            }
             return this;
+
         },
         //text和html的公用方法
         _get_set_dom:function(text,type/*1 for text | 2 for html*/){
@@ -639,35 +734,121 @@ var $ = (function(window,undefined){
         //设置获取innerHTML
         html: function (strHtml) {
             return this._get_set_dom(strHtml,2);
+        },
+
+        //在结果集中查找某个元素或者某批元素
+        /*
+        * tips 只能进行简单的一些匹配
+        * 类选择器 .class
+        * id选择器 #id
+        * 元素选择器 div
+        *
+        * */
+        filter:function(selector){
+            selector = selector.trim();
+            var opElems = this.domElemList,
+                testArr = [//测试选择器类型
+                {
+                    slc:selector.slice(1),
+                    reg:/^\./,
+                    handler:function(ele){
+                        return ele.className.indexOf(this.slc) !== -1;
+                    }
+                },
+                {
+                    slc:selector.slice(1),
+                    reg:/^#/,
+                    handler:function(ele){
+                        return ele.id === this.slc;
+                    }
+                },
+                {
+                    slc:selector,
+                    reg:/([a-zA-Z.]+)/g,
+                    handler:function(ele){
+                        return ele.tagName.toLowerCase() === this.slc;
+                    }
+                }
+                ],
+                useObj = {},
+                tmp = [];
+
+            //遍历测试选择器类型对象
+            for(var i = 0;i<testArr.length;i++){
+                if(testArr[i].reg.test(selector)){
+                    useObj = testArr[i];
+                    break;
+                }
+            }
+            //如果有匹配到的话
+            if(typeof useObj.reg === 'undefined'){
+                return this._stateChange([]);
+            }
+
+            //把符合条件的元素都放入一个临时数组中
+            [].map.call(opElems,function(v,i){
+                if(useObj.handler(v)){
+                    tmp.push(v);
+                }
+            });
+
+            return this._stateChange(tmp);
         }
 
     };
 
+    /*
+    * 可以接受的参数有
+    * @ 选择器字串
+    * @ nodeList或者元素数组
+    * */
     function get(selector){
-        var nodeList = document.querySelectorAll(selector);
+        var nodeList;
+        if(typeof selector == 'string'){
+            nodeList= document.querySelectorAll(selector);
+        }else if(_util.isArraylike(selector)){
+            nodeList = selector;
+        }else{
+            throw '你好歹传个对的参数啊！';
+            //return null;
+        }
         nodeList = _util.toArray(nodeList);//转成数组对象
-        return new Xobj(nodeList,selector);
+        return new xQuery(nodeList,selector);
     }
 
-    function domReady(callback){//文档加载完成函数
-        document.addEventListener('DOMContentLoaded',callback);
+    /*
+    * 把选择器函数直接赋值给全局对象
+    * */
+    var _$ = function (selector) {
+        if(_util.getType(selector) == 'function'){
+            _util.domReady(selector);
+            return get('body');
+        }
+        return get(selector);
+    };
+
+    /*
+    * 合并工具类到全局对象中
+    * */
+    for(var i in _util){
+        _$[i] = _util[i];
     }
 
+    /*
+    * 放弃对全局$的控制权
+    * */
+    var noConflit = function(deep/*是否连xQuery也给放弃掉*/){
+        deep && (window.xQuery = null);
+        window.$ = null;
+        return _$;
+    };
 
-    function camelCase(str) {//驼峰式
-        return str.replace(/(-[\da-z])/gi,function(word,letter){
-            return RegExp.$1.substr(1,1).toUpperCase();
-        });
-        //return str;
-    }
+    _$.noConflit = noConflit;
+    _$.version = 'xQuery_0.1';//版本号
+    _$.getTime = function(){//获取当前时间
+      return +new Date();
+    };
 
-    var obj = _util.extend({},{
-        ajax:function(opts){
-            return new ajax(opts).initAjax();
-        },
-        get:get,
-        domReady:domReady
-    },_util);//合并返回值参数
+    window.xQuery = window.$ = _$;//赋值给全局变量
 
-    return obj;
 })(window,undefined);

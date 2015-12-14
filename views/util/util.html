@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>dd</title>
-    <script src="util/util.js"></script>
+    <script src="util/xQuery.js"></script>
     <style>
         .style1{
             border:1px solid #Aaa;
@@ -18,41 +18,40 @@
 <div id="_1">
     <ul class="style1">
         <li>1</li>
-        <li>2</li>
+        <li class="a2">2</li>
         <li>3</li>
         <li>4</li>
         <li id="dd">5</li>
     </ul>
 </div>
 <div id="_2">
-    <ul class="style1">
+    <ul class="style1" id="dda">
         <li>1</li>
         <li id="aa">2</li>
-        <li>3</li>
+        <li class="a2">3</li>
         <li>4</li>
         <li class="a2">5</li>
+        <a href="javascrpt:void(0)">dfdsf</a>
     </ul>
 </div>
 <div id="_3">
     <ul class="style1">
         <li>1</li>
-        <li>2</li>
+        <li class="a2" >2</li>
         <li>3</li>
-        <li>4</li>
+        <li class="a2">4</li>
         <li>5
             <a href="javascript:void(0)" id="click">点击给最近的富容器加边框</a>
         </li>
     </ul>
 </div>
     <script>
-        $.domReady(function(){
-            var clBtn= $.get('#click'),
-                pp = clBtn.closest('div');
-            clBtn.getE().addEventListener('click',function(evt){
-                pp.addClass('style2');
+        $(function(){
+            var clBtn= $('#click');
+            clBtn.get(0).addEventListener('click',function(evt){
+                clBtn.closest('div').toggleClass('style2');
             });
         });
-
     </script>
 </body>
 </html>
