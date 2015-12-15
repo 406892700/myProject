@@ -5,17 +5,17 @@
  *   date 2015-12
  *   version 0.1
  *
- *   |一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一|
+ *   ________________________________________________________________________
  *   | //                                                                   |
- *   |   @1:事件系统未完成                                                    |
- *   |   @2:缓存系统未完成                                                    |
+ *   |   @1:事件系统未完成   (初步完成，虽然还有很大的缺陷，聊胜于无)              |
+ *   |   @2:缓存系统未完成   (事件绑定用到了，但是未成系统~)                     |
  *   |                                                                      |
  *   |  @tips 因为主要是面向移动端的，所以基本没有做ie的兼容，只封装了             |
  *   |  一部分常会用到的方法，目前事件代理，动画效果都需要自己去做                 |
- *   |  考虑到文件的大小，以后最多就实现todo中的两个，动画就不做了，               |
+ *   |  考虑到文件的大小，动画就不做了，                                        |
  *   |  交给css3了                                                           |
  *   |                                                                      |
- *   |一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一一|
+ *   ________________________________________________________________________
  */
 ;(function(window,undefined){
     /*ajax对象构造函数*/
@@ -94,7 +94,11 @@
     /*
     *   缓存对象
     * */
-    var cache = {};
+    var cache = {},
+        unique = '__xQuery__',
+        getUnique = function(){
+            return unique+(new Date().getTime());
+        };
 
     /*
     * 核心构造函数
@@ -548,14 +552,21 @@
         *  tips
         *  有些事件无法冒泡,暂时不处理了,不用代理的方式来绑定
         *  事件即可
+        *
+        *  、、、、、、、、、、、、、、、、、、、、、
+        *    在这里使用的一个缓存独享cache，用于自主
+        *    控制事件处理函数的管理，在一定程度上可以
+        *    避免可能的内存泄露所带来的性能浪费
+        *  、、、、、、、、、、、、、、、、、、、、、
         * */
         bind:function(/*proxyObj,eventType,callback,data*/){
-            var opElems  = this.domElemList,
+            var opElem  = this.getOpElem(),
+                self = this,
             //进行一些参数修正
-                fucIndex = (function(args){
+                funcIndex = (function(args){
                     var index = -1;
                     [].map.call(args,function(v,i){
-                        if(_util.isFunction(obj)){
+                        if(_util.isFunction(v)){
                             index = i+1;
                         }
                     });
@@ -563,14 +574,42 @@
                     return index;
                 })(arguments),
                 obj = {},
-                bindEvent = function (domList,ob) {
-                    [].map.call(domList,function(v,i){
-                        if(typeof ob.proxyObj !== 'undefined'){
-                            v.addEventListener(ob.type,ob.callback)
-                        }
+                /*(这个就不循环绑定了，只绑定选择集中的操作元素)
+                 *考虑实际情况下，代理元素一般都是一个特定的对象，故在此放弃了循环
+                 * 如有需要，在外部使用时候进行循环绑定
+                 * 当需要批量绑定时，推荐使用代理绑定方式
+                 * todo:
+                 * 这里还有一些情况没有进行处理
+                 * 1、当一个对象被两次或两次以上代理时，后面的代理会覆盖前面的代理
+                 * 2、批量绑定多个事件的情况没有予以处理
+                 * 3、这种处理方式确实很不优雅，会元素上生成一堆无用的data-uuid属性，
+                 *    这样的实现方式还需要斟酌，这里就留待以后处理了
+                 * 4、同一个元素绑定两次相同事件会造成后面的绑定覆盖前面的绑定，这个是个巨大的！！硬伤！！，
+                 *    暂时还没有完美的解决方案，先研究一些jQuery的事件系统，再回来改这里的实现
+                 * */
+                bindEvent = function (opElem,ob) {
+                    var uniqueId = getUnique();
+                    //设置uuid
+                    self.eq(0).data('uuid',uniqueId);
+                    cache[uniqueId] = cache[uniqueId] || {};
+                    if(typeof ob.proxyObj === 'undefined'){//无代理
+                        cache[uniqueId][ob.type] = function(event){
+                            event.data = ob.data;
+                            ob.callback(event);
+                        };
 
-                    });
+                    }else if(typeof ob.proxyObj === 'string'){
+                        cache[uniqueId][ob.type] = function(event){
+                            event.data = ob.data;
+                            var targetArr = _util.findElement(opElem,ob.proxyObj);
+                            if(_util.ifArrayIn(event.target,targetArr)){
+                                ob.callback(event);
+                            }
 
+                        };
+
+                    }
+                    opElem.addEventListener(ob.type,cache[uniqueId][ob.type],false);
                 };
 
             //根据funcIndex判断是否有代理
@@ -590,11 +629,21 @@
                 }
             }
 
+            bindEvent(opElem,obj);
+
+            return this;
 
         },
         //事件绑定解除
-        unbind:function(proxyObj,eventType,callback){
+        unbind:function(eventType/**/){
+            var self = this,
+                opElem = this.getOpElem(),
+                uuid = self.eq(0).data('uuid');
 
+            opElem.removeEventListener(eventType,$.cache[uuid][eventType]);
+            delete $.cache[uuid][eventType];//移除缓存的事件处理函数
+
+            return this;
         },
         //执行一些dom操作，这个会破坏链式操作(这里指操作对象会被替换)
         _stateChange: function (domElem) {
@@ -735,7 +784,7 @@
                     return opElem.getAttribute(attr);
                 }else{
                     for(var i in attr){
-                        [],map.call(attr[i],function(v,i){
+                        [].map.call(attr[i],function(v,i){
                             v.setAttribute(attr,value);
                         });
                     }
