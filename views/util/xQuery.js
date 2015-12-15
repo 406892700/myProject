@@ -283,7 +283,7 @@
                 return [].slice.call(arrlike);
             }
             throw Error('该对象无法转换成数组对象');
-            return null;
+            //return null;
 
         },
         
@@ -396,6 +396,8 @@
             //[].splice.apply(this,arguments);
             //return this;
         },
+        //这个没用的,就是用来作为xQuery对象的唯一
+        __id__:'xuhuaiyuan',
         ////原生方法slice借用
         //slice: function (args) {
         //    [].slice.apply(this,arguments);
@@ -489,73 +491,101 @@
             });
         },
         //创建fragment的公用方法
-        buildFragment:function(arg){
+        buildFragment:function(arg,callback){
             /*
             * 可以接受以下参数类型
             * 1. 字符串类型
             * 2. 元素集合
             * 3. xQuery对象
             * */
-            var obj = [
-                {
-                    type:'string',func:function(){
-                    }
-                }
-            ];
-            var type = (function (arg) {
-
-            })(arg);
             var fragment = document.createDocumentFragment(),
-                container = document.createElement('div');
+                container = document.createElement('div'),
+                opElems = this.domElemList,
+                cN,
+            obj =   {
+                        'string': function () {
+                            container.innerHTML = arg;
+                            cN = container.childNodes;
+                            for (var i = 0; i < cN.length; i++) {
+                                fragment.appendChild(cN[i].cloneNode(true));
+                            }
 
-            container.innerHTML = str;
-            var cN = container.childNodes;
-            for(var i = 0;i<cN.length;i++){
-                fragment.appendChild(cN[i]);
+                            [].map.call(opElems, function (opElem, i) {
+                                callback(fragment.cloneNode(true),opElem);
+                            });
+
+                        },
+                        'array'://直接当做domList
+                            //直接鸭式辩型,反正都把arg当做节点数组,如果不是,直接强行弄成数组
+                        function(){
+                            if(arg.length == 0){
+                                arg = [arg];
+                            }
+                            for (var i = 0; i < arg.length; i++) {
+                                fragment.appendChild(arg[i].cloneNode(true));
+                            }
+
+                            [].map.call(opElems, function (opElem, i) {
+                                callback(fragment.cloneNode(true),opElem);
+                            });
+                        },
+
+                        'xQuery'://xQuery对象的话,那就取出domList
+                            function () {
+                                    var domList = arg.domElemList;
+                                for (var i = 0; i < domList.length; i++) {
+                                    fragment.appendChild(domList[i].cloneNode(true));
+                                }
+
+                                [].map.call(opElems, function (opElem, i) {
+                                    callback(fragment.cloneNode(true),opElem);
+                                });
+                            }
+
+                    },
+                type = _util.getType(arg);
+            if(type === 'string'){
+                obj['string']();
+            }else if(type === 'obj' && arg.__id__ !== 'xuhuaiyuan'){
+                obj['array']();
+            }else if(arg.__id__ === 'xuhuaiyuan'){
+                obj['xQuery']();
             }
+            return this;
+
         },
         //在元素前面插入元素
-        insertBefore: function () {
-
+        insertBefore: function (str) {
+            return this.buildFragment(str,function(elems,opElem){
+                    opElem.parentNode.insertBefore(elems, opElem);
+            });
         },
         //在元素后面插入元素
-        insertAfter: function () {
-
+        insertAfter: function (str) {
+            return this.buildFragment(str,function(elems,opElem){
+                if(opElem.nextSibling){//如果有后项元素节点
+                    opElem.parentNode.insertBefore(elems,opElem.nextSibling);
+                }else{//如果没有的话
+                    opElem.parentNode.appendChild(elems);
+                }
+            });
         },
         //向文档中append元素
         append:function(str){
-            var fragment = document.createDocumentFragment(),
-                container = document.createElement('div'),
-                opElems = this.domElemList;
-            var self = this;
-            container.innerHTML = str;
-
-            var cN = container.childNodes;
-            //fragment.childNodes = cN;
-            for(var i = 0;i<cN.length;i++){
-                fragment.appendChild(cN[i].cloneNode(true));
-            }
-            [].map.call(opElems,function (opElem,i) {
-                opElem.appendChild(fragment.cloneNode(true));
+            return this.buildFragment(str, function (elems,opElem) {
+                opElem.appendChild(elems);
             });
-
-            return this;
         },
         //向文档中prepend元素
         prepend: function (str) {
-            var fragment = document.createDocumentFragment(),
-                container = document.createElement('div'),
-                opElems = this.domElemList;
-            container.innerHTML = str;
-            var cN = container.childNodes;
-            for(var i = 0;i<cN.length;i++){
-                fragment.appendChild(cN[i]);
-            }
-            [].map.call(opElems,function (opElem,i) {
-                opElem.insertBefore(fragment,opElem.firstChild);
-            });
+            return this.buildFragment(str, function (elems,opElem) {
+                if(opElem.firstChild){//如果存在子节点的话
+                    opElem.insertBefore(elems,opElem.firstChild);
+                }else{
+                    opElem.appendChild(elems);
+                }
 
-            return this;
+            });
         },
         //移除元素
         remove:function(){
