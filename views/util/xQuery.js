@@ -92,6 +92,11 @@
     };
 
     /*
+    *   缓存对象
+    * */
+    var cache = {};
+
+    /*
     * 核心构造函数
     * */
     function xQuery(elemArr,selector){
@@ -351,11 +356,6 @@
             // Return the modified object
             return target;//返回被更改后的对象
         },
-        camelCase : function (str) {//驼峰式
-            return str.replace(/(-[\da-z])/gi,function(word,letter){
-                return RegExp.$1.substr(1,1).toUpperCase();
-            });
-        },
         //文档加载完成函数
         domReady : function (callback){
             document.addEventListener('DOMContentLoaded',callback);
@@ -365,6 +365,20 @@
             return new ajax(opts).initAjax();
         }
     };
+
+
+    //获取所有的事件类型
+    var allEvents = (function(){
+        var x = document.createElement('div'),
+            fEvent = /^on\w+$/i,
+            tmp = [];
+        for(var i in x){
+            fEvent.test(i) && tmp.push(i.replace(/^on/i,''));
+        }
+
+        return tmp.join(' ');
+
+    })();
 
     /*
     * 核心对象的原型方法
@@ -527,15 +541,62 @@
         },
         //事件绑定
         /*
-        *  param proxyObj 事件代理对象
+        *  param [proxyObj] 事件代理对象(这里被希望传入的是一个选择器字符串)
         *  param eventType 事件类型
         *  param callback 事件回调函数
-        *  param data 事件所需的数据，可以不传
+        *  param [data] 事件所需的数据，可以不传
+        *  tips
+        *  有些事件无法冒泡,暂时不处理了,不用代理的方式来绑定
+        *  事件即可
         * */
-        bind:function(proxyObj,eventType,callback,data){
+        bind:function(/*proxyObj,eventType,callback,data*/){
+            var opElems  = this.domElemList,
+            //进行一些参数修正
+                fucIndex = (function(args){
+                    var index = -1;
+                    [].map.call(args,function(v,i){
+                        if(_util.isFunction(obj)){
+                            index = i+1;
+                        }
+                    });
+
+                    return index;
+                })(arguments),
+                obj = {},
+                bindEvent = function (domList,ob) {
+                    [].map.call(domList,function(v,i){
+                        if(typeof ob.proxyObj !== 'undefined'){
+                            v.addEventListener(ob.type,ob.callback)
+                        }
+
+                    });
+
+                };
+
+            //根据funcIndex判断是否有代理
+            if(funcIndex === 2){//在2位置上,说明没有proxy
+                obj = {
+                    type : arguments[0],
+                    callback : arguments[1],
+                    data : arguments[2]
+                }
+
+            }else if(funcIndex === 3){//在3位置上,说明有proxy
+                obj = {
+                    proxyObj : arguments[0],
+                    type : arguments[1],
+                    callback : arguments[2],
+                    data : arguments[3]
+                }
+            }
+
 
         },
-        //执行一些dom操作，这个会破坏链式操作，无法用end返回
+        //事件绑定解除
+        unbind:function(proxyObj,eventType,callback){
+
+        },
+        //执行一些dom操作，这个会破坏链式操作(这里指操作对象会被替换)
         _stateChange: function (domElem) {
             domElem = _util.isArraylike(domElem) ? domElem : [domElem];
             //domElem = _util.getType(domElem).toLowerCase() !== 'array' ? [domElem]:domElem;
@@ -843,7 +904,8 @@
         return _$;
     };
 
-    _$.noConflit = noConflit;
+    _$.cache = cache;//缓存对象
+    _$.noConflit = noConflit;//放弃$的控制权
     _$.version = 'xQuery_0.1';//版本号
     _$.getTime = function(){//获取当前时间
       return +new Date();
