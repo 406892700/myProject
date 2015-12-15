@@ -488,18 +488,55 @@
                 return classArr.join(' ');
             });
         },
-        //向文档中append元素
-        append:function(str){
+        //创建fragment的公用方法
+        buildFragment:function(arg){
+            /*
+            * 可以接受以下参数类型
+            * 1. 字符串类型
+            * 2. 元素集合
+            * 3. xQuery对象
+            * */
+            var obj = [
+                {
+                    type:'string',func:function(){
+                    }
+                }
+            ];
+            var type = (function (arg) {
+
+            })(arg);
             var fragment = document.createDocumentFragment(),
-                container = document.createElement('div'),
-                opElems = this.domElemList;
+                container = document.createElement('div');
+
             container.innerHTML = str;
             var cN = container.childNodes;
             for(var i = 0;i<cN.length;i++){
                 fragment.appendChild(cN[i]);
             }
+        },
+        //在元素前面插入元素
+        insertBefore: function () {
+
+        },
+        //在元素后面插入元素
+        insertAfter: function () {
+
+        },
+        //向文档中append元素
+        append:function(str){
+            var fragment = document.createDocumentFragment(),
+                container = document.createElement('div'),
+                opElems = this.domElemList;
+            var self = this;
+            container.innerHTML = str;
+
+            var cN = container.childNodes;
+            //fragment.childNodes = cN;
+            for(var i = 0;i<cN.length;i++){
+                fragment.appendChild(cN[i].cloneNode(true));
+            }
             [].map.call(opElems,function (opElem,i) {
-                opElem.appendChild(fragment);
+                opElem.appendChild(fragment.cloneNode(true));
             });
 
             return this;
