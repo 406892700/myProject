@@ -48,4 +48,8 @@ module.exports = function(app){
     app.get('/p_reg',function(req,res){
         res.render('html5/courseRegister/index',{});
     });
+
+    app.get('/gululoan', function (req, res) {
+        res.render('html5/guluLoan/index',{});
+    })
 };
