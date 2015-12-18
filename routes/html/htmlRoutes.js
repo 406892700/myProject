@@ -51,5 +51,9 @@ module.exports = function(app){
 
     app.get('/gululoan', function (req, res) {
         res.render('html5/guluLoan/index',{});
+    });
+
+    app.get('/fastclick', function (req, res) {
+        res.render('html5/testFastClick/index',{});
     })
 };
