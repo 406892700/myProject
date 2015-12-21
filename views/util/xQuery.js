@@ -466,12 +466,48 @@
             [].map.apply(this,arguments);
             return this;
         },
+
+        /*
+        获取元素相对窗口的位置
+        * */
+
+        offset: function () {
+            var opELem = this.getOpElem(),
+                parentElem = opELem.offsetParent,
+                oLeft = opELem.offsetLeft,
+                oTop = opELem.offsetTop;
+            while(parentElem.tagName.toLocaleLowerCase() !== 'body'){
+                var borderWidth  = xQuery([parentElem]).css('border-width').slice(0,-2)*1;
+                oLeft += (borderWidth+parentElem.offsetLeft);
+                oTop += (borderWidth+parentElem.offsetTop);
+                parentElem = parentElem.offsetParent;
+            }
+
+            return {
+                left:oLeft,
+                top:oTop
+            }
+        },
+        /*
+        * 元素宽度
+        * */
+        width:function(){
+            return  this.getOpElem().offsetWidth;
+        },
+
+        /*
+        * 元素高度
+        * */
+        height: function () {
+            return  this.getOpElem().offsetHeight;
+        },
+
         //获取当前操作元素
         getOpElem: function (index) {
             index  = index || this.opIndex;
             return this.domElemList[index];
         },
-        //动画函数
+        //动画函数(为实现，这个还是有问题的)
         /*
         *  @param1 prop css对象
         *  @param2 speed 动画持续时间
@@ -534,6 +570,8 @@
                     }
                 }else{
                     prop = _util.camelCase(prop);
+                    /*这里单次的操作style可能会有性能的问题，
+                    * 下次换成cssText方式*/
                     opElem.style[prop] = value;
                 }
             });

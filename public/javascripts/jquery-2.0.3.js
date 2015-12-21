@@ -5967,13 +5967,13 @@ jQuery.fn.extend({
 
 					callback.call( this[ i ], node, i );
 				}
-
+				//如果有脚本的话
 				if ( hasScripts ) {
 					doc = scripts[ scripts.length - 1 ].ownerDocument;
 
 					// Reenable scripts
 					jQuery.map( scripts, restoreScript );
-
+					//执行script
 					// Evaluate executable scripts on first document insertion
 					for ( i = 0; i < hasScripts; i++ ) {
 						node = scripts[ i ];
@@ -5996,6 +5996,9 @@ jQuery.fn.extend({
 	}
 });
 
+	/*
+	* 一些公用方法的共用
+	* */
 jQuery.each({
 	appendTo: "append",
 	prependTo: "prepend",
@@ -6024,6 +6027,7 @@ jQuery.each({
 });
 
 jQuery.extend({
+	//就是在原生的clone上做了一些处理，加入了checked的修复和事件的复制
 	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
 		var i, l, srcElements, destElements,
 			clone = elem.cloneNode( true ),
@@ -6066,6 +6070,10 @@ jQuery.extend({
 		return clone;
 	},
 
+
+	/*
+	一个公用方法，用于构建documentFragment
+	* */
 	buildFragment: function( elems/*参数*/, context/*执行上下文元素document*/, scripts, selection ) {
 		var elem, tmp, tag, wrap, contains, j,
 			i = 0,
@@ -6167,6 +6175,10 @@ jQuery.extend({
 		return fragment;//返回拼装好的fragment
 	},
 
+	/*
+	* 	清除元素上的data缓存数据
+	*
+	* */
 	cleanData: function( elems ) {
 		var data, elem, events, type, key, j,
 			special = jQuery.event.special,
@@ -6200,6 +6212,9 @@ jQuery.extend({
 		}
 	},
 
+	/*=、
+	如果包含url的话，那就用ajax把数据加载过来
+	*/
 	_evalUrl: function( url ) {
 		return jQuery.ajax({
 			url: url,
@@ -6214,6 +6229,9 @@ jQuery.extend({
 
 // Support: 1.x compatibility
 // Manipulating tables requires a tbody
+	/*
+	*这个函数就是处理tr的兼容性问题的
+	* */
 function manipulationTarget( elem, content ) {
 	return jQuery.nodeName( elem, "table" ) &&
 		jQuery.nodeName( content.nodeType === 1 ? content : content.firstChild, "tr" ) ?
@@ -6224,6 +6242,7 @@ function manipulationTarget( elem, content ) {
 }
 
 // Replace/restore the type attribute of script elements for safe DOM manipulation
+	//重置或存储安全的dom操作的script元素的属性
 function disableScript( elem ) {
 	elem.type = (elem.getAttribute("type") !== null) + "/" + elem.type;
 	return elem;
@@ -6241,6 +6260,7 @@ function restoreScript( elem ) {
 }
 
 // Mark scripts as having already been evaluated
+	//把脚本的状态设置为已经执行了
 function setGlobalEval( elems, refElements ) {
 	var l = elems.length,
 		i = 0;
