@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>seajs</title>
+    <script src="someDemo/seajs/sea.js"></script>
+    <script>
+        seajs.config({
+            base:'',
+            alias:{
+                'xquery':'someDemo/seajs/js/xQuery.js'
+            }
+        });
+
+        seajs.use('someDemo/seajs/js/main');
+    </script>
+</head>
+<body>
+
+</body>
+</html>

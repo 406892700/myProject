@@ -17,7 +17,8 @@
   "description": "依赖管理文件",
   "main": "node ./bin/www",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "gulp": "^3.9.0",
+    "seajs": "^3.0.2"
   },
   "author": "xhy",
   "license": "ISC"

@@ -24,5 +24,9 @@ module.exports = function(app){
 
     app.get('/fakeScroll', function (req,res) {
         res.render('someDemo/fakeScroll/diyScroll',{});
+    });
+
+    app.get('/seajs', function (req, res) {
+        res.render('someDemo/seajs/index',{});
     })
 };
