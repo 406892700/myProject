@@ -55,5 +55,10 @@ module.exports = function(app){
 
     app.get('/fastclick', function (req, res) {
         res.render('html5/testFastClick/index',{});
-    })
+    });
+
+
+    app.get('/audio',function(req,res){
+        res.render('html5/audio/audio',{});
+    });
 };
