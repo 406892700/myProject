@@ -58,6 +58,10 @@ module.exports = function(app){
     });
 
 
+    app.get('/audio1',function(req,res){
+        res.render('html5/audio/index1',{});
+    });
+
     app.get('/audio',function(req,res){
         res.render('html5/audio/audio',{});
     });
