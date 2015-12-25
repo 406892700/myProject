@@ -65,4 +65,8 @@ module.exports = function(app){
     app.get('/audio',function(req,res){
         res.render('html5/audio/audio',{});
     });
+
+    app.get('/spinner',function(req,res){
+        res.render('somePlugin/spinner/index',{});
+    });
 };
