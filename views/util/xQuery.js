@@ -468,8 +468,8 @@
         },
 
         /*
-        获取元素相对窗口的位置
-        * */
+         获取元素相对窗口的位置
+         * */
 
         offset: function () {
             var opELem = this.getOpElem(),
@@ -489,15 +489,15 @@
             }
         },
         /*
-        * 元素宽度
-        * */
+         * 元素宽度
+         * */
         width:function(){
             return  this.getOpElem().offsetWidth;
         },
 
         /*
-        * 元素高度
-        * */
+         * 元素高度
+         * */
         height: function () {
             return  this.getOpElem().offsetHeight;
         },
@@ -509,12 +509,12 @@
         },
         //动画函数(为实现，这个还是有问题的)
         /*
-        *  @param1 prop css对象
-        *  @param2 speed 动画持续时间
-        *  @param3 easing 动画曲线
-        *  @param4 delay 延迟时间
-        *  @param5 callback 完成后的回调
-        * */
+         *  @param1 prop css对象
+         *  @param2 speed 动画持续时间
+         *  @param3 easing 动画曲线
+         *  @param4 delay 延迟时间
+         *  @param5 callback 完成后的回调
+         * */
         animate:function(prop, speed, easing,delay,callback,innerUse){
             easing = easing || 'linear';
             var convertTime = function(speed){
@@ -571,7 +571,7 @@
                 }else{
                     prop = _util.camelCase(prop);
                     /*这里单次的操作style可能会有性能的问题，
-                    * 下次换成cssText方式*/
+                     * 下次换成cssText方式*/
                     opElem.style[prop] = value;
                 }
             });
@@ -803,18 +803,29 @@
                             ob.callback(event);
                         };
 
+                        opElem.addEventListener(ob.type,cache[uniqueId][ob.type],false);
+
                     }else if(typeof ob.proxyObj === 'string'){
                         cache[uniqueId][ob.type] = function(event){
                             event.data = ob.data;
-                            var targetArr = _util.findElement(opElem,ob.proxyObj);
-                            if(_util.ifArrayIn(event.target,targetArr)){
-                                ob.callback(event);
+//                            var targetArr = _util.findElement(opElem,ob.proxyObj);
+
+                            var targetArr = self.domElemList;
+                            for(var i = 0;i<targetArr.length;i++){
+                                //console.log(_util.ifContain(targetArr[i],event.target));
+                                if(_util.ifContain(targetArr[i],event.target)){
+                                    event.preventDefault();
+                                    ob.callback.call([targetArr[i]],event);
+                                    break;
+                                }
                             }
 
                         };
 
+                        $(ob.proxyObj).getOpElem().addEventListener(ob.type,cache[uniqueId][ob.type],false);
+
                     }
-                    opElem.addEventListener(ob.type,cache[uniqueId][ob.type],false);
+                    // opElem.addEventListener(ob.type,cache[uniqueId][ob.type],false);
                 };
 
             //根据funcIndex判断是否有代理
