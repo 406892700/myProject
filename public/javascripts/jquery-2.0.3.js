@@ -757,7 +757,7 @@ jQuery.extend({
 			ret = [];
 
 		// Go through the array, translating each of the items to their
-		if ( isArray ) {
+		if ( isArray ) { 
 			for ( ; i < length; i++ ) {
 				value = callback( elems[ i ], i, arg );
 
@@ -891,7 +891,9 @@ jQuery.extend({
 	// A method for quickly swapping in/out CSS properties to get correct calculations.
 	// Note: this method belongs to the css module but it's needed here for the support module.
 	// If support gets modularized, this method should be moved back to the css module.
-	//一个用于快速
+	//一个用于快速交换css属性的方法用以正确获取属性值
+	//这方法属于css模块，但是这里也需要的
+	//如果support模块被模块化的话这个方法应该被移动到css模块中
 	swap: function( elem, options, callback, args ) {
 		var ret, name,
 			old = {};
@@ -906,6 +908,7 @@ jQuery.extend({
 		ret = callback.apply( elem, args || [] );
 
 		// Revert the old values
+		// 恢复旧值
 		for ( name in options ) {
 			elem.style[ name ] = old[ name ];
 		}
@@ -6775,12 +6778,14 @@ function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
 function getWidthOrHeight( elem, name, extra ) {
 
 	// Start with offset property, which is equivalent to the border-box value
+	// 当做border-box的属性
 	var valueIsBorderBox = true,
 		val = name === "width" ? elem.offsetWidth : elem.offsetHeight,
 		styles = getStyles( elem ),
 		isBorderBox = jQuery.support.boxSizing && jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
 
 	// some non-html elements return undefined for offsetWidth, so check for null/undefined
+	// 一些非html元素在获取offsetWidth属性时会返回undefined，所以我们先确认一下
 	// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
 	// MathML - https://bugzilla.mozilla.org/show_bug.cgi?id=491668
 	if ( val <= 0 || val == null ) {
@@ -6855,20 +6860,24 @@ function actualDisplay( name, doc ) {
 	return display;
 }
 
+
+/*将width和height的获取方式放入cssHook中*/
 jQuery.each([ "height", "width" ], function( i, name ) {
 	jQuery.cssHooks[ name ] = {
 		get: function( elem, computed, extra ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
-					jQuery.swap( elem, cssShow, function() {
+				//存在的元素如果可见的话一定有他的尺寸，所以如通过我们给他一个style将会让我们受益
+				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?//如果尺寸为零的话，那就就要先将该元素设置为可见
+					jQuery.swap( elem, cssShow/*这个就是一个可见样式对象*/, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
-					getWidthOrHeight( elem, name, extra );
+					getWidthOrHeight( elem, name, extra );//调用公用方法获取高宽
 			}
 		},
 
+		/*判断支持border-box*/
 		set: function( elem, value, extra ) {
 			var styles = extra && getStyles( elem );
 			return setPositiveNumber( elem, value, extra ?
