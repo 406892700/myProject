@@ -69,4 +69,17 @@ module.exports = function(app){
     app.get('/spinner',function(req,res){
         res.render('somePlugin/spinner/index',{});
     });
+
+    app.get('/share_friend', function (req, res, next) {
+        res.render('html5/share_weixin/share_weixin_friend',{});
+    });
+
+
+    app.get('/create_school', function (req, res, next) {
+        res.render('html5/share_weixin/create_school',{});
+    });
+
+    app.get('/share_circle', function (req,res,next) {
+        res.render('html5/share_weixin/share_weixin_circle',{});
+    })
 };

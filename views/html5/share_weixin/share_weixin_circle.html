@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>分享朋友圈</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <style>
+        html{
+            font-size:62.5%;
+            width: 100%;
+        }
+
+        body{
+            text-align: center;
+            font-size: 1.2rem;
+            background-color: #ffcf4c;
+            font-family: 'Microsoft Yahei';
+            padding-bottom:20px;
+            overflow: hidden;
+            width: 100%;
+            color:#333;
+        }
+
+        *{
+            padding:0px;
+            margin:0px;
+            box-sizing:border-box;
+        }
+
+        img{
+            display: block;
+            width:100%;
+        }
+
+        ul{
+            list-style: none;
+            text-align: left;
+        }
+
+        /*垂直居中类*/
+        .alignCenter{
+            position: absolute;
+            left:50%;
+            top:50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        .wx_header{
+
+        }
+
+        .wx_article{
+            position: relative;
+            background-color: #fdf6cd;
+            border-radius: 5px;
+            margin: -30px auto 0px auto;
+            width:90%;
+            padding: 22% 0px 10px 0px;
+        }
+
+        .wx_article > header{
+            position: absolute;
+            top: -10px;
+            width: 104%;
+            left: -2%;
+            color:#8bc145;
+            font-size:1.8rem;
+            line-height: 2.0rem;
+        }
+
+        .wx_article > header > p{
+            position: absolute;
+            left:50%;
+            top:50%;
+            -webkit-transform: translate(-50%, -60%);
+            -moz-transform: translate(-50%, -60%);
+            -ms-transform: translate(-50%, -60%);
+            -o-transform: translate(-50%, -60%);
+            transform: translate(-50%, -60%);
+            width: 85%;
+            text-align: left;
+        }
+
+        .wx_article > .article{
+
+        }
+
+        .wx_article > .article > .title{
+            position: relative;
+            border-top: 1px solid #ecc0ac;
+            margin: 0px 15%;
+        }
+
+        .wx_article > .article > .title > .real_title{
+            position: absolute;
+            background-color: #fdf6cd;
+            font-size:1.6rem;
+            left: 50%;
+            -webkit-transform: translate(-50%,-60%);
+            -moz-transform: translate(-50%,-60%);
+            -ms-transform: translate(-50%,-60%);
+            -o-transform: translate(-50%,-60%);
+            transform: translate(-50%,-60%);
+            white-space: nowrap;
+        }
+
+        .wx_article > .article > .title > .real_title > span{
+            color:#ecc0ac;
+            font-size: 1.2rem;
+        }
+
+        .wx_article > .article > .content{
+            margin: 1.8rem 20px;
+            font-size: 1.4rem;
+            line-height: 2.0rem;
+            text-align: justify;
+        }
+
+        .btn_area{
+            margin-top: 30px;
+        }
+
+        .btn_area > .down_btn,
+        .btn_area > .input_wrap{
+            display:block;
+            position: relative;
+            width: 80%;
+            margin:10px auto;
+
+        }
+
+        .btn_area > .input_wrap > input{
+            border:none;
+            outline: none;
+            width:85%;
+            color:#999999;
+            height: 60%;
+            text-align: center;
+            font-size:2.2rem;
+            z-index:999;
+        }
+
+        .btn_area > .down_btn > p{
+            color:#fff;
+            font-size:2.0rem;
+            width: 85%;
+        }
+
+        footer.contruct_us{
+            color:#a47920;
+
+        }
+
+        footer.contruct_us > p {
+            width: 90%;
+            margin: 0px auto;
+            font-size:1.4rem;
+        }
+
+        footer.contruct_us > p > a{
+            color:#da441c;
+        }
+    </style>
+</head>
+<body>
+    <header class="wx_header">
+        <img src="html5/share_weixin/images/demo_1.png" alt=""/>
+    </header>
+    <section class="wx_article">
+        <header>
+            <img src="html5/share_weixin/images/wx_share_cloud.png" alt=""/>
+            <p>第三方发生的的放松放松的方式反倒是官方大幅度个发动广大</p>
+        </header>
+        <div class="article">
+            <div class="title">
+                <div class="real_title">
+                    <span>●</span>
+                    &nbsp;&nbsp;操作流程&nbsp;&nbsp;
+                    <span>●</span>
+                </div>
+            </div>
+            <div class="content">
+                <ul>
+                    <li>1、在下面输入您的手机号，并点击“下载咕噜宝宝
+                        app”按钮，咕噜宝宝将会把临时密码发到您输入的
+                        手机号
+                    </li>
+                    <li>2、点击“下载咕噜宝宝app”按钮后下载安装咕噜
+                        宝宝</li>
+                    <li>3、输入您的手机号以及临时密码并登录</li>
+                    <li>4、点击“进入课堂”按钮</li>
+                    <li>5、开启精彩的课程之旅吧~</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <div class="btn_area">
+        <div class="input_wrap">
+            <input type="text" class="alignCenter" value="请输入您的手机号" onfocus="if(this.value=='请输入您的手机号')this.value=''" onblur="if(this.value=='')this.value='请输入您的手机号'"/>
+            <img src="html5/share_weixin/images/wx_share_input.png" alt=""/>
+        </div>
+
+        <a href="" class="down_btn">
+            <img src="html5/share_weixin/images/wx_down_btn1.png" alt=""/>
+            <p class="alignCenter">特么的你给我下载</p>
+        </a>
+    </div>
+
+    <footer class="contruct_us">
+        <p>有任何问题欢迎拨打客服电话
+        <a href="tel:4009-058-053">4009-058-053</a> <br/>
+            （工作时间9:00-18:00）
+
+        </p>
+    </footer>
+</body>
+</html>
