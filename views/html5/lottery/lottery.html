@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>大转盘</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <style>
+        html{
+            font-size: 62.5%;
+        }
+
+        body{
+            font-size: 1.2rem;
+            text-align: center;
+            font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
+            width: 100%;
+        }
+
+        *{
+            box-sizing: border-box;
+            padding:0;
+            margin:0;
+        }
+        img{
+            display: block;
+            width: 100%;
+        }
+
+        .lottery_panel{
+            position: relative;
+            overflow: hidden;
+        }
+
+        .h_align_center{
+            position: absolute;
+            left:0;
+            top:0;
+        }
+
+        #trigger > a{
+            width: 25%;
+            height: 25%;
+            -webkit-transform: translate(-55%, -50%);
+            transform: translate(-55%,-50%);
+            display: block;
+            left: 50%;
+            top: 50%;
+            position: absolute;
+        }
+
+        .lottery_panel > .lottery_plate{
+            position: absolute;
+            /*transition: transform 5s;*/
+
+        }
+
+        .lottery_mask{
+            position: fixed;
+            left:0;
+            top:0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: none;
+        }
+
+        .lottery_mask img{
+            width: 100%;
+        }
+
+        .lottery_mask > .lottery_result{
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left:50%;
+            -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+        }
+
+        .lottery_mask > .lottery_result a{
+            display: block;
+            width: 80%;
+            margin: 20px auto;
+            position: relative;
+        }
+        .lottery_mask > .lottery_result a > p{
+            color:#d93636;
+            font-size: 2.0rem;
+            font-weight: bold;
+            letter-spacing: 0.2rem;
+        }
+
+
+        .lottery_mask > .lottery_result > .img_wrap{
+            position: relative;
+        }
+
+        .lottery_mask > .lottery_result > .img_wrap > p{
+            position: absolute;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            left: 45%;
+            top: 65%;
+            color:#d93636;
+            font-size: 1.6rem;
+            text-align: center;
+            line-height: 2.0rem;
+        }
+        .lottery_mask > .lottery_result > .img_wrap .btn_close{
+            display: block;
+            width: 30px;
+            height: 30px;
+            background: url('html5/lottery/lottery_close_btn.png') no-repeat 0 0;
+            background-size: cover;
+            right:20px;
+            top:20px;
+            position: absolute;
+        }
+
+        .share_btn_area{
+            position: relative;
+        }
+
+        .share_btn_area > a{
+            position: absolute;
+            width: 80%;
+            left:10%;
+            bottom:15%;
+        }
+
+        .share_btn_area > a > p{
+            text-align: center;
+            -webkit-transform: translate(-55%, -50%);
+            transform: translate(-55%,-50%);
+            display: block;
+            left: 50%;
+            top: 50%;
+            position: absolute;
+            color:#d93636;
+            font-size: 2.0rem;
+            font-weight: bold;
+            letter-spacing: 0.2rem;
+
+        }
+
+         .lottery_mask > .lottery_result > p{
+             color:#ffb715;
+             font-size: 1.4rem;
+             width: 80%;
+             margin:10px auto;
+             text-align: left;
+         }
+
+        .align_center{
+            position: absolute;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            left:50%;
+            top:50%;
+        }
+
+        .block{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index:99999;
+            left:0;
+            top:0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="html5/lottery/lottery_header.png" alt=""/>
+    </header>
+    <section class="lottery_panel">
+        <img src="html5/lottery/lottery_panel.png" alt=""/>
+        <div class="lottery_plate h_align_center" id="spin_panel">
+            <img src="html5/lottery/spin_panel.png" alt=""/>
+        </div>
+        <div class="h_align_center" id="trigger">
+            <a href="javascript:void(0)"></a>
+            <img src="html5/lottery/spin_arrow.png" alt=""/>
+        </div>
+    </section>
+    <section class="share_btn_area">
+        <img src="html5/lottery/lottery_02.png" alt=""/>
+        <a href="WEBTAG_TO_SHARE?shareDes=shareUrl=">
+            <img src="html5/lottery/lottery_btn.png" alt=""/>
+            <p>立即分享</p>
+        </a>
+    </section>
+
+    <section class="lottery_slide">
+        <img src="html5/lottery/lottery_slide.png" alt=""/>
+    </section>
+
+    <div class="lottery_mask" data-type="中奖的" id="get">
+        <div class="lottery_result">
+            <div class="img_wrap">
+                <a href="javascript:void(0)" class="btn_close" onclick="$(this).closest('.lottery_mask').css('display','none');"></a>
+                <img src="html5/lottery/lottery_mask_get.png" alt=""/>
+                <p id="reward">10元话费</p>
+            </div>
+            <p>奖品于活动结束后三个工作日内统一发放，感谢您的参与~</p>
+            <a href="javascript:void(0)">
+                <img src="html5/lottery/lottery_btn.png" alt=""/>
+                <p class="align_center">点击分享</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="lottery_mask" data-type="没中奖的" id="not_get">
+        <div class="lottery_result">
+            <div class="img_wrap">
+                <a href="javascript:void(0)" class="btn_close" onclick="$(this).closest('.lottery_mask').css('display','none');"></a>
+                <img src="html5/lottery/lottery_mask_no.png" alt=""/>
+            </div>
+            <a href="WEBTAG_TO_SHARE?shareDes=shareUrl=">
+                <img src="html5/lottery/lottery_btn.png" alt=""/>
+                <p class="align_center">立即分享</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="lottery_mask" data-type="中奖的" id="no_chance">
+        <div class="lottery_result">
+            <div class="img_wrap">
+                <a href="javascript:void(0)" class="btn_close" onclick="$(this).closest('.lottery_mask').css('display','none');"></a>
+                <img src="html5/lottery/lottery_mask_nochance.png" alt=""/>
+                <p id="reward">10元话费</p>
+            </div>
+            <a href="javascript:void(0)">
+                <img src="html5/lottery/lottery_btn.png" alt=""/>
+                <p class="align_center">点击领取</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="javascripts/zepto.min.js"></script>
+    <script src="html5/lottery/fastclick.js"></script>
+    <script>
+        var shareDes = '我分享了专属邀请码，免费抽iPhone6S！';
+        $(function () {
+            var block = function(){//放置遮罩
+                $('<div class="block" id="block"></div>').appendTo($('body'));
+            },
+                removeblock = function(){//移除遮罩
+                    $('#block').remove();
+                };
+
+
+            FastClick.attach(document.body);
+            $('#trigger > a').click(function(){
+                block();
+                var reward = ['10元话费','完整版电子课件','谢谢参与','线下培训入场券','iphone 6s','价值198元保温杯','299元绘本全套','台湾知名幼儿园参访'],
+                    angle,
+                    rdNum = Math.random();
+                console.log(rdNum);
+                if(0 < rdNum && rdNum <= 0.05){/*10元话费*/
+                    rd = 0;
+                }else if(0.05 < rdNum && rdNum <= 0.1){/*价值198元保温杯*/
+                    rd = 5;
+                }else if(0.1 < rdNum && rdNum <= 0.2){/*线下培训入场券*/
+                    rd = 3;
+                }else if(0.2 < rdNum && rdNum <= 0.4){/*完整版电子课件*/
+                    rd = 1;
+                }else{/*不中奖*/
+                    rd = 2;
+                }
+                console.log(rd);
+                angle = -(rd*45+1440)+'deg';
+
+                /*console.log(rd);*/
+                $('#spin_panel').animate({'transform':'ro·tate('+angle+')','-webkit-transform':'rotate('+angle+')'},5000,'ease-in-out',function(){
+                    removeblock();
+                    if(rd !== 2){
+                        $('#get').css('display','block').find('#reward').text(reward[rd]);
+                    }else{
+                        $('#not_get').css('display','block');
+                    }
+                    $('#spin_panel').css({'transform':'rotate(0deg)','-webkit-transform':'rotate(0deg)'});
+                });
+            });
+        });
+        ;(function(window,$,undefined){//文字轮播插件
+            $.fn.slideText = function(opt){
+                var that = this;
+                var default_opt = {
+                    speed:50,
+                    data:[
+                        {nickname:'nickname',phone:'1503***1503'}
+                    ]
+                };
+
+                opt = $.extend({},default_opt,opt);
+
+                var getTpl = function(){
+                    var tpl = [];
+                    tpl.push('');
+                    tpl.push('<div class="innerWrap">');
+                    tpl.push('<div class="slideBoard">');
+                    tpl.push('<table width="100%">');
+                    tpl.push('<thead>');
+                    tpl.push('</thead>');
+                    tpl.push('<tbody>');
+                    opt.data.map(function(v,i){
+                        tpl.push('<tr><td class="s_left">'+v.nickname+'</td><td class="s_center">'+v.phone+'</td><td class="s_right">已参加活动</td></tr>');
+                    });
+                    tpl.push('</tbody>');
+                    tpl.push('</table>');
+                    tpl.push('</div>');
+                    tpl.push('</div>');
+
+                    that.append(tpl.join(''));
+                };
+
+                var initSlide = function(){
+                    var slide = $('.slideBoard',that),
+                            itemHeight = slide.find('tbody tr').height(),
+                            offsetY = 0,
+                            itemList = slide.find('tbody tr'),
+                            length = itemList.length;
+                    setInterval(function(){
+                        slide.animate({'margin-top':'+=-1px'}, opt.speed,function(){
+                            if(offsetY > itemHeight){
+                                offsetY = 0;
+                                slide.find('tbody tr').eq(0).insertAfter(slide.find('tbody tr').eq(length-1));
+                                slide.css('marginTop',0);
+                                return;
+                            }
+                        });
+                        offsetY++;
+                    },opt.speed);
+                }
+
+                getTpl();
+                initSlide();
+            }
+        })(window,jQuery,undefined);
+    </script>
+</body>
+</html>

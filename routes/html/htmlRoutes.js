@@ -81,5 +81,17 @@ module.exports = function(app){
 
     app.get('/share_circle', function (req,res,next) {
         res.render('html5/share_weixin/share_weixin_circle',{});
-    })
+    });
+
+    app.get('/lottery', function (req, res, next) {
+        res.render('html5/lottery/lottery',{});
+    });
+
+    app.get('/testShare', function (req, res, next) {
+        res.render('html5/lottery/test',{});
+    });
+
+    app.get('/oneyuan',function(req,res,next){
+        res.render('html5/oneyuan/oneyuan',{});
+    });
 };
