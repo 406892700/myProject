@@ -1,0 +1,216 @@
+
+<!-- saved from url=(0029)http://www.jq22.com/demo/src/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+ 
+
+        <!--Meta tags-->
+
+        <meta charset="utf-8">
+
+ 
+
+        <!--Title-->
+
+        <title></title>
+
+ 
+
+        <!--Stylesheets-->
+
+        <link rel="stylesheet" href="html5/video/src_files/styles.css">
+
+ 
+
+        <!--jQuery-->
+
+        <script src="html5/video/src_files/jquery-1.7.2.min.js"></script>
+
+ 
+
+        <!--jPlayer-->
+
+		<script src="html5/video/src_files/jquery.jplayer.min.js"></script>
+
+        
+
+        <!--[if lt IE 9]>
+
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+
+        <![endif]-->
+
+ 
+
+    </head>
+
+<body>
+
+ 
+
+	<!--container for everything-->
+
+	<div id="jp_container_1" class="jp-video jp-video-360p">
+
+	
+
+		<!--container in which our video will be played-->
+
+		<div id="jquery_jplayer_1" class="jp-jplayer" style="width: 570px; height: 340px;">
+			<img id="jp_poster_0" src="html5/video/mi4.png" style="width: 570px; height: 340px; display: inline;">
+			<video id="jp_video_0" preload="metadata" src="http://jq22.qiniudn.com/www.jq22.commi4.webm" style="width: 0px; height: 0px;"></video>
+		</div>
+
+		
+
+		<!--main containers for our controls-->
+
+		<div class="jp-gui">
+
+		    <div class="jp-interface">
+
+		        <div class="jp-controls-holder">
+
+		
+
+					<!--play and pause buttons-->
+
+				    <a href="javascript:;" class="jp-play" tabindex="1">play</a>
+
+				    <a href="javascript:;" class="jp-pause" tabindex="1" style="display: none;">pause</a>
+
+				    <span class="separator sep-1"></span>
+
+				 
+
+					<!--progress bar-->
+
+				    <div class="jp-progress">
+
+				        <div class="jp-seek-bar" style="width: 100%;">
+
+							<div class="jp-play-bar" style="width: 0%;"><span></span></div>
+
+						</div>
+
+				    </div>
+
+				 
+
+				    <!--time notifications-->
+
+				    <div class="jp-current-time">00:00</div>
+
+				    <span class="time-sep">/</span>
+
+				    <div class="jp-duration">01:11</div>
+
+				    <span class="separator sep-2"></span>
+
+				 
+
+				    <!--mute / unmute toggle-->
+
+				    <a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a>
+
+				    <a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute" style="display: none;">unmute</a>
+
+				 
+
+				    <!--volume bar-->
+
+				    <div class="jp-volume-bar">
+
+				        <div class="jp-volume-bar-value" style="width: 80%;"><span class="handle"></span></div>
+
+				    </div>
+
+				    <span class="separator sep-2"></span>
+
+				 
+
+				    <!--full screen toggle-->
+
+				    <a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen">full screen</a>
+
+				    <a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen" style="display: none;">restore screen</a>
+
+				
+
+		        </div><!--end jp-controls-holder-->
+
+		    </div><!--end jp-interface-->
+
+		</div><!--end jp-gui-->
+
+		
+
+		<!--unsupported message-->
+
+		<div class="jp-no-solution" style="display: none;">
+
+		    <span>Update Required</span>
+
+		    Here's a message which will appear if the video isn't supported. A Flash alternative can be used here if you fancy it.
+
+		</div>
+
+	
+
+	</div><!--end jp_container_1-->
+
+	
+
+	<!--instantiate-->
+
+	<script type="text/javascript">
+
+	$(document).ready(function(){
+
+	 
+
+	    $("#jquery_jplayer_1").jPlayer({
+
+	        ready: function () {
+
+	            $(this).jPlayer("setMedia", {
+
+	                m4v: "mi4.m4v",
+
+	                ogv: "mi4.ogv",
+
+	                webmv: "http://file.bmob.cn/M02/24/A0/oYYBAFaA3fqAGfZrAA-DvCSCS4g866.mp4",
+
+	                poster: "mi4.png"
+
+	            });
+
+	        },
+
+	        swfPath: "js",
+
+	        supplied: "webmv, ogv, m4v",
+
+	        size: {
+
+	            width: "570px",
+
+	            height: "340px",
+
+	            cssClass: "jp-video-360p"
+
+	        }
+
+	    });
+
+	 
+
+	});
+
+	</script>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<title>HTML5手机网页视频播放器代码</title>
+<link rel="stylesheet" type="text/css" href="html5/video/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="html5/video/css/willesPlay.css"/>
+<script src="html5/video/js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="html5/video/js/willesPlay.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="willesPlay">
+		<div class="playContent">
+			<video width="100%" height="100%" id="playVideo">
+				<source src="http://www.gulubaobao.com/upload/trainning/video/20.mp4" type="video/mp4"></source>
+				当前浏览器不支持 video直接播放
+			</video>
+			<div class="previewPic">
+				<div class="mask"></div>
+				<img src="/html5/video/images/pic.png" alt=""/>
+			</div>
+			<div class="playTip"></div>
+			<span class="fullScreen"></span>
+
+		</div>
+
+
+		<div class="playControll">
+			<div class="playPause playIcon"></div>
+			<div class="timebar">
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+					<div class="drag"></div>
+				</div>
+
+			</div>
+			<div class="otherControl">
+				<span class="currentTime">0:00:00</span>/<span class="duration">0:00:00</span>
+			</div>
+		</div>
+	</div>
+	<div class="mainContent">
+		<img src="/html5/video/images/video_review.png" alt="" width="100%"/>
+	</div>
+
+	<div class="btn_area">
+		<a href="WEBTAG_TO_SHARE?shareDes=全国幼儿园长都在收看：幼儿创思数学启蒙课程！猛戳免费听课>&shareUrl=http://www.gulubaobao.com/h5/app/courseReview/courseReviewShare.html">课程分享</a>
+	</div>
+</body>
+</html>

@@ -15,6 +15,7 @@
             text-align: center;
             font:normal normal 1.2rem/1.8rem 'Microsoft Yahei';
             width: 100%;
+            background-color: #e52d2c;
         }
 
         *{
@@ -171,6 +172,57 @@
             left:0;
             top:0;
         }
+
+        /*文字轮播样式*/
+        .lottery_slide{
+            position: relative;
+        }
+
+        .slide_text_title{
+            position: absolute;
+            width: 100%;
+            color:#d83838;
+            font-size: 1.6rem;
+            height:50px;
+            line-height: 50px;
+            left:0;
+            top:0;
+        }
+
+        .slide_text_title > img{
+            width:70%;
+            display:block;
+            margin:0px auto;
+        }
+
+        .lottery_slide > .innerWrap{
+            overflow:hidden;
+            height:60%;
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            top: 50px;
+        }
+
+        .lottery_slide > .slideBoard{
+
+        }
+
+        .lottery_slide .slideBoard table{
+            width:100%;
+            font-size:1.6rem;
+            color:#d83838;
+        }
+
+        .lottery_slide .slideBoard  td {
+            padding:5px;
+            vertical-align: top;
+        }
+
+        .lottery_slide .slideBoard  td.s_left{
+            text-align: left;
+            padding:0px 10px;
+        }
     </style>
 </head>
 <body>
@@ -197,6 +249,13 @@
 
     <section class="lottery_slide">
         <img src="html5/lottery/lottery_slide.png" alt=""/>
+        <div class="slide_text_title">
+            已有xx位用户获奖
+        </div>
+    </section>
+    
+    <section>
+        <img src="html5/lottery/explaination.png" alt=""/>
     </section>
 
     <div class="lottery_mask" data-type="中奖的" id="get">
@@ -257,28 +316,24 @@
             FastClick.attach(document.body);
             $('#trigger > a').click(function(){
                 block();
-                var reward = ['10元话费','完整版电子课件','谢谢参与','线下培训入场券','iphone 6s','价值198元保温杯','299元绘本全套','台湾知名幼儿园参访'],
+                var reward = ['10元话费','台湾知名幼儿园参访','399元绘本全套','价值198元保温杯','iphone 6s','线下培训入场券','谢谢参与','完整版电子课件'],
                     angle,
                     rdNum = Math.random();
-                console.log(rdNum);
                 if(0 < rdNum && rdNum <= 0.05){/*10元话费*/
                     rd = 0;
                 }else if(0.05 < rdNum && rdNum <= 0.1){/*价值198元保温杯*/
-                    rd = 5;
+                    rd = 3;
                 }else if(0.1 < rdNum && rdNum <= 0.2){/*线下培训入场券*/
                     rd = 3;
                 }else if(0.2 < rdNum && rdNum <= 0.4){/*完整版电子课件*/
-                    rd = 1;
+                    rd = 7;
                 }else{/*不中奖*/
-                    rd = 2;
+                    rd = 6;
                 }
-                console.log(rd);
-                angle = -(rd*45+1440)+'deg';
-
-                /*console.log(rd);*/
+                angle = (rd*45+1440)+'deg';
                 $('#spin_panel').animate({'transform':'ro·tate('+angle+')','-webkit-transform':'rotate('+angle+')'},5000,'ease-in-out',function(){
                     removeblock();
-                    if(rd !== 2){
+                    if(rd !== 6){
                         $('#get').css('display','block').find('#reward').text(reward[rd]);
                     }else{
                         $('#not_get').css('display','block');
@@ -286,14 +341,40 @@
                     $('#spin_panel').css({'transform':'rotate(0deg)','-webkit-transform':'rotate(0deg)'});
                 });
             });
+
+            $('.lottery_slide').slideText({
+                speed:50,
+
+                data:[
+                    {nickname:'轩轩妈妈',reward:"获得10元话费"},
+                    {nickname:'涵韵爸爸',reward:"获得线下培训入场券"},
+                    {nickname:'果冻妈妈',reward:"获得iphone 6s"},
+                    {nickname:'志豪家长',reward:"获得价值198元保温杯"},
+                    {nickname:'欣欣爸爸',reward:"获得299元绘本全套"},
+                    {nickname:'吴先森', reward:"获得台湾知名幼儿园参访"},
+                    {nickname:'轩轩妈妈',reward:"获得10元话费"},
+                    {nickname:'涵韵爸爸',reward:"获得线下培训入场券"},
+                    {nickname:'果冻妈妈',reward:"获得iphone 6s"},
+                    {nickname:'志豪家长',reward:"获得价值198元保温杯"},
+                    {nickname:'欣欣爸爸',reward:"获得299元绘本全套"},
+                    {nickname:'吴先森', reward:"获得台湾知名幼儿园参访"},
+                    {nickname:'轩轩妈妈',reward:"获得10元话费"},
+                    {nickname:'涵韵爸爸',reward:"获得线下培训入场券"},
+                    {nickname:'果冻妈妈',reward:"获得iphone 6s"},
+                    {nickname:'志豪家长',reward:"获得价值198元保温杯"},
+                    {nickname:'欣欣爸爸',reward:"获得299元绘本全套"},
+                    {nickname:'吴先森', reward:"获得台湾知名幼儿园参访"}
+                ]
+            })
         });
-        ;(function(window,$,undefined){//文字轮播插件
+
+        (function(window,$,undefined){//文字轮播插件
             $.fn.slideText = function(opt){
                 var that = this;
                 var default_opt = {
                     speed:50,
                     data:[
-                        {nickname:'nickname',phone:'1503***1503'}
+                        {nickname:'nickname',reward:''}
                     ]
                 };
 
@@ -309,7 +390,7 @@
                     tpl.push('</thead>');
                     tpl.push('<tbody>');
                     opt.data.map(function(v,i){
-                        tpl.push('<tr><td class="s_left">'+v.nickname+'</td><td class="s_center">'+v.phone+'</td><td class="s_right">已参加活动</td></tr>');
+                        tpl.push('<tr><td class="s_left">恭喜'+v.nickname+'</td><td class="s_left">'+ v.reward+'</td></tr>');
                     });
                     tpl.push('</tbody>');
                     tpl.push('</table>');
@@ -326,22 +407,20 @@
                             itemList = slide.find('tbody tr'),
                             length = itemList.length;
                     setInterval(function(){
-                        slide.animate({'margin-top':'+=-1px'}, opt.speed,function(){
-                            if(offsetY > itemHeight){
-                                offsetY = 0;
-                                slide.find('tbody tr').eq(0).insertAfter(slide.find('tbody tr').eq(length-1));
-                                slide.css('marginTop',0);
-                                return;
-                            }
-                        });
-                        offsetY++;
+                        offsetY = slide.css('margin-top').slice(0,-2)*1;
+                        slide.css({'margin-top':(offsetY-1)+'px'});
+                        if(-offsetY > itemHeight){
+                            offsetY = 0;
+                            slide.find('tbody tr').eq(0).insertAfter(slide.find('tbody tr').eq(length-1));
+                            slide.css('marginTop',0);
+                        }
                     },opt.speed);
-                }
+                };
 
                 getTpl();
                 initSlide();
             }
-        })(window,jQuery,undefined);
+        })(window,Zepto,undefined);
     </script>
 </body>
 </html>

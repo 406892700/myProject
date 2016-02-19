@@ -87,11 +87,20 @@ module.exports = function(app){
         res.render('html5/lottery/lottery',{});
     });
 
+    app.get('/lottery/share', function (req, res, next) {
+        res.render('html5/lottery/lotteryShare',{});
+    });
+
     app.get('/testShare', function (req, res, next) {
         res.render('html5/lottery/test',{});
     });
 
     app.get('/oneyuan',function(req,res,next){
         res.render('html5/oneyuan/oneyuan',{});
+    });
+
+
+    app.get('/video',function(req,res,next){
+        res.render('html5/video/index',{});
     });
 };

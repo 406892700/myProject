@@ -1,0 +1,200 @@
+@charset "utf-8";
+html{
+	font-size:62.5%;
+}
+
+body{
+	font-size:1.2rem;
+	padding-bottom: 40px;
+}
+
+video{
+	display: block;
+}
+
+a:hover{
+	text-decoration: none;
+}
+#willesPlay{
+	box-shadow: 0px 0px 15px #333333;
+	position: relative;
+}
+
+#willesPlay .playContent{
+	position: relative;
+	height: auto;
+	overflow: hidden;
+	background:#000;
+	cursor: pointer;
+}
+
+#willesPlay .playContent .previewPic{
+	position: absolute;
+	left:0;
+	top:0;
+	width: 100%;
+	height: 100%;
+}
+
+#willesPlay .playContent .previewPic > .mask{
+	width:100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.3);
+	position: absolute;
+	left:0;
+	top:0;
+}
+
+#willesPlay .playContent .previewPic > img{
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+#willesPlay .playContent .playTip{
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background:url('/html5/video/images/iconfont-bofang.png') no-repeat 0 0;
+	background-size:80px 80px;
+	text-align: center;
+	line-height: 80px;
+	top: 40%;
+	left: 50%;
+	margin-left: -40px;
+	margin-top: -40px;
+	color: #fff;
+	cursor: pointer;
+}
+
+#willesPlay .playControll{
+	position: absolute;
+	z-index: 2147483650;
+	width: 100%;
+	height: 48px;
+	bottom:0;
+	-moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
+	padding:0px 10px;
+	box-sizing: border-box;
+}
+
+#willesPlay .fullControll{
+	background:rgba(0,0,0,.5);
+}
+#willesPlay .fullControll .timebar span{
+	color: #FFFFFF;
+}
+#willesPlay .playControll .playPause{
+	float: left;
+	width: 25px;
+	height: 25px;
+	background: url('/html5/video/images/iconfont-zanting.png') 0px 0px no-repeat;
+	background-size: 25px 25px;
+	cursor: pointer;
+	margin-top:8px;
+}
+#willesPlay .playControll .playIcon{
+	background: url('/html5/video/images/iconfont-bofangqibofang.png') 0px 0px no-repeat;
+	background-size: 25px 25px;
+}
+/*进度条*/
+#willesPlay .playControll .timebar{
+	float: left;
+	width: calc(100% - 145px);
+	line-height: 48px;
+	margin-left: 5px;
+}
+
+#willesPlay .playControll .timebar .progress{
+	float: left;
+	width: 100%;
+	margin: 19px 0px;
+	height: 5px;
+	cursor: pointer;
+	background-color:rgba(255,255,255,0.5);
+	border-radius: 2px;
+	position: relative;
+}
+
+#willesPlay .playControll .timebar .progress .progress-bar{
+	background-color:rgba(208,0,0,0.5);
+	height: 5px;
+	border-radius: 2px;
+	float: left;
+
+}
+
+#willesPlay .playControll .timebar .progress .drag{
+	width:15px;
+	height:15px;
+	background-color: #fff;
+	position: absolute;
+	top: -5px;
+	border-radius: 50%;
+	left:0;
+}
+
+
+#willesPlay .otherControl{
+	float: right;
+	position: relative;
+}
+
+span.fullScreen{
+	position: absolute;
+	right:10px;
+	top:10px;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background: url('/html5/video/images/iconfont-quanping.png') no-repeat 0 0;
+	background-size: cover;
+	cursor: pointer;
+}
+
+.cancleScreen{
+
+}
+
+#willesPlay .otherControl{
+	font-size:1.4rem;
+	color:#fff;
+	margin-top: 10px;
+}
+
+#willesPlay .otherControl span.currentTime{
+	color:#f95d6f;
+}
+video::-webkit-media-controls-enclosure {
+    /*禁用播放器控制栏的样式*/
+    display: none !important;
+}
+:-webkit-full-screen{}
+
+.mainContent{
+	margin-top: 20px;
+}
+
+
+.btn_area{
+	margin-top: 30px;
+
+}
+
+.btn_area > a{
+	display: block;
+	width:80%;
+	max-width: 220px;
+	border-radius: 40px;
+	background-color: #f95d6f;
+	height: 40px;
+	line-height: 40px;
+	color:#fff;
+	font-size:1.8rem;
+	text-align: center;
+	margin: 0px auto;
+}
+
+
