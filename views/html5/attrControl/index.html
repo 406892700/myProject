@@ -10,18 +10,17 @@
             display:block !important;
         }
 
-        .btn{
-            display:inline-block;
-            width:80px;
-            height:30px;
-            background-color: #0078d8;
-            color:#fff;
-            font-size:14px;
-            line-height: 30px;
-            text-align: center;
-            outline:none;
-            border: none;
-        }
+        /*.btn{*/
+            /*display:inline-block;*/
+            /*width:80px;*/
+            /*height:30px;*/
+            /*background-color: #0078d8;*/
+            /*color:#fff;*/
+            /*font-size:14px;*/
+            /*text-align: center;*/
+            /*outline:none;*/
+            /*border: none;*/
+        /*}*/
 
         .btn:disabled{
             background-color: #eee;
@@ -29,6 +28,31 @@
     </style>
 </head>
 <body>
+<table border="1">
+    <thead>
+    <tr>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td rowspan="3">123</td>
+        <td>33</td>
+        <td>33</td>
+    </tr>
+    <tr>
+
+        <td>33</td>
+        <td>33</td>
+    </tr>
+    <tr>
+
+        <td>33</td>
+        <td>33</td>
+    </tr>
+    </tbody>
+</table>
     <select name="" id="select">
     </select>
     <script>
@@ -37,12 +61,19 @@
             /**/
 
             var data = {
-               '颜色':['蓝色','红色','绿色'],
+                '颜色':['蓝色','红色','绿色','黑色','彩色'],
 				'尺寸':['123*12','33*12'],
-				'材质':['金属','纸质']
+				'材质':['金属','纸质'],
+                fillOption:{
+                    '颜色':['0','1','0','1','1'],
+                    '尺寸':['1','1'],
+                    '材质':['0','0']
+                },
+                comList:[{"123*12$纸质$蓝色"}, "123*12$纸质$红色", "123*12$纸质$绿色", "33*12$纸质$蓝色", "33*12$纸质$红色", "33*12$纸质$绿色"]
             };
             /**/
-            var dataObj = {};
+            var dataObj = [];
+            //{name:'dd',values:['蓝色','红色','绿色']}
 
             var getData = function(){//获取初始数据
                 return $.ajax({url:''});
@@ -52,7 +83,8 @@
                 /*初始化select*/
                 var str = '';
                 for(var i in data){
-                    str+= '<option value="'+i+'">'+i+'</option>';
+                    if(i !== 'fillOption' && i !== 'comList')
+                        str+= '<option value="'+i+'">'+i+'</option>';
                 }
                 $obj.append(str);
                 str = '';
@@ -64,7 +96,7 @@
                     $(data[i]).each(function(i,v){
                         str += '<input value="'+v+'" type="checkbox"> <span>'+v+'</span> &nbsp;';
                     });
-                    str+='<button class="btn _btnxx" disabled>确定</button></div>';
+                    str+='<button class="btn btn-primary _btnxx" disabled>确定</button></div>';
                 }
                 $panel.append(str);
                 $panel.insertAfter($obj);
@@ -75,7 +107,7 @@
                 var divs = $('#selectAttr').children('div'),
                     checkboxs = divs.find('input[type=checkbox]'),
                     doneBtn = divs.find('._btnxx');
-                $obj.bind('change',function(){
+                $obj.bind('click',function(){
                     divs.filter('._showxx').removeClass('_showxx');
                     divs.eq($(this).children(':selected').index()).addClass('_showxx');
                 });
@@ -91,16 +123,34 @@
                 doneBtn.bind('click',function(evt){
                     var _checks = $(this).siblings('input[type=checkbox]'),
                         _checkeds = _checks.filter(':checked'),
+                        _obj = {},
                         cAttr = $obj.val(),
                         cVal = [];
                     _checkeds.each(function(i,v){
                         cVal.push($(v).val());
                     });
-                    dataObj[cAttr] = cVal;
+
+                    _obj['keyName'] = cAttr;
+                    _obj['values'] = cVal;
+
+                    /*这里是用来判断是不是已经在数组中了*/
+                    var index = -1;
+                    for(var i = 0;i<dataObj.length;i++){
+                        if(dataObj[i].keyName == cAttr){
+                            index = i;
+                            break;
+                        }
+                    }
+                    /*end*/
+                    if(index !== -1){
+                        dataObj[i] = _obj;
+                    }else{
+                        dataObj.push(_obj);
+                    }
+
                     _checks.attr('disabled','disabled');
 
                     initTable1(dataObj);
-                    console.log(dataObj);
                 });
 
             };
@@ -117,10 +167,10 @@
                     tpl.push('</tr>');
                     tpl.push('</thead>');
                     tpl.push('<tbody>');
-                    for(var  i in obj){
+                    for(var  i = 0;i<obj.length;i++){
                         tpl.push('<tr>');
-                        tpl.push('<td>'+i+'</td>');
-                        tpl.push('<td>'+obj[i].join(' ')+'</td>');
+                        tpl.push('<td>'+obj[i].keyName+'</td>');
+                        tpl.push('<td>'+obj[i].values.join(' ')+'</td>');
                         tpl.push('<td> <a href="javascript:void(0)" class="modify">[修改]</a> <a href="javascript:void(0)" class="del">[删除]</a></td></tr>');
                         tpl.push('</tr>')
                     }
@@ -129,10 +179,66 @@
 
                 $('#_table1x').remove();
                 $(tpl.join('\n')).insertAfter($('#selectAttr'));
+
+                var newObj = {
+                    title:[],
+                    values:[]
+                };
+                for(var j = 0;j<dataObj.length;j++){
+                    newObj.title.push(dataObj[j].keyName);
+                    newObj.values.push(dataObj[j].values);
+                }
+                initTable2(newObj);
             };
 
             var initTable2 = function (obj) {
+//                console.log(obj);
+                var tpl = [],
+                    getAllcombination = function(obj){//获取所有组合的可能
+                        var ret = obj[0],
+                            eObj = [];
 
+                        for(var i = 1;i<obj.length;i++){
+                            var cObj = obj[i];
+                            for(var k = 0;k<ret.length;k++){
+                                for(var j = 0;j<cObj.length;j++){
+                                    eObj.push(ret[k]+'$'+cObj[j]);
+                                }
+                            }
+                            ret = eObj.join('$$').split('$$');
+                            eObj = [];
+                        }
+
+                        return ret;
+                    },
+                    allComs = getAllcombination(obj.values);
+                console.log(allComs);
+                tpl.push('<table class="table table-bordered" id="_table2x">');
+                tpl.push('<thead>');
+                tpl.push('<tr>');
+                for(var i =0 ;i<obj.title.length;i++){
+                    tpl.push('<th>'+obj.title[i]+'</th>');
+                }
+                tpl.push('<th>单价</th>');
+                tpl.push('<th>库存</th>');
+                tpl.push('</tr>');
+                tpl.push('</thead>');
+                tpl.push('<tbody>');
+                for(var i = 0;i<allComs.length;i++){
+                    tpl.push('<tr>');
+                    var attrArr = allComs[i].split('$');
+                    for(var j = 0;j<attrArr.length;j++){
+                        tpl.push('<td>'+attrArr[j]+'</td>');
+                    }
+                    tpl.push('<td><input type="text"/>元</td>');
+                    tpl.push('<td><input type="text"/>件</td>');
+                    tpl.push('</tr>');
+                }
+                tpl.push('</tbody>');
+                tpl.push('</table>');
+
+                $('#_table2x').remove();
+                $(tpl.join('\n')).insertAfter($('#_table1x'));
             };
 
 
