@@ -9,67 +9,45 @@
         ._showxx{
             display:block !important;
         }
-
-        /*.btn{*/
-            /*display:inline-block;*/
-            /*width:80px;*/
-            /*height:30px;*/
-            /*background-color: #0078d8;*/
-            /*color:#fff;*/
-            /*font-size:14px;*/
-            /*text-align: center;*/
-            /*outline:none;*/
-            /*border: none;*/
-        /*}*/
-
         .btn:disabled{
             background-color: #eee;
         }
     </style>
 </head>
 <body>
-<table border="1">
-    <thead>
-    <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-    </tr></thead>
-    <tbody>
-    <tr>
-        <td rowspan="3">123</td>
-        <td>33</td>
-        <td>33</td>
-    </tr>
-    <tr>
-
-        <td>33</td>
-        <td>33</td>
-    </tr>
-    <tr>
-
-        <td>33</td>
-        <td>33</td>
-    </tr>
-    </tbody>
-</table>
     <select name="" id="select">
     </select>
     <script>
         var setAttr = (function($){
 
+            //删除指定位置的元素
+            Array.prototype.remove = function(index){
+                if(index === -1)return this;
+                for(var i = index;i<this.length;i++){
+                    this[i] = this[i+1];
+                }
+                this.length--;
+                return this;
+            };
             /**/
 
             var data = {
                 '颜色':['蓝色','红色','绿色','黑色','彩色'],
-				'尺寸':['123*12','33*12'],
+				'尺寸':['123x12','33x12'],
 				'材质':['金属','纸质'],
-                fillOption:{
-                    '颜色':['0','1','0','1','1'],
-                    '尺寸':['1','1'],
-                    '材质':['0','0']
-                },
-                comList:[{"123*12$纸质$蓝色"}, "123*12$纸质$红色", "123*12$纸质$绿色", "33*12$纸质$蓝色", "33*12$纸质$红色", "33*12$纸质$绿色"]
+                'dataObj':[
+                    {keyName:'颜色',values:['红色','蓝色']},
+                    {keyName:'尺寸',values:['123x12']},
+                    {keyName:'材质',values:['纸质']}
+                ],
+                allComs:[
+                    {
+                        com:['红色','123x12','纸质'],price:123,store:333
+                    },
+                    {
+                        com:['蓝色','123x12','纸质'],price:121,store:368
+                    }
+                ]
             };
             /**/
             var dataObj = [];
@@ -82,38 +60,86 @@
             var initComponent = function ($obj,data) {
                 /*初始化select*/
                 var str = '';
+                str+= '<option value="请选择">请选择</option>';
                 for(var i in data){
-                    if(i !== 'fillOption' && i !== 'comList')
+                    if(i !== 'dataObj' && i !== 'allComs')
                         str+= '<option value="'+i+'">'+i+'</option>';
                 }
                 $obj.append(str);
                 str = '';
+                console.log(data.dataObj);
+
 
                 /*初始化选择版*/
                 var $panel = $('<div id="selectAttr" class="selectAttr"></div>');
-                for(var i in data){
-                    str += '<div style="display:none">';
-                    $(data[i]).each(function(i,v){
-                        str += '<input value="'+v+'" type="checkbox"> <span>'+v+'</span> &nbsp;';
+                for(var j in data){
+                    str += '<div style="display:none" id="'+j+'">';
+                    $(data[j]).each(function(i,v){
+                        str += '<input value="'+v+'" type="checkbox" id="'+j+"_"+v+'"> <span>'+v+'</span> &nbsp;';
                     });
                     str+='<button class="btn btn-primary _btnxx" disabled>确定</button></div>';
                 }
                 $panel.append(str);
                 $panel.insertAfter($obj);
                 str = '';
+                if(data.dataObj){
+
+                    $obj.children().eq(1).attr('selected',true);
+                    $panel.children('div').eq(0).addClass('_showxx');
+                    dataObj = data.dataObj;
+                    var _arr = [];
+                    for(var i = 0;i<dataObj.length;i++){
+                        var attr = dataObj[i];
+                        for(var j = 0;j<attr.values.length;j++){
+                            _arr.push('#'+attr.keyName+'_'+attr.values[j]);
+                        }
+                    }
+                    console.log(_arr.join(','));
+                    $(_arr.join(',')).attr('checked',true);
+                    initTable1(data.dataObj);
+
+                    var newObj = {
+                        title:[],
+                        allComs:data.allComs
+                    };
+                    for(var j = 0;j<dataObj.length;j++){
+                        newObj.title.push(dataObj[j].keyName);
+                    }
+
+                    initTable2(newObj,true);
+                }
             };
 
             var bindEvent = function($obj){
                 var divs = $('#selectAttr').children('div'),
                     checkboxs = divs.find('input[type=checkbox]'),
                     doneBtn = divs.find('._btnxx');
-                $obj.bind('click',function(){
+                $obj.bind('change',function(){
                     divs.filter('._showxx').removeClass('_showxx');
-                    divs.eq($(this).children(':selected').index()).addClass('_showxx');
+                    var index = $(this).children(':selected').index();
+                    if(index >= 1){
+                        divs.eq(index-1).addClass('_showxx');
+                    }
+
                 });
 
+                $('body').on('click','._delxx',function(evt){
+                    var index = -1,
+                        cAttr = $(this).data('keyName');
+                    for(var i = 0;i<dataObj.length;i++){
+                        if(dataObj[i].keyName == cAttr){
+                            index = i;
+                            break;
+                        }
+                    }
+                    $('#'+cAttr).find('input[type=checkbox]').removeAttr('checked');
+                    dataObj.remove(index);
+                    initTable1(dataObj);
+                });
+
+
                 checkboxs.bind('change',function(evt){
-                    if(checkboxs.filter(':checked').length){
+                    if($(this).parents().children('input[type=checkbox]').filter(':checked').length){
                         $(this).siblings('._btnxx').removeAttr('disabled');
                     }else{
                         $(this).siblings('._btnxx').attr('disabled','disabled');
@@ -148,8 +174,8 @@
                         dataObj.push(_obj);
                     }
 
-                    _checks.attr('disabled','disabled');
-
+//                    _checks.attr('disabled','disabled');
+                    console.log(dataObj);
                     initTable1(dataObj);
                 });
 
@@ -171,7 +197,7 @@
                         tpl.push('<tr>');
                         tpl.push('<td>'+obj[i].keyName+'</td>');
                         tpl.push('<td>'+obj[i].values.join(' ')+'</td>');
-                        tpl.push('<td> <a href="javascript:void(0)" class="modify">[修改]</a> <a href="javascript:void(0)" class="del">[删除]</a></td></tr>');
+                        tpl.push('<td><a href="javascript:void(0)" class="_delxx" data-key-name="'+obj[i].keyName+'">[删除]</a></td></tr>');
                         tpl.push('</tr>')
                     }
                     tpl.push('</tbody>');
@@ -191,10 +217,11 @@
                 initTable2(newObj);
             };
 
-            var initTable2 = function (obj) {
+            var initTable2 = function (obj,type) {
 //                console.log(obj);
                 var tpl = [],
                     getAllcombination = function(obj){//获取所有组合的可能
+                        if(obj.length === 0)return [];
                         var ret = obj[0],
                             eObj = [];
 
@@ -202,7 +229,7 @@
                             var cObj = obj[i];
                             for(var k = 0;k<ret.length;k++){
                                 for(var j = 0;j<cObj.length;j++){
-                                    eObj.push(ret[k]+'$'+cObj[j]);
+                                    eObj.push(ret[k]+'``$'+cObj[j]);
                                 }
                             }
                             ret = eObj.join('$$').split('$$');
@@ -211,8 +238,8 @@
 
                         return ret;
                     },
-                    allComs = getAllcombination(obj.values);
-                console.log(allComs);
+                        allComs;
+
                 tpl.push('<table class="table table-bordered" id="_table2x">');
                 tpl.push('<thead>');
                 tpl.push('<tr>');
@@ -224,16 +251,32 @@
                 tpl.push('</tr>');
                 tpl.push('</thead>');
                 tpl.push('<tbody>');
-                for(var i = 0;i<allComs.length;i++){
-                    tpl.push('<tr>');
-                    var attrArr = allComs[i].split('$');
-                    for(var j = 0;j<attrArr.length;j++){
-                        tpl.push('<td>'+attrArr[j]+'</td>');
+                if(typeof type !== 'undefined'){
+                    allComs = obj.allComs;
+                    for(var i = 0;i<allComs.length;i++){
+                        var _cObj = allComs[i];
+                        tpl.push('<tr>');
+                        for(var j = 0;j<_cObj.com.length;j++){
+                            tpl.push('<td>'+_cObj.com[j]+'</td>')
+                        }
+                        tpl.push('<td><input type="text" value="'+_cObj.price+'"/>元</td>');
+                        tpl.push('<td><input type="text" value="'+_cObj.store+'"/>件</td>');
+                        tpl.push('</tr>');
                     }
-                    tpl.push('<td><input type="text"/>元</td>');
-                    tpl.push('<td><input type="text"/>件</td>');
-                    tpl.push('</tr>');
+                }else{
+                    allComs = getAllcombination(obj.values);
+                    for(var i = 0;i<allComs.length;i++){
+                        tpl.push('<tr>');
+                        var attrArr = allComs[i].split('``$');
+                        for(var j = 0;j<attrArr.length;j++){
+                            tpl.push('<td>'+attrArr[j]+'</td>');
+                        }
+                        tpl.push('<td><input type="text"/>元</td>');
+                        tpl.push('<td><input type="text"/>件</td>');
+                        tpl.push('</tr>');
+                    }
                 }
+
                 tpl.push('</tbody>');
                 tpl.push('</table>');
 
