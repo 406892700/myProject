@@ -103,4 +103,8 @@ module.exports = function(app){
     app.get('/video',function(req,res,next){
         res.render('html5/video/index',{});
     });
+
+    app.get('/attrCtrl',function(req,res,next){
+        res.render('html5/attrControl/index',{});
+    });
 };

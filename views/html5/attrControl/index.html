@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>属性控制器</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap/css/bootstrap.css"/>
+    <script src="javascripts/jquery.min.js"></script>
+    <style>
+        ._showxx{
+            display:block !important;
+        }
+
+        .btn{
+            display:inline-block;
+            width:80px;
+            height:30px;
+            background-color: #0078d8;
+            color:#fff;
+            font-size:14px;
+            line-height: 30px;
+            text-align: center;
+            outline:none;
+            border: none;
+        }
+
+        .btn:disabled{
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <select name="" id="select">
+    </select>
+    <script>
+        var setAttr = (function($){
+
+            /**/
+
+            var data = {
+               '颜色':['蓝色','红色','绿色'],
+				'尺寸':['123*12','33*12'],
+				'材质':['金属','纸质']
+            };
+            /**/
+            var dataObj = {};
+
+            var getData = function(){//获取初始数据
+                return $.ajax({url:''});
+            };
+
+            var initComponent = function ($obj,data) {
+                /*初始化select*/
+                var str = '';
+                for(var i in data){
+                    str+= '<option value="'+i+'">'+i+'</option>';
+                }
+                $obj.append(str);
+                str = '';
+
+                /*初始化选择版*/
+                var $panel = $('<div id="selectAttr" class="selectAttr"></div>');
+                for(var i in data){
+                    str += '<div style="display:none">';
+                    $(data[i]).each(function(i,v){
+                        str += '<input value="'+v+'" type="checkbox"> <span>'+v+'</span> &nbsp;';
+                    });
+                    str+='<button class="btn _btnxx" disabled>确定</button></div>';
+                }
+                $panel.append(str);
+                $panel.insertAfter($obj);
+                str = '';
+            };
+
+            var bindEvent = function($obj){
+                var divs = $('#selectAttr').children('div'),
+                    checkboxs = divs.find('input[type=checkbox]'),
+                    doneBtn = divs.find('._btnxx');
+                $obj.bind('change',function(){
+                    divs.filter('._showxx').removeClass('_showxx');
+                    divs.eq($(this).children(':selected').index()).addClass('_showxx');
+                });
+
+                checkboxs.bind('change',function(evt){
+                    if(checkboxs.filter(':checked').length){
+                        $(this).siblings('._btnxx').removeAttr('disabled');
+                    }else{
+                        $(this).siblings('._btnxx').attr('disabled','disabled');
+                    }
+                });
+
+                doneBtn.bind('click',function(evt){
+                    var _checks = $(this).siblings('input[type=checkbox]'),
+                        _checkeds = _checks.filter(':checked'),
+                        cAttr = $obj.val(),
+                        cVal = [];
+                    _checkeds.each(function(i,v){
+                        cVal.push($(v).val());
+                    });
+                    dataObj[cAttr] = cVal;
+                    _checks.attr('disabled','disabled');
+
+                    initTable1(dataObj);
+                    console.log(dataObj);
+                });
+
+            };
+
+            var initTable1 = function(obj){
+                 var tpl = [];
+                    tpl.push('');
+                    tpl.push('<table class="table table-bordered" id="_table1x">');
+                    tpl.push('<thead>');
+                    tpl.push('<tr>');
+                    tpl.push('<th>属性名称</th>');
+                    tpl.push('<th>属性内容</th>');
+                    tpl.push('<th>操作</th>');
+                    tpl.push('</tr>');
+                    tpl.push('</thead>');
+                    tpl.push('<tbody>');
+                    for(var  i in obj){
+                        tpl.push('<tr>');
+                        tpl.push('<td>'+i+'</td>');
+                        tpl.push('<td>'+obj[i].join(' ')+'</td>');
+                        tpl.push('<td> <a href="javascript:void(0)" class="modify">[修改]</a> <a href="javascript:void(0)" class="del">[删除]</a></td></tr>');
+                        tpl.push('</tr>')
+                    }
+                    tpl.push('</tbody>');
+                    tpl.push('</table>');
+
+                $('#_table1x').remove();
+                $(tpl.join('\n')).insertAfter($('#selectAttr'));
+            };
+
+            var initTable2 = function (obj) {
+
+            };
+
+
+            var init = function($obj){
+                initComponent($obj,data);
+                bindEvent($obj);
+            };
+
+
+            return init;
+        })(jQuery);
+
+        $(function(){
+            setAttr($('#select'));
+        });
+    </script>
+</body>
+</html>
