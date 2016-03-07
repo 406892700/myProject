@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>测试</title>
+    <style>
+        .mask{
+            width:100%;
+            height: 100%;
+            position: fixed;
+            left:0;
+            top:0;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .innerWrap{
+            height:100%;
+            background-color: #fff;
+            overflow-y: scroll;
+        }
+
+        .innerWrap > img{
+            width:100%;
+            height:999px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="mask">
+        <div class="innerWrap">
+            <img src="/html5/bbs/images/video_bg.png" alt=""/>
+        </div>
+    </div>
+</body>
+</html>

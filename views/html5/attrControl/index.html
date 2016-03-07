@@ -31,30 +31,12 @@
             };
             /**/
 
-            var data = {
-                '颜色':['蓝色','红色','绿色','黑色','彩色'],
-				'尺寸':['123x12','33x12'],
-				'材质':['金属','纸质'],
-                'dataObj':[
-                    {keyName:'颜色',values:['红色','蓝色']},
-                    {keyName:'尺寸',values:['123x12']},
-                    {keyName:'材质',values:['纸质']}
-                ],
-                allComs:[
-                    {
-                        com:['红色','123x12','纸质'],price:123,store:333
-                    },
-                    {
-                        com:['蓝色','123x12','纸质'],price:121,store:368
-                    }
-                ]
-            };
             /**/
             var dataObj = [];
             //{name:'dd',values:['蓝色','红色','绿色']}
 
-            var getData = function(){//获取初始数据
-                return $.ajax({url:''});
+            var getData = function(url){//获取初始数据
+                return $.ajax({url:url});
             };
 
             var initComponent = function ($obj,data) {
@@ -63,7 +45,7 @@
                 str+= '<option value="请选择">请选择</option>';
                 for(var i in data){
                     if(i !== 'dataObj' && i !== 'allComs')
-                        str+= '<option value="'+i+'">'+i+'</option>';
+                        str+= '<option value="'+ i+'">'+i.split('|')[0]+'</option>';
                 }
                 $obj.append(str);
                 str = '';
@@ -73,11 +55,14 @@
                 /*初始化选择版*/
                 var $panel = $('<div id="selectAttr" class="selectAttr"></div>');
                 for(var j in data){
-                    str += '<div style="display:none" id="'+j+'">';
-                    $(data[j]).each(function(i,v){
-                        str += '<input value="'+v+'" type="checkbox" id="'+j+"_"+v+'"> <span>'+v+'</span> &nbsp;';
-                    });
-                    str+='<button class="btn btn-primary _btnxx" disabled>确定</button></div>';
+                    if(j !== 'dataObj' && j !== 'allComs'){
+                        str += '<div style="display:none" id="'+ j.replace('|','_')+'">';
+                        $(data[j]).each(function(i,v){
+                            str += '<input value="'+v+'" type="checkbox" id="'+ j.split('|')[0]+"_"+ v.split('|')[1]+'"> <span>'+v.split('|')[0]+'</span> &nbsp;';
+                        });
+                        str+='<button class="btn btn-primary _btnxx" disabled>确定</button></div>';
+                    }
+
                 }
                 $panel.append(str);
                 $panel.insertAfter($obj);
@@ -91,7 +76,7 @@
                     for(var i = 0;i<dataObj.length;i++){
                         var attr = dataObj[i];
                         for(var j = 0;j<attr.values.length;j++){
-                            _arr.push('#'+attr.keyName+'_'+attr.values[j]);
+                            _arr.push('#'+attr.keyName.split('|')[0]+'_'+attr.values[j].split('|')[1]);
                         }
                     }
                     console.log(_arr.join(','));
@@ -132,7 +117,7 @@
                             break;
                         }
                     }
-                    $('#'+cAttr).find('input[type=checkbox]').removeAttr('checked');
+                    $('#'+cAttr.replace('|','_')).find('input[type=checkbox]').removeAttr('checked');
                     dataObj.remove(index);
                     initTable1(dataObj);
                 });
@@ -195,8 +180,12 @@
                     tpl.push('<tbody>');
                     for(var  i = 0;i<obj.length;i++){
                         tpl.push('<tr>');
-                        tpl.push('<td>'+obj[i].keyName+'</td>');
-                        tpl.push('<td>'+obj[i].values.join(' ')+'</td>');
+                        tpl.push('<td>'+obj[i].keyName.split('|')[0]+'</td>');
+                        var values = obj[i].values.join('``$').split('``$');
+                        $(values).each(function(kk,vv){
+                            values[kk] = vv.split('|')[0];
+                        });
+                        tpl.push('<td>'+values.join(' ')+'</td>');
                         tpl.push('<td><a href="javascript:void(0)" class="_delxx" data-key-name="'+obj[i].keyName+'">[删除]</a></td></tr>');
                         tpl.push('</tr>')
                     }
@@ -244,10 +233,10 @@
                 tpl.push('<thead>');
                 tpl.push('<tr>');
                 for(var i =0 ;i<obj.title.length;i++){
-                    tpl.push('<th>'+obj.title[i]+'</th>');
+                    tpl.push('<th data-id="'+obj.title[i].split('|')[1]+'">'+obj.title[i].split('|')[0]+'</th>');
                 }
-                tpl.push('<th>单价</th>');
-                tpl.push('<th>库存</th>');
+                tpl.push('<th class="notDynmic">单价</th>');
+                tpl.push('<th class="notDynmic">库存</th>');
                 tpl.push('</tr>');
                 tpl.push('</thead>');
                 tpl.push('<tbody>');
@@ -257,22 +246,23 @@
                         var _cObj = allComs[i];
                         tpl.push('<tr>');
                         for(var j = 0;j<_cObj.com.length;j++){
-                            tpl.push('<td>'+_cObj.com[j]+'</td>')
+                            tpl.push('<td data-id="'+_cObj.com[j].split('|')[1]+'">'+_cObj.com[j].split('|')[0]+'</td>')
                         }
-                        tpl.push('<td><input type="text" value="'+_cObj.price+'"/>元</td>');
-                        tpl.push('<td><input type="text" value="'+_cObj.store+'"/>件</td>');
+                        tpl.push('<td class="_pricexx"><input type="text" value="'+_cObj.price+'"/>元</td>');
+                        tpl.push('<td class="_storeNumxx"><input type="text" value="'+_cObj.store+'"/>件</td>');
                         tpl.push('</tr>');
                     }
                 }else{
                     allComs = getAllcombination(obj.values);
+                    console.log(allComs);
                     for(var i = 0;i<allComs.length;i++){
                         tpl.push('<tr>');
                         var attrArr = allComs[i].split('``$');
                         for(var j = 0;j<attrArr.length;j++){
-                            tpl.push('<td>'+attrArr[j]+'</td>');
+                            tpl.push('<td class="_attrValuexx" data-id="'+attrArr[j].split('|')[1]+'">'+attrArr[j].split('|')[0]+'</td>');
                         }
-                        tpl.push('<td><input type="text"/>元</td>');
-                        tpl.push('<td><input type="text"/>件</td>');
+                        tpl.push('<td class="_pricexx"><input type="text"/>元</td>');
+                        tpl.push('<td class="_storeNumxx"><input type="text"/>件</td>');
                         tpl.push('</tr>');
                     }
                 }
@@ -285,17 +275,81 @@
             };
 
 
-            var init = function($obj){
-                initComponent($obj,data);
-                bindEvent($obj);
+            var init = function($obj,url){
+                getData(url).done(function(data){
+                    data = {
+                        '颜色|1':['蓝色|1','红色|2','绿色|3','黑色|4','彩色|5'],
+                        '尺寸|2':['123x12|1','33x12|2'],
+                        '材质|3':['金属|1','纸质|2']
+                        ,
+                        'dataObj':[
+                            {keyName:'颜色|1',values:['红色|2','蓝色|3']},
+                            {keyName:'尺寸|2',values:['123x12|2']},
+                            {keyName:'材质|3',values:['纸质|2']}
+                        ],
+                        allComs:[
+                            {
+                                com:['红色|2','123x12|2','纸质|2'],price:123,store:333
+                            },
+                            {
+                                com:['蓝色|1','123x12|2','纸质|2'],price:121,store:368
+                            }
+                        ]
+
+                    };
+                    initComponent($obj,data);
+                    bindEvent($obj);
+                }).fail(function(err){
+                    alert('数据获取错误！');
+                });
+
+            };
+
+            var getValue = function(){
+                var dataSourse = $('#_table2x').find('tbody tr'),
+                    attrsIds = $('#_table2x').find('thead tr th:not(.notDynmic)'),
+                    arr = [],
+                    attrs = [],
+                    ret = [];
+                attrsIds.each(function(i,v){
+                    attrs.push($(v).data('id'));
+                });
+
+                dataSourse.each(function(i,v){
+                    var obj  = {
+                                attrs:[],
+                                inventory:'',
+                                price:''
+                            },
+                        $this = $(this);
+
+
+                    $this.find('td._attrValuexx').each(function(j,vv){
+                        arr.push($(vv).data('id'))
+                    });
+
+                    for(var k = 0;k<attrs.length;k++){
+                        obj.attrs.push({attrId:attrs[k],attrValueId:arr[k]});
+                    }
+                    obj.price = $this.find('td._pricexx > input[type=text]').val();
+                    obj.inventory = $this.find('td._storeNumxx > input[type=text]').val();
+                    ret.push(obj);
+                });
+
+                return ret;
+
             };
 
 
-            return init;
+            return {
+                init:init,
+                getValue:getValue
+            };
         })(jQuery);
 
         $(function(){
-            setAttr($('#select'));
+            setAttr.init($('#select'),'');
+
         });
     </script>
 </body>

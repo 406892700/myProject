@@ -1,0 +1,618 @@
+body{
+    text-align: left;
+    background-color: #eee;
+    font-size: 1.4rem !important;
+    padding-bottom: 30px;
+}
+.pink{
+    color:#f95d6f;
+}
+header.articleInfo{
+    padding:15px 10px 0 10px;
+    background-color: #fff;
+}
+
+header.articleInfo > h2{
+    font-weight: normal;
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+}
+
+header.articleInfo > h2 > .articleType{
+    color:#f95d6f;
+}
+
+header.articleInfo > h2 > .iconType{
+    display: inline-block;
+    width:20px;
+    height: 20px;
+    vertical-align: text-bottom;
+    background-size:20px 20px;
+}
+
+header.articleInfo > h2 > .iconType.video{
+    background-image:url('/html5/bbs/images/bbs_type_video.png');
+}
+
+header.articleInfo > h2 > .iconType.vote{
+    background-image:url('/html5/bbs/images/bbs_type_vote.png');
+}
+
+header.articleInfo > h2 > .iconType.pic{
+    background-image:url('/html5/bbs/images/bbs_type_pic.png');
+}
+
+header.articleInfo > h2 > .iconType.audio{
+    background-image:url('/html5/bbs/images/bbs_type_audio.png');
+}
+
+section.articleInfo{
+    padding:10px 0 0 10px;
+    background-color: #FFf;
+
+}
+
+section.articleInfo > ul{
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 10px;
+}
+
+section.articleInfo > ul > li{
+    float: left;
+    margin-right: 20px;
+    color:#999;
+}
+
+section.articleInfo > ul > li > .iconType{
+    display: inline-block;
+    margin-right: 2px;
+    width:15px;
+    height:15px;
+    vertical-align: top;
+    background-size: 15px 15px;
+}
+
+section.articleInfo > ul > li > .iconType.like{
+    background-image:url('/html5/bbs/images/bbs_info_like.png');
+}
+
+section.articleInfo > ul > li > .iconType.reply{
+    background-image:url('/html5/bbs/images/bbs_info_reply.png');
+}
+
+section.articleInfo > ul > li > .iconType.view{
+    background-image:url('/html5/bbs/images/bbs_info_view.png');
+}
+
+section.articleSec{
+    background-color: #Fff;
+    padding:10px;
+}
+
+section.articleSec > .userInfo{
+
+}
+
+section.articleSec > .userInfo > .userAvatar{
+    border-radius: 50%;
+    overflow: hidden;
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+
+section.articleSec > .userInfo > .userAvatar > img{
+    width: 100%;
+    height: 100%;
+}
+
+section.articleSec > .userInfo > .rightPt{
+    margin-left: 70px;
+    padding-top: 10px;
+}
+
+section.articleSec > .userInfo > .rightPt > p.userName{
+    font-size: 1.6rem;
+}
+
+section.articleSec > .userInfo > .rightPt > p.userName > .tagAuthor{
+    height: 1.6rem;
+    background-color: #f95d6f;
+    color:#fff;
+    font-size: 1.4rem;
+    display: inline-block;
+    border-radius: 3px;
+    padding:2px 5px;
+    line-height: 1.4rem !important;
+    margin-left: 5px;
+    vertical-align: top;
+}
+
+section.articleSec > .userInfo > .rightPt > p.publishTime{
+    color:#999;
+    margin-top: 5px;
+}
+
+section.articleSec > .articleContent{
+
+}
+/*内容中的一些类别*/
+section.articleSec > .articleContent > .typeWrap{
+    margin:10px 0;
+    position: relative;
+}
+
+/*视频*/
+.articleContent > .typeWrap > .typeVideo{
+    position: relative;
+}
+
+.articleContent > .typeWrap > .typeVideo .playBtn{
+    display: block;
+    background: url('/html5/bbs/images/bbs_video_play.png') no-repeat 0 0;
+    width:60px;
+    height: 60px;
+    position: absolute;
+    background-size: cover;
+    left:50%;
+    top:50%;
+    margin-left: -30px;
+    margin-top: -30px;
+}
+
+.articleContent > .typeWrap > .typeVideo > video{
+    width:100%;
+}
+
+.articleContent > .typeWrap > .typeVideo > img{
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+}
+
+.articleContent > .typeWrap > .typeVideo .playBtn.loading{
+    background-image:url('/html5/bbs/images/bbs_video_loading.png');
+    -webkit-animation: rotate 0.5s linear infinite;
+}
+
+@-webkit-keyframes rotate {
+    from{
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to{
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/*投票*/
+.articleContent > .typeWrap > .typeVote{
+
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent{
+    padding: 10px 0;
+
+    border-bottom:1px solid #ccc;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent:first-child{
+    border-top:1px solid #ccc;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent .title{
+    font-size:1.8rem;
+    color:#333;
+    font-weight: bold;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent ol{
+    margin-top: 10px;
+    color:#666;
+    font-size: 1.6rem;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent .checkbox{
+    width:20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    background-size: cover;
+    background-image: url('/html5/bbs/images/bbs_check_uncheck.png');
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li.checked .checkbox{
+    background-image: url('/html5/bbs/images/bbs_check_checked.png');
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li{
+    margin:10px 0;
+    cursor:pointer;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li .leftPt{
+    margin-right: 80px;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li .leftPt > .progress{
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+    background-color: #eee;
+    border-radius: 8px;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li .leftPt > .progress > .percent{
+    float: left;
+    height: 8px;
+    background-color:#9cd5a1 ;
+    border-radius: 8px;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li .leftPt > p{
+    color:#666;
+    font-size: 1.4rem;
+    margin-top: 8px;
+}
+
+.articleContent > .voteWrap > .typeVote .voteContent li .rightPt{
+    width: 70px;
+    float: right;
+    text-align: right;
+    line-height: 100%;
+}
+
+.articleContent > .voteWrap > .typeVote > .btnArea{
+    text-align: center;
+}
+
+.articleContent > .voteWrap > .typeVote > .btnArea .submitVote{
+    display: inline-block;
+    width:200px;
+    background-color: #f95d6f;
+    color:#fff;
+    font-size:1.6rem;
+    height: 35px;
+    line-height: 35px;
+    margin: 10px auto 0px auto;
+    border-radius: 5px;
+}
+
+/*图片*/
+.articleContent > .typeWrap > .typePic{
+    text-align: left;
+    overflow: hidden;
+}
+
+.articleContent > .typeWrap > .typePic > a{
+    display: inline-block;
+    border:3px solid #fff;
+    float: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.articleContent > .typeWrap > .typePic > a > img{
+    width: 100%;
+}
+
+.articleContent > .typeWrap > .typePic > a > img.real{
+    height: 100%;
+    position: absolute;
+    left:0;
+    top:0;
+}
+
+.articleContent > .typeWrap > .typePic.amount12 > a{
+    width: 100%;
+}
+
+.articleContent > .typeWrap > .typePic.amount3 > a{
+    width: 33.3333%;
+    overflow: hidden;
+    height: 0;
+    padding-bottom: 32.60%;
+}
+
+
+section.replySec{
+    margin-top: 15px;
+    background-color: #Fff;
+    padding:0 0px 0 10px;
+}
+
+section.replySec li{
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+}
+
+section.replySec li > div{
+    padding:10px;
+    position: relative;
+}
+
+section.replySec li aside.operation{
+    position: absolute;
+    right: 0;
+    top:13px;
+}
+
+section.replySec li aside.operation > a.iconOp{
+    width:20px;
+    height: 20px;
+    display: inline-block;
+    margin: 0 15px;
+    background-size:20px 20px;
+}
+
+section.replySec li aside.operation > a.iconOp.delete{
+    background-image:url('/html5/bbs/images/bbs_delete.png');
+}
+
+section.replySec li aside.operation > a.iconOp.delete:active{
+    background-image:url('/html5/bbs/images/bbs_delete_actived.png');
+}
+
+section.replySec li aside.operation > a.iconOp.reply{
+    background-image:url('/html5/bbs/images/bbs_replay.png');
+}
+
+section.replySec li aside.operation > a.iconOp.reply:active{
+    background-image:url('/html5/bbs/images/bbs_replay_actived.png');
+}
+
+section.replySec li .userAvatar{
+    float: left;
+    width:50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+section.replySec li .userAvatar > img{
+    width: 100%;
+    height: 100%;
+}
+
+section.replySec li .replyItem{
+    margin-left: 60px;
+    padding-top: 5px;
+}
+
+section.replySec li .replyItem > p{
+    margin-bottom: 3px;
+}
+
+section.replySec li .replyItem > p.userName{
+    color:#f95d6f;
+
+    font-size: 1.6rem;
+}
+
+section.replySec li .replyItem > p.reply_info{
+    color:#999;
+}
+
+section.replySec li .replyItem > p.reply_info > span.time{
+    display: inline-block;
+    margin-left: 15px;
+}
+
+section.replySec li .replyItem > p.replyContent{
+    color:#333;
+    padding:5px 0;
+    line-height: 2.0rem;
+}
+
+section.replySec li .replyItem > p.replyContent .replyTo{
+    color:#f95d6f;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+section.replySec .allReplyItem{
+    padding:20px 10px;
+    font-size: 1.4rem;
+}
+
+section.replySec .allReplyItem > a.lookMoreReply{
+    float: right;
+    color:#418af8;
+    margin-right: 30px;
+}
+
+.goTop{
+    position: fixed;
+    right:10px;
+    top:-63px;
+    width:50px;
+    height: 63px;
+    background: url('/html5/bbs/images/bbs_to_top.png') no-repeat 0 0;
+    background-size:cover;
+    transition:top 0.5s;
+    -webkit-transition:top 0.5s;
+}
+
+.goTop.actived{
+    top:0;
+}
+
+
+/*音频*/
+.x_audio > .left_icon{
+    width: 30px;
+    float: left;
+    height: 30px;
+}
+
+.x_audio > .left_icon a{
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url('/html5/bbs/images/bbs_audio_play.png') no-repeat 0 0;
+    background-size: cover;
+    margin-top: 5px;
+}
+
+.x_audio > .left_icon a.pause{
+    background: url('/html5/bbs/images/bbs_audio_pause.png') no-repeat 0 0;
+    background-size: cover;
+}
+
+
+.x_audio > .right_progress{
+    margin-left: 30px;
+    margin-right: 70px;
+    height: 30px;
+    position: relative;
+    /*background: url('/html5/bbs/images/bbs_audio_bg.png') repeat-x 0 50%;*/
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding:0px 10px;
+    overflow: hidden;
+}
+
+.x_audio > .right_progress > div.x_progress_wrap{
+    height: 30px;
+    padding-top: 1px;
+    /*overflow: hidden;*/
+    background: url('/html5/bbs/images/bbs_audio_bg.png') repeat-x 0 50%;
+    position: relative;
+}
+
+.x_audio > .right_progress > div.x_progress_wrap > .x_percent_bg{
+    height: 30px;
+    position: relative;
+    float: left;
+    background: url('/html5/bbs/images/bbs_audio_percent.png') repeat-x 0 50%;
+    width: 0;
+}
+
+.x_audio > .right_progress .pro_bar{
+    position: relative;
+    height: 4px;
+    width: 100%;
+    background-color: #ccc;
+    border-radius: 4px;
+    margin-top: 12px;
+}
+
+.x_audio > .right_progress .pro_bar > .x_percent{
+    height: 4px;
+    background-color: #f95d6f;
+}
+
+.x_audio > .right_progress a{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 0;
+    top: 7px;
+    background: url('/html5/bbs/images/bbs_audio_drag.png') no-repeat 0 0;
+    background-size: cover;
+}
+
+.x_audio > .x_time{
+    text-align: right;
+    color:#f95d6f;
+    font-size:1.6rem;
+    width:70px;
+    float: right;
+    margin-top: 5px;
+}
+
+/*图片阅览大图*/
+.bbs_mask{
+    background-color:rgba(0,0,0,1);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left:0;
+    top:0;
+}
+
+.bbs_mask > .inner_wrap{
+    height:100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.bbs_mask > .inner_wrap > .loading{
+    position: absolute;
+    background-image:url('/html5/bbs/images/bbs_icon_loading.png');
+    width:30px;
+    height: 30px;
+    left:50%;
+    top:50%;
+    margin-top:-15px;
+    margin-left: -15px;
+    -webkit-animation: rotate 1.5s linear infinite;
+}
+
+.bbs_mask img{
+    width:100%;
+    top:50%;
+}
+
+
+/*弹窗的样式*/
+.__tips_mask{
+    position: fixed;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0,0.5);
+    text-align: center;
+    box-sizing:border-box;
+    color:#666;
+}
+
+.__tips_mask > .__tips{
+    max-width:320px;
+    width:80%;
+    background-color: #fff;
+    position:absolute;
+    left:50%;
+    top:50%;
+    -webkit-transform:translate(-50%,-50%);
+    -moz-transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%);
+    -o-transform:translate(-50%,-50%);
+    transform:translate(-50%,-50%);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.__tips_mask > .__tips > .__content{
+    padding:35px 10px;
+    border-bottom: 1px solid #d1d1d1;
+    word-break:break-all;
+}
+
+.__tips_mask > .__tips > .__btm{
+    height:35px;
+    line-height: 35px;
+}
+
+.__tips_mask > .__tips > .__btm > a{
+    display: block;
+    height:100%;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    color:#666;
+    text-decoration: none;
+}
+
+.__tips_mask > .__tips > .__btm > a.half{
+    width:50%;
+    float:left;
+    box-sizing:border-box;
+}
+
+.__tips_mask > .__tips > .__btm > a.half:first-child{
+    border-right: 1px solid #d1d1d1;
+}

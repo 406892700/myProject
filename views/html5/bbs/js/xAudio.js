@@ -50,13 +50,15 @@ var xAudio = (function($){
     /*回调函数对象*/
     var callback = {
         /*这个是做一些初始化*/
-        canplay: function (audio,ctrl_btn,ctrl_bar,ctrl_time) {
+        canplay: function (audio,ctrl_btn,ctrl_bar,ctrl_time,c_percent,c_bg) {
             //audio.play();
             var loop = function(){
                 var cTime = audio.currentTime,
                     aTime = audio.duration,
                     allWidth = ctrl_bar.width()-30;
-                    ctrl_btn.css('left',allWidth*cTime/aTime+'px');
+                ctrl_btn.css('left',allWidth*cTime/aTime-1+'px');
+                c_percent.css('width',allWidth*cTime/aTime+'px');
+                c_bg.css('width',allWidth*cTime/aTime+'px');
                 ctrl_time.text(util.formatTime(aTime-cTime));
 
                 if(aTime == cTime){
@@ -93,7 +95,7 @@ var xAudio = (function($){
             });
         },
         /*滑块拖放*/
-        touchDrag : function (audio,ctrl_btn,ctrl_bar,ctrl_time) {
+        touchDrag : function (audio,ctrl_btn,ctrl_bar,ctrl_time,c_percent,c_bg) {
             var allWidth = ctrl_bar.width()-20;
 
             ctrl_btn[0].addEventListener('touchstart', function (evt) {
@@ -111,7 +113,8 @@ var xAudio = (function($){
                         currentTime = offsetX/allWidth*audio.duration;
                         audio.currentTime = ~~currentTime;
                         ctrl_btn[0].style.left = offsetX+'px';
-
+                        c_percent[0].style.width = offsetX+'px';
+                        c_bg[0].style.width = offsetX+'px';
                     };
 
 
@@ -146,16 +149,20 @@ var xAudio = (function($){
     XAudio.prototype.getTpl = function () {
         var tpl = [];
         tpl.push("<div class=\"x_audio\" id=\""+this.id+"\">\n");
-        tpl.push("<div class=\"left_icon\">\n");
-        tpl.push("<a href=\"javascript:void(0)\" class=\"icon_audio\"></a>\n");
-        tpl.push("</div>\n");
-        tpl.push("<div class=\"right_progress\">\n");
-        tpl.push("<div class=\"pro_bar\"></div>\n");
-        tpl.push("<a href=\"javascript:void(0)\" class=\"__ctrl_btn play\"></a>\n");
-        tpl.push("</div>\n");
-        tpl.push("<div class=\"x_time\">\n");
-        tpl.push("-<span class=\"__ctrl_time\">"+util.formatTime(0)+"</span>\n");
-        tpl.push("</div>\n");
+            tpl.push("<div class=\"left_icon\">\n");
+            tpl.push("<a href=\"javascript:void(0)\" class=\"icon_audio\"></a>\n");
+            tpl.push("</div>\n");
+            tpl.push("<div class=\"x_time\">\n");
+            tpl.push("<span class=\"__ctrl_time\">"+util.formatTime(0)+"</span>\n");
+            tpl.push("</div>\n");
+            tpl.push("<div class=\"right_progress\">\n");
+            tpl.push("<div class=\"x_progress_wrap\">");
+            tpl.push("<div class=\"x_percent_bg\"></div>");
+            tpl.push("<div class=\"pro_bar\"><div class=\"x_percent\"></div></div>\n");
+            tpl.push("<a href=\"javascript:void(0)\" class=\"__ctrl_btn play\"></a>\n");
+            tpl.push("</div>\n");
+            tpl.push("</div>");
+
         tpl.push("</div>\n");
 
         return tpl.join('');
@@ -176,29 +183,31 @@ var xAudio = (function($){
             c_play_btn = $(context_id+' .icon_audio'),
             c_time = $(context_id+' .__ctrl_time'),
             c_bar = $(context_id+' .right_progress'),
+            c_percent = $(context_id+' .x_percent'),
+            c_bg = $(context_id+' .x_percent_bg'),
             audio = this.audio;
         /*
         * ---------------------------------------------
         *
         *  下面注释掉的地方在ios中无法触发这个事件，
         *  好特么神奇，到时候再研究研究
+        *  已解决:必须先播放，所以将视屏设置为autoplay
+        *
         *
         * ---------------------------------------------
         * */
         var ADUIO = this.audio;
         ADUIO.onloadeddata = function(){
             ADUIO.pause();
-            callback.canplay(audio,c_btn,c_bar,c_time);
-            callback.touchDrag(audio,c_btn,c_bar,c_time);
+            callback.canplay(audio,c_btn,c_bar,c_time,c_percent,c_bg);
+            callback.touchDrag(audio,c_btn,c_bar,c_time,c_percent,c_bg);
             callback.play(audio,c_play_btn);
             callback.pause(audio,c_play_btn);
             callback.clickBtn(audio,c_play_btn);
         };
-
-
     };
 
     return function (elem,src) {
         return new XAudio(elem,src);
     }
-})(xQuery||jQuery);
+})($);

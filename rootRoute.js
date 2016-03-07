@@ -11,5 +11,6 @@ module.exports  = [
     require('./routes/html/htmlRoutes'),
     require('./routes/demo/demo'),
     require('./routes/admin/dashboard/dashRoute'),
-    require('./routes/someDemo/demo')
+    require('./routes/someDemo/demo'),
+ require('./routes/gulu/gulu')
 ];
