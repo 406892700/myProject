@@ -7,108 +7,110 @@ module.exports = function(app){
     });
 
     app.get('/bbs/getdata',function(req,res){
+
         var obj = {
-            code:0,
-            data:{
-                a_id:12,//文章id
-                a_author_id:12,//作者id
-                a_type:'区角活动',//文章类别
-                a_title:'我从未停止过，要成为一个坏人的决心',//文章标题
-                a_media_type_name:'video',//pic,audio,vote//多媒体类别名称
-                a_media_type:4,//多媒体类别id
-                ifVoted:false,//是否投过票了
-                a_media_data:{//类别数据(根据不同的类别来给不同的数据类型)
-                    //音频
-                    audioUrl:'/html5/audio/1.mp3',
-
-                    //视频
-                    videoUrl:'http://file.bmob.cn/M02/24/A0/oYYBAFaA3fqAGfZrAA-DvCSCS4g866.mp4',
-                    videoPic:'/html5/bbs/images/video_bg.png',
-
-                    //图片列表
-                    imgList:['/html5/bbs/images/video_bg.png','/html5/bbs/images/video_bg.png','/html5/bbs/images/ranklist_bg.png','/html5/bbs/images/video_bg.png','/html5/bbs/images/ranklist_bg.png']
+            code: "0",
+            errmsg: "",
+            result: {
+                a_article: {
+                    a_content: "<p>se<br/></p>",
+                    author_info: {
+                        avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                        name: "软软爷爷",
+                        time: "2016-03-03 19:00:49"
+                    }
                 },
-                a_info:{//点赞。回复，浏览
-                    like:1522,
-                    reply:151,
-                    view:1511
+                a_author_id: "125968",
+                a_id: "6",
+                a_info: {
+                    like: "3",
+                    reply: "2",
+                    view: "7"
                 },
-                votes:[
-                    {//投票（没投过都一样）
-                        voteTheme:'孩子作业多好不好啊1？', //投票主体
-                        voteAll:180,//所有选项总票数
-                        voteItems:[
-                            {id:12, value:30, content:'A 支持 孩子就要从小抓起'},
-                            {id:14, value:60, content:'B 支持 孩子就要从小抓起'},
-                            {id:13, value:90, content:'C 支持 孩子就要从小抓起'}
-                        ]
+                a_media_data: {
+                    imgList: [
+                        "http://192.168.1.3/upload/other/2016/03/03/81D723E3E7FE408484A1BDED2E3C8ED8_100_100.png"
+                    ]
+                },
+                a_media_type: "2",
+                a_media_type_name: "vote",
+                a_title: "sss",
+                a_type: "活动",
+                ifVoted: false,
+                replys: [
+                    {
+                        content: "呵呵呵，",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
                     },
-                    {//投票（没投过都一样）
-                        voteTheme:'孩子作业多好不好啊2？', //投票主体
-                        voteAll:180,//所有选项总票数
-                        voteItems:[
-                            {id:15, value:30, content:'A 支持 孩子就要从小抓起'},
-                            {id:24, value:60, content:'B 支持 孩子就要从小抓起'},
-                            {id:53, value:90, content:'C 支持 孩子就要从小抓起'}
-                        ]
+                    {
+                        content: "999",
+                        id: "3",
+                        index: "2",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:09:58",
+                        toName: "软软爷爷"
                     },
-                    {//投票（没投过都一样）
-                        voteTheme:'孩子作业多好不好啊3？', //投票主体
-                        voteAll:180,//所有选项总票数
-                        voteItems:[
-                            {id:82, value:30, content:'A 支持 孩子就要从小抓起'},
-                            {id:114, value:60, content:'B 支持 孩子就要从小抓起'},
-                            {id:193, value:90, content:'C 支持 孩子就要从小抓起'}
-                        ]
+                    {
+                        content: "555",
+                        id: "2",
+                        index: "3",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:09:41",
+                        toName: ""
                     }
                 ],
-                a_article:{//文章正文信息
-                    a_content:'dsfsdsfd',//文章正文
-                    author_info:{
-                        name:'大海啊',
-                        avatar:'/html5/bbs/images/useravatar.png',
-                        time:'2011-11-11 11:11'
-                    }
-                },
-
-                replys:[
+                votes: [
                     {
-                        id:12,//评论id
-                        replyer_id:12,//回复者id
-                        replyer:{//回复者信息
-                            name:'大海啊',
-                            avatar:'/html5/bbs/images/useravatar.png',
-                        },
-                        index:1,//多少多少楼
-                        time:'2011-11-11 11:11',//回复时间
-                        content:'cddsfssdf',//回复内容
-                        toName:'呵呵'
+                        single: true,
+                        voteAll: "11",
+                        voteItems: [
+                            {
+                                content: "1 哈搜",
+                                id: "3",
+                                value: "1"
+                            },
+                            {
+                                content: "2 dd",
+                                id: "4",
+                                value: "5"
+                            }
+                        ],
+                        voteTheme: "补补订单"
                     },
                     {
-                        id:15,//评论id
-                        replyer_id:12,//回复者id
-                        replyer:{//回复者信息
-                            name:'大海啊',
-                            avatar:'/html5/bbs/images/useravatar.png',
-                        },
-                        index:2,//多少多少楼
-                        time:'2011-11-11 11:11',//回复时间
-                        content:'cddsfssdf',//回复内容
-                        toName:'呵呵'
-                    },
-                    {
-                        id:1,//评论id
-                        replyer_id:1,//回复者id
-                        replyer:{//回复者信息
-                            name:'大海啊',
-                            avatar:'/html5/bbs/images/useravatar.png',
-                        },
-                        index:3,//多少多少楼
-                        time:'2011-11-11 11:11',//回复时间
-                        content:'cddsfssdf'//回复内容
+                        single: false,
+                        voteAll: "11",
+                        voteItems: [
+                            {
+                                content: "1 哈搜",
+                                id: "3",
+                                value: "1"
+                            },
+                            {
+                                content: "2 dd",
+                                id: "4",
+                                value: "5"
+                            }
+                        ],
+                        voteTheme: "补补订单"
                     }
                 ]
-
             }
         };
 
@@ -118,33 +120,40 @@ module.exports = function(app){
     app.get('/api/vote',function(req,res){
         var obj = {
             code:0,
-            data:[
-                {//投票（没投过都一样）
-                    voteTheme:'孩子作业多好不好啊1？', //投票主体
-                    voteAll:180,//所有选项总票数
-                    voteItems:[
-                        {id:12, value:30, content:'A 支持 孩子就要从小抓起'},
-                        {id:14, value:60, content:'B 支持 孩子就要从小抓起'},
-                        {id:13, value:90, content:'C 支持 孩子就要从小抓起'}
-                    ]
+            result:[
+                {
+                    single: true,
+                    voteAll: "11",
+                    voteItems: [
+                        {
+                            content: "1 哈搜",
+                            id: "3",
+                            value: "1"
+                        },
+                        {
+                            content: "2 dd",
+                            id: "4",
+                            value: "5"
+                        }
+                    ],
+                    voteTheme: "补补订单"
                 },
-                {//投票（没投过都一样）
-                    voteTheme:'孩子作业多好不好啊2？', //投票主体
-                    voteAll:180,//所有选项总票数
-                    voteItems:[
-                        {id:12, value:30, content:'A 支持 孩子就要从小抓起'},
-                        {id:14, value:60, content:'B 支持 孩子就要从小抓起'},
-                        {id:13, value:90, content:'C 支持 孩子就要从小抓起'}
-                    ]
-                },
-                {//投票（没投过都一样）
-                    voteTheme:'孩子作业多好不好啊3？', //投票主体
-                    voteAll:180,//所有选项总票数
-                    voteItems:[
-                        {id:12, value:30, content:'A 支持 孩子就要从小抓起'},
-                        {id:14, value:60, content:'B 支持 孩子就要从小抓起'},
-                        {id:13, value:90, content:'C 支持 孩子就要从小抓起'}
-                    ]
+                {
+                    single: false,
+                    voteAll: "11",
+                    voteItems: [
+                        {
+                            content: "1 哈搜",
+                            id: "3",
+                            value: "1"
+                        },
+                        {
+                            content: "2 dd",
+                            id: "4",
+                            value: "5"
+                        }
+                    ],
+                    voteTheme: "补补订单"
                 }
             ]
         };
@@ -154,5 +163,150 @@ module.exports = function(app){
 
     app.get('/testMask',function(req,res){
         res.render('html5/bbs/testMask',{});
+    });
+
+    app.get('/allreply', function (req, res) {
+        res.render('html5/bbs/reply',{});
+    });
+
+    app.get('/getReply', function (req, res) {
+        var count = req.query.count, obj ={};
+        console.log(count);
+        if(count >= 5){
+            obj = {
+                code:0,
+                errmsg:'',
+                result:[]
+            }
+        }else{
+            obj = {
+                code:0,
+                errmsg:'',
+                result:[
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "呵呵呵",
+                        id: "4",
+                        index: "1",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:10:24",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "999",
+                        id: "3",
+                        index: "2",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:09:58",
+                        toName: "软软爷爷"
+                    },
+                    {
+                        content: "555",
+                        id: "2",
+                        index: "3",
+                        replyer: {
+                            avatar: "http://pay.gulubaobao.com/images/ic_launcher_small.png",
+                            name: "软软爷爷"
+                        },
+                        replyer_id: "125968",
+                        time: "2016-03-08 14:09:41",
+                        toName: ""
+                    }
+                ]
+            };
+        }
+
+        res.json(obj);
     });
 };

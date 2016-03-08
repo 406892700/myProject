@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta content="telephone=no" name="format-detection" />
+    <title>详情</title>
+    <link rel="stylesheet" href="/html5/bbs/css/common.css"/>
+    <link rel="stylesheet" href="/html5/bbs/css/detail.css"/>
+    <script src="/javascripts/zepto.min.js"></script>
+    <script src="/javascripts/fastclick.js"></script>
+    <script src="/html5/bbs/js/mobileTips.js"></script>
+    <script src="/html5/bbs/js/bbsDetail.js"></script>
+    <style>
+        .replySec{
+            margin-top: 0 !important;
+        }
+
+
+    </style>
+</head>
+<body>
+    <section id="reply" class="replySec">
+
+    </section>
+    <div class="flush_loading"><span></span></div>
+    <div class="no_more" style="display:none;">没有更多啦~</div>
+    <aside class="goTop">
+    </aside>
+    <script>
+        $(function () {
+            //音频初始化
+            BBS.initReply();
+            // xAudio('html5/audio/1.mp3',$('.audioWrap'));
+        });
+    </script>
+
+</body>
+</html>

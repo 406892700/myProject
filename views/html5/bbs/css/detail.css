@@ -2,7 +2,6 @@ body{
     text-align: left;
     background-color: #eee;
     font-size: 1.4rem !important;
-    padding-bottom: 30px;
 }
 .pink{
     color:#f95d6f;
@@ -615,4 +614,29 @@ section.replySec .allReplyItem > a.lookMoreReply{
 
 .__tips_mask > .__tips > .__btm > a.half:first-child{
     border-right: 1px solid #d1d1d1;
+}
+
+
+/*评论页面的样式*/
+.flush_loading,.no_more{
+    height:40px;
+    line-height: 40px;
+    position: relative;
+    font-size:16px;
+    color:#333;
+    text-align: center;
+}
+
+.flush_loading > span{
+    width:30px;
+    height:30px;
+    background-image:url('/html5/bbs/images/icon_flush_loading.png');
+    background-size: cover;
+    display: block;
+    position: absolute;
+    left:50%;
+    top:50%;
+    margin-top:-15px;
+    margin-left: -15px;
+    -webkit-animation: rotate 1s linear infinite;
 }

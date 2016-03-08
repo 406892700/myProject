@@ -6,7 +6,7 @@ var BBS = (function(){
             handleAjax : function(data,callback,callback1){
                 callback1 = callback1 || function(){};
                 if(data.code*1 === 0){
-                    callback(data.data);
+                    callback(data.result);
                 }else{
                     alert(data.errmsg);
                     callback1();
@@ -36,17 +36,33 @@ var BBS = (function(){
                 tid:1
             },
             success:function(data){
-                if(data.code*1 == -1){
-                    alert(data.errmsg);
-                    return;
-                }
-
-                renderData(data.data);
+                util.handleAjax(data,function(data){
+                    renderData(data);
+                });
             },
             error: function (err) {
-                alert('数据获取错误！');
+                util.errAlert();
             }
         })
+    };
+
+    var goTop = function($obj){
+        var oY = 0,
+            jumpTop = function(){
+                document.body.scrollTop = 0;
+            };
+        $obj.bind('click',jumpTop);
+
+        $(window).scroll(function(evt){
+            var cY = $(this).scrollTop();
+            if(cY-oY > 0){
+                $obj.addClass('actived');
+            }else{
+                $obj.removeClass('actived');
+            }
+            oY = cY;
+
+        });
     };
 
     var renderTop = function (data,$wrapTop) {
@@ -248,6 +264,7 @@ var BBS = (function(){
         if(!data || !data.length)return;
         var voteTpl = [],
             showResult = function(data,$wrap){
+                console.log(data);
                 var voteTpl2 = [];
                 voteTpl2.push('<div class="typeVote">');
                 $(data).each(function(index,v){
@@ -273,16 +290,16 @@ var BBS = (function(){
 
                 });
                 voteTpl2.push('</div>');
-
                 $wrap.append(voteTpl2.join('\n'));
 
             };
-        if(!flag){//没投票
+        if(!flag && args.uid){//没投票
             voteTpl.push('<div class="typeVote">');
             $(data).each(function(index,v){
-                voteTpl.push('<div class="voteContent" data-vote-all="'+v.voteAll+'">');
+                voteTpl.push('<div class="voteContent" data-vote-all="'+v.voteAll+'" data-single="'+ v.single+'"> ');
                 voteTpl.push('<div class="title">');
-                voteTpl.push(''+v.voteTheme+'');
+                var typeName = v.single ? '单选' : '多选';
+                voteTpl.push(v.voteTheme+'('+typeName+')');
                 voteTpl.push('</div>');
                 voteTpl.push('<ol>');
                 for(var i = 0,length = v.voteItems.length;i<length;i++){
@@ -300,20 +317,33 @@ var BBS = (function(){
             $wrap.append(voteTpl.join(''));
 
             $wrap.find('li').bind('click',function(){
-                $(this).siblings('li.checked').removeClass('checked');
-                $(this).addClass('checked');
+                var single =  $(this).closest('.voteContent').data('single');
+
+                if(single){
+                    $(this).siblings('li.checked').removeClass('checked');
+                    $(this).addClass('checked');
+                }else{
+                    $(this).toggleClass('checked');
+                }
+
             });
             //
             $wrap.find('.btnArea').bind('click',function(){
                 var $this = $(this),
-                    voteItemNum = $('.voteContent').length,
+                    voteItemNum = $('.voteContent'),
                     ids = [].map.call($wrap.find('li.checked'),function(v,i){
                         return $(v).data('id');
                     });
-                if(ids.length < voteItemNum){
-                    $.Alert('您还没有全部投完哦~');
-                    return;
+                for(var j = 0;j<voteItemNum.length;j++){
+                    if(voteItemNum.eq(j).find('.checked').length === 0){
+                        $.Alert('您还没有全部投完哦~');
+                        return;
+                    }
                 }
+                //if(ids.length < voteItemNum){
+                //    $.Alert('您还没有全部投完哦~');
+                //    return;
+                //}
 
                 if($this.hasClass('disabeld')){
                     return;
@@ -328,7 +358,7 @@ var BBS = (function(){
                         $this.removeClass('disabeld');
                         util.handleAjax(data,function(data){
                             $wrap.empty();
-                            //alert(1);
+                            console.log(data);
                             showResult(data,$wrap);
                         });
                     },
@@ -343,11 +373,12 @@ var BBS = (function(){
 
     };
 
-    var renderReply = function (data,$wrapReply) {
-        var replyTpl = [];
-        replyTpl.push("<section class=\"replySec\">\n");
+    /*获取评论模板*/
+    var getReplyTpl = function(data){
+        var replyTpl = [],
+            replys = data;
         replyTpl.push("<ul>\n");
-        var replys = data.replys;
+
         for(var i = 0,length = replys.length;i<length;i++){
             replyTpl.push("<li id=\"reply_"+replys[i].id+"\">\n");
             replyTpl.push("<div class=\"clearfix1\">\n");
@@ -383,16 +414,13 @@ var BBS = (function(){
         }
 
         replyTpl.push("</ul>\n");
-        replyTpl.push("<div class=\"allReplyItem\">\n");
-        replyTpl.push("已有 <span class=\"pink\">"+data.a_info.reply+"</span>人跟帖\n");
-        replyTpl.push("<a href=\"#\" class=\"lookMoreReply\">查看更多评论 &gt;</a>\n");
-        replyTpl.push("</div>\n");
-        replyTpl.push("</section>\n");
-        replyTpl.push("<!-- 回复区域-->\n");
 
-        $wrapReply.append(replyTpl.join(''));
+        return replyTpl.join('');
+    };
 
-        $('.replySec li').find('.iconOp.delete').bind('click',function(){
+    /*绑定删除评论事件*/
+    var bindReplyEvent = function(){
+        $('.replySec').on('click','.iconOp.delete',function(){
             var reply_id = $(this).data('id'),
                 $replyItem = $('#reply_'+reply_id),
                 viewportWidth = $(window).width(),
@@ -402,36 +430,116 @@ var BBS = (function(){
                         data:{
                             id:reply_id
                         },
-                        success:function(){
-                            $replyItem.find('.clearfix1')
-                                .animate({'-webkit-transform':'translateX(-'+viewportWidth+'px)','transform':'translateX(-'+viewportWidth+'px)'},
-                                1000,
-                                'ease-in-out',
-                                function(){
-                                $replyItem.remove();
+                        success:function(data){
+                            util.handleAjax(data,function(data){
+                                $replyItem.find('.clearfix1')
+                                    .animate({'-webkit-transform':'translateX(-'+viewportWidth+'px)','transform':'translateX(-'+viewportWidth+'px)'},
+                                    1000,
+                                    'ease-in-out',
+                                    function(){
+                                        $replyItem.remove();
+                                    });
                             });
+
                         },
                         error:function(err){
                             util.errAlert();
                         }
                     })
-            };
+                };
             $.Confirm('确定删除此条评论？',{doneText:'删除',doneCallback:deletefunc})
         });
     };
 
+    /*放入模板*/
+    var renderReply = function (data,$wrapReply) {
+        var replyTpl = [];
+        replyTpl.push("<section class=\"replySec\">\n");
+        replyTpl.push(getReplyTpl(data.replys));
+        replyTpl.push("<div class=\"allReplyItem\">\n");
+        replyTpl.push("已有 <span class=\"pink\">"+data.a_info.reply+"</span>人跟帖\n");
+        replyTpl.push("<a href=\"#\" class=\"lookMoreReply\">查看更多评论 &gt;</a>\n");
+        replyTpl.push("</div>\n");
+        replyTpl.push("</section>\n");
+        replyTpl.push("<!-- 回复区域-->\n");
+        $wrapReply.append(replyTpl.join(''));
+        bindReplyEvent();
+    };
+
+    /*数据与模板拼接*/
     var renderData = function (data) {
+        FastClick.attach(document.body);
         renderTop(data,$('#top'));
         renderContent(data,$('#content'));
         renderReply(data,$('#reply'));
+        goTop($('.goTop'));
+    };
+
+    var lastId = 0,
+        count = 0;
+    /*评论页获取模板*/
+    var getReply = function(id){
+        id = id || 0;
+        var tid = util.getQueryField('tid'),
+            ifEnd = false;
+
+        $.ajax({
+            url:'/getReply?count='+(count++),
+            data:{
+                tid:tid,
+                id:id
+            },
+            async:false,
+            success: function (data) {
+                util.handleAjax(data,function(data){
+                    if(!data.length) {
+                        ifEnd = true;
+                        return;
+                    }
+                    $('#reply').append(getReplyTpl(data));
+                    lastId = data[data.length-1].id;
+                });
+            },
+            error: function (err) {
+                util.errAlert();
+            }
+        });
+
+        return ifEnd;
+
+    };
+
+    var initReply = function(){
+        FastClick.attach(document.body);
+        getReply();
+        bindReplyEvent();
+        goTop($('.goTop'));
+        lazyFlush($('.flush_loading'),$('.no_more'));
+    };
+
+    var lazyFlush = function($flush,$noMore){
+        var load = function(){
+            if($(document).height()-$(window).scrollTop()-$(window).height() <= 10){
+                var ifEnd = getReply(lastId);
+                if(ifEnd){
+                    $(window).unbind('scroll',load);
+                    $flush.css('display','none');
+                    $noMore.css('display','block');
+                    return;
+                }
+                $(window).unbind('scroll',load);
+                setTimeout(function(){
+                    $(window).bind('scroll',load);
+                },50);
+            }
+
+        };
+
+        $(window).bind('scroll',load);
     };
 
     return {
-        initPage:initPage
+        initPage:initPage,
+        initReply:initReply
     }
 })($);
-$(function () {
-    //音频初始化
-    BBS.initPage();
-   // xAudio('html5/audio/1.mp3',$('.audioWrap'));
-});
