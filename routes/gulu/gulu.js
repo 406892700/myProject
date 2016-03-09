@@ -28,11 +28,14 @@ module.exports = function(app){
                     view: "7"
                 },
                 a_media_data: {
+                    audioUrl: "http://192.168.1.6/down/pic.jsp?filename=/head/2015/12/01/1.mp3"
+                },
+                /*a_media_data: {
                     imgList: [
                         "http://192.168.1.3/upload/other/2016/03/03/81D723E3E7FE408484A1BDED2E3C8ED8_100_100.png"
                     ]
-                },
-                a_media_type: "2",
+                },*/
+                a_media_type: "3",
                 a_media_type_name: "vote",
                 a_title: "sss",
                 a_type: "活动",

@@ -112,6 +112,7 @@ var xAudio = (function($){
                         }
                         currentTime = offsetX/allWidth*audio.duration;
                         audio.currentTime = ~~currentTime;
+                        console.log(audio.currentTime);
                         ctrl_btn[0].style.left = offsetX+'px';
                         c_percent[0].style.width = offsetX+'px';
                         c_bg[0].style.width = offsetX+'px';

@@ -28,6 +28,7 @@ var BBS = (function(){
             accesstoken : util.getQueryField('accesstoken')
         };
 
+    /*初始化详情页面*/
     var initPage = function(){
         $.ajax({
             async:false,
@@ -46,6 +47,7 @@ var BBS = (function(){
         })
     };
 
+    /*跳到顶部*/
     var goTop = function($obj){
         var oY = 0,
             jumpTop = function(){
@@ -65,6 +67,7 @@ var BBS = (function(){
         });
     };
 
+    /*初始化顶部*/
     var renderTop = function (data,$wrapTop) {
         var tpl = [];
         tpl.push('');
@@ -88,6 +91,7 @@ var BBS = (function(){
         $wrapTop.append(tpl.join('\n'));
     };
 
+    /*初始化内容区块*/
     var renderContent = function (data,$wrapContent) {
         var tpl = [];
         tpl.push("<section class=\"articleSec\">\n");
@@ -458,7 +462,7 @@ var BBS = (function(){
         replyTpl.push(getReplyTpl(data.replys));
         replyTpl.push("<div class=\"allReplyItem\">\n");
         replyTpl.push("已有 <span class=\"pink\">"+data.a_info.reply+"</span>人跟帖\n");
-        replyTpl.push("<a href=\"#\" class=\"lookMoreReply\">查看更多评论 &gt;</a>\n");
+        replyTpl.push("<a href=\"/allreply?uid="+args.uid+"&accesstoken="+args.accesstoken+"\" class=\"lookMoreReply\">查看更多评论 &gt;</a>\n");
         replyTpl.push("</div>\n");
         replyTpl.push("</section>\n");
         replyTpl.push("<!-- 回复区域-->\n");
@@ -509,6 +513,8 @@ var BBS = (function(){
 
     };
 
+
+    /*初始化回复页面*/
     var initReply = function(){
         FastClick.attach(document.body);
         getReply();
@@ -517,6 +523,7 @@ var BBS = (function(){
         lazyFlush($('.flush_loading'),$('.no_more'));
     };
 
+    /*下拉加载*/
     var lazyFlush = function($flush,$noMore){
         var load = function(){
             if($(document).height()-$(window).scrollTop()-$(window).height() <= 10){
