@@ -107,4 +107,8 @@ module.exports = function(app){
     app.get('/attrCtrl',function(req,res,next){
         res.render('html5/attrControl/index',{});
     });
+
+    app.get('/cookies',function(req,res,next){
+       res.render('html5/cookies/cookies',{});
+    });
 };

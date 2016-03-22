@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        var xCookie = (function(){
+            var setCookies = function(key,value,expires){
+                var Days = expires || 30,
+                        exp = new Date();
+                exp.setTime(exp.getTime() + Days*24*60*60*1000);
+                document.cookie = key + "="+ escape (value) + ";expires=" + exp.toGMTString();
+            };
+
+            var getCookies = function(key){
+                var arr,reg = new RegExp("(^| )"+key+"=([^;]*)(;|$)");
+                if(arr = document.cookie.match(reg))
+                    return unescape(arr[2]);
+                else
+                    return null;
+            };
+
+            var delCookies = function(key){
+                var exp = new Date();
+                exp.setTime(exp.getTime() - 1);//设置过期时间为当前时间的前一秒
+                var cval=getCookies(key);//能不能获取当期cookie
+                if(cval!=null)//如果没有过期的话，重新设置过期时间强制过期
+                    document.cookie = key + "="+cval+";expires="+exp.toGMTString();
+            }
+
+            return {
+                setCookies:setCookies,
+                getCookies:getCookies,
+                delCookies:delCookies
+            };
+        })();
+    </script>
+</head>
+<body>
+
+</body>
+</html>
