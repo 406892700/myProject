@@ -81,7 +81,7 @@
                     }
                     //console.log(_arr.join(','));
                     $(_arr.join(',')).attr('checked',true);
-                    initTable1(data.dataObj);
+                    initTable1(data.dataObj,true);
 
                     var newObj = {
                         title:[],
@@ -122,6 +122,28 @@
                     initTable1(dataObj);
                 });
 
+                $('body').on('click','._movexx',function(evt){
+                    var
+                        $this = $(this),
+                        index = $this.data('index'),
+                        index2 = (function(index){
+                            if($this.hasClass('_up')){
+                                return --index;
+                            }
+
+                            return ++index;
+                        })(index),
+                        swap = function(obj,p1,p2){
+                            var tmp;
+                            tmp = obj[p1];
+                            obj[p1] = obj[p2];
+                            obj[p2] = tmp;
+                            return obj;
+                        }
+
+                    initTable1(swap(dataObj,index,index2));
+                });
+
 
                 checkboxs.bind('change',function(evt){
                     if($(this).parents().children('input[type=checkbox]').filter(':checked').length){
@@ -159,7 +181,10 @@
                         dataObj.push(_obj);
                     }
 
+
+
 //                    _checks.attr('disabled','disabled');
+                    //console.log('-------------------------------------------------');
                     //console.log(dataObj);
 
                     initTable1(dataObj);
@@ -167,7 +192,7 @@
 
             };
 
-            var initTable1 = function(obj){
+            var initTable1 = function(obj,type){
                  var tpl = [];
                     tpl.push('');
                     tpl.push('<table class="table table-bordered" id="_table1x">');
@@ -187,7 +212,17 @@
                             values[kk] = vv.split('|')[0];
                         });
                         tpl.push('<td>'+values.join(' ')+'</td>');
-                        tpl.push('<td><a href="javascript:void(0)" class="_delxx" data-key-name="'+obj[i].keyName+'">[删除]</a></td></tr>');
+                        tpl.push('<td>');
+                        tpl.push('<a href="javascript:void(0)" class="_delxx" data-key-name="'+obj[i].keyName+'">[删除]</a>');
+                        if(i === 0){
+                            tpl.push('<a href="javascript:void(0)" class="_movexx _down" data-index="'+0+'">[下移]</a>');
+                        }else if(i === obj.length-1){
+                            tpl.push('<a href="javascript:void(0)" class="_movexx _up" data-index="'+(obj.length-1)+'">[上移]</a>');
+                        }else{
+                            tpl.push('<a href="javascript:void(0)" class="_movexx _down" data-index="'+i+'">[下移]</a>');
+                            tpl.push('<a href="javascript:void(0)" class="_movexx _up" data-index="'+i+'">[上移]</a>');
+                        }
+                        tpl.push('</td></tr>');
                         tpl.push('</tr>')
                     }
                     tpl.push('</tbody>');
@@ -196,6 +231,9 @@
                 $('#_table1x').remove();
                 $(tpl.join('\n')).insertAfter($('#selectAttr'));
 
+                if(type){
+                    return;
+                }
                 var newObj = {
                     title:[],
                     values:[]
@@ -236,37 +274,55 @@
                 for(var i =0 ;i<obj.title.length;i++){
                     tpl.push('<th data-id="'+obj.title[i].split('|')[1]+'">'+obj.title[i].split('|')[0]+'</th>');
                 }
-                tpl.push('<th class="notDynmic">单价</th>');
-                tpl.push('<th class="notDynmic">库存</th>');
+                tpl.push('<th class="notDynmic">单价<input type="text" class="input-xlarge span3" style="margin-left:5px;"><a style="vertical-align:top" class="btn btn-primary btn-mini batch_modify_price" data-clazz="__price">批量修改</a></th>');
+                tpl.push('<th class="notDynmic">库存<input type="text" class="input-xlarge span3" style="margin-left:5px;"><a style="vertical-align:top" class="btn btn-primary btn-mini batch_modify_num" data-clazz="__store">批量修改</a></th>');
                 tpl.push('</tr>');
                 tpl.push('</thead>');
                 tpl.push('<tbody>');
                 if(typeof type !== 'undefined'){
-                    console.log(obj.allComs);
+                    //console.log(obj.allComs);
                     allComs = obj.allComs;
                     for(var i = 0;i<allComs.length;i++){
                         var _cObj = allComs[i];
                         tpl.push('<tr>');
                         for(var j = 0;j<_cObj.com.length;j++){
-                            tpl.push('<td data-id="'+_cObj.com[j].split('|')[1]+'">'+_cObj.com[j].split('|')[0]+'</td>')
+                            tpl.push('<td class="_attrValuexx" data-id="'+_cObj.com[j].split('|')[1]+'">'+_cObj.com[j].split('|')[0]+'</td>')
                         }
-                        tpl.push('<td class="_pricexx"><input type="text" value="'+_cObj.price+'"/>元</td>');
-                        tpl.push('<td class="_storeNumxx"><input type="text" value="'+_cObj.store+'"/>件</td>');
+                        tpl.push('<td class="_pricexx"><input type="text" class="__price" value="' +_cObj.price+'"/>元</td>');
+                        tpl.push('<td class="_storeNumxx"><input type="text" class="__store" value="'+_cObj.store+'"/>件</td>');
                         tpl.push('</tr>');
                     }
                 }else{
                     allComs = getAllcombination(obj.values);
                     //
-                    var preData = setAttr.getValueInner();
-                    console.log(allComs);
+                    var preData = getValueInner();
+                    //console.log(preData);
+                    //console.log(allComs);
                     for(var i = 0;i<allComs.length;i++){
                         tpl.push('<tr>');
-                        var attrArr = allComs[i].split('``$');
+                        var attrArr = allComs[i].split('``$'),
+                            getPriceStore = function (com,cache) {
+                                for(var ii = 0,len = cache.length;ii<len;ii++){
+                                    if(com.join('').indexOf(cache[ii].com.join('')) !== -1){
+                                        return {
+                                            price:cache[ii].price,
+                                            store:cache[ii].store
+                                        }
+                                    }
+                                }
+
+                                return{
+                                    price:'',
+                                    store:''
+                                }
+                            };
                         for(var j = 0;j<attrArr.length;j++){
                             tpl.push('<td class="_attrValuexx" data-id="'+attrArr[j].split('|')[1]+'">'+attrArr[j].split('|')[0]+'</td>');
                         }
-                        tpl.push('<td class="_pricexx"><input type="text"/>元</td>');
-                        tpl.push('<td class="_storeNumxx"><input type="text"/>件</td>');
+
+                        var price_store = getPriceStore(attrArr,preData);
+                        tpl.push('<td class="_pricexx"><input type="text" class="__price" value="'+price_store.price+'"/>元</td>');
+                        tpl.push('<td class="_storeNumxx"><input type="text" class="__store"     value="'+price_store.store+'"/>件</td>');
                         tpl.push('</tr>');
                     }
                 }
@@ -276,6 +332,18 @@
 
                 $('#_table2x').remove();
                 $(tpl.join('\n')).insertAfter($('#_table1x'));
+
+                $('#_table2x').find('.batch_modify_price,.batch_modify_num').bind(
+                        'click',
+                        function() {
+                            var clazz = $(this).data('clazz'), val = $(this).siblings(
+                                    'input[type="text"]').val(), trs = $('#_table2x')
+                                    .find('tbody > tr');
+                            trs.each(function(i, v) {
+                                $(v).find('td').find('input[type=text].' + clazz + '')
+                                        .val(val);
+                            });
+                        });
             };
 
 
@@ -285,21 +353,21 @@
                         '颜色|1':['蓝色|1','红色|2','绿色|3','黑色|4','彩色|5'],
                         '尺寸|2':['123x12|1','33x12|2'],
                         '材质|3':['金属|1','纸质|2']
-//                        ,
-//                        'dataObj':[
-//                            {keyName:'颜色|1',values:['红色|2','蓝色|3']},
-//                            {keyName:'尺寸|2',values:['123x12|2']},
-//                            {keyName:'材质|3',values:['纸质|2']}
-//                        ]
-//                        ,
-//                        allComs:[
-//                            {
-//                                com:['红色|2','123x12|2','纸质|2'],price:123,store:333
-//                            },
-//                            {
-//                                com:['蓝色|1','123x12|2','纸质|2'],price:121,store:368
-//                            }
-//                        ]
+                        ,
+                        'dataObj':[
+                            {keyName:'颜色|1',values:['红色|2','蓝色|1']},
+                            {keyName:'尺寸|2',values:['123x12|1']},
+                            {keyName:'材质|3',values:['纸质|2']}
+                        ]
+                        ,
+                        allComs:[
+                            {
+                                com:['红色|2','123x12|1','纸质|2'],price:123,store:333
+                            },
+                            {
+                                com:['蓝色|1','123x12|1','纸质|2'],price:121,store:368
+                            }
+                        ]
 
                     };
                     initComponent($obj,data);
