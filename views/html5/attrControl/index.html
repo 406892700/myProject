@@ -49,7 +49,7 @@
                 }
                 $obj.append(str);
                 str = '';
-                console.log(data.dataObj);
+                //console.log(data.dataObj);
 
 
                 /*初始化选择版*/
@@ -79,7 +79,7 @@
                             _arr.push('#'+attr.keyName.split('|')[0]+'_'+attr.values[j].split('|')[1]);
                         }
                     }
-                    console.log(_arr.join(','));
+                    //console.log(_arr.join(','));
                     $(_arr.join(',')).attr('checked',true);
                     initTable1(data.dataObj);
 
@@ -160,7 +160,8 @@
                     }
 
 //                    _checks.attr('disabled','disabled');
-                    console.log(dataObj);
+                    //console.log(dataObj);
+
                     initTable1(dataObj);
                 });
 
@@ -241,6 +242,7 @@
                 tpl.push('</thead>');
                 tpl.push('<tbody>');
                 if(typeof type !== 'undefined'){
+                    console.log(obj.allComs);
                     allComs = obj.allComs;
                     for(var i = 0;i<allComs.length;i++){
                         var _cObj = allComs[i];
@@ -254,6 +256,8 @@
                     }
                 }else{
                     allComs = getAllcombination(obj.values);
+                    //
+                    var preData = setAttr.getValueInner();
                     console.log(allComs);
                     for(var i = 0;i<allComs.length;i++){
                         tpl.push('<tr>');
@@ -281,20 +285,21 @@
                         '颜色|1':['蓝色|1','红色|2','绿色|3','黑色|4','彩色|5'],
                         '尺寸|2':['123x12|1','33x12|2'],
                         '材质|3':['金属|1','纸质|2']
-                        ,
-                        'dataObj':[
-                            {keyName:'颜色|1',values:['红色|2','蓝色|3']},
-                            {keyName:'尺寸|2',values:['123x12|2']},
-                            {keyName:'材质|3',values:['纸质|2']}
-                        ],
-                        allComs:[
-                            {
-                                com:['红色|2','123x12|2','纸质|2'],price:123,store:333
-                            },
-                            {
-                                com:['蓝色|1','123x12|2','纸质|2'],price:121,store:368
-                            }
-                        ]
+//                        ,
+//                        'dataObj':[
+//                            {keyName:'颜色|1',values:['红色|2','蓝色|3']},
+//                            {keyName:'尺寸|2',values:['123x12|2']},
+//                            {keyName:'材质|3',values:['纸质|2']}
+//                        ]
+//                        ,
+//                        allComs:[
+//                            {
+//                                com:['红色|2','123x12|2','纸质|2'],price:123,store:333
+//                            },
+//                            {
+//                                com:['蓝色|1','123x12|2','纸质|2'],price:121,store:368
+//                            }
+//                        ]
 
                     };
                     initComponent($obj,data);
@@ -305,6 +310,31 @@
 
             };
 
+            //内部值获取
+            var getValueInner = function () {
+                var dataSourse = $('#_table2x').find('tbody tr'),
+                    ret = [];
+
+                dataSourse.each(function(i,v){
+                    var obj  = {
+                                com:[],
+                                price:'',
+                                store:''
+                            },
+                            $this = $(this);
+
+                    $this.find('td._attrValuexx').each(function(j,vv){
+                        obj.com.push($(vv).text()+'|'+$(vv).data('id'));
+                    });
+                    obj.price = $this.find('td._pricexx > input[type=text]').val();
+                    obj.store = $this.find('td._storeNumxx > input[type=text]').val();
+                    ret.push(obj);
+                });
+
+                return ret;
+            };
+
+            //外部值获取
             var getValue = function(){
                 var dataSourse = $('#_table2x').find('tbody tr'),
                     attrsIds = $('#_table2x').find('thead tr th:not(.notDynmic)'),
@@ -343,7 +373,8 @@
 
             return {
                 init:init,
-                getValue:getValue
+                getValue:getValue,
+                getValueInner:getValueInner
             };
         })(jQuery);
 
