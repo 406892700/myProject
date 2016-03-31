@@ -109,6 +109,16 @@ module.exports = function(app){
     });
 
     app.get('/cookies',function(req,res,next){
-       res.render('html5/cookies/cookies',{});
+        res.render('html5/cookies/cookies',{});
     });
+
+    app.get('/es6',function(req,res,next){
+        res.render('html5/ES6/es6',{});
+    });
+
+
+    app.get('/imgpreview',function(req,res,next){
+        res.render('html5/imgPreview/imgPreview',{});
+    });
+
 };
