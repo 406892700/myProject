@@ -5,6 +5,11 @@ module.exports = function(app){
     /*
     * 普通的页面跳转 start
     * */
+
+    //首页
+    app.get('/',function(req,res){
+        res.render('index',{});
+    });
     var util = require('../../routesUtil');//路由工具方法
     //登录页
     app.get('/login',function(req,res){
